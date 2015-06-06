@@ -5,9 +5,14 @@
              tools:context="com.jayangche.android.fragment.home.BigDiscountFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ListView
+        android:background="@color/c_bg_base"
+        android:divider="@android:color/transparent"
+        android:id="@+id/list_discount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:dividerHeight="5dp"
+        android:layout_height="match_parent">
+    </ListView>
 
 </FrameLayout>
