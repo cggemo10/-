@@ -7,31 +7,33 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.jayangche.android.R;
 import com.jayangche.android.activity.MainActivity;
 
 
-public class ForumFragment extends Fragment {
+public class UserCenterFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
     private String mParam1;
     private String mParam2;
 
-    private OnForumInteractionListener mListener;
-
-    private static ForumFragment fragment = new ForumFragment();
+    private OnUserCenterInteractionListener mListener;
 
 
-    public static ForumFragment getFragment() {
+    public static UserCenterFragment newInstance(String param1, String param2) {
+        UserCenterFragment fragment = new UserCenterFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public ForumFragment() {
-        // Required empty public constructor
+    public UserCenterFragment() {
+
     }
 
     @Override
@@ -46,11 +48,11 @@ public class ForumFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_forum, container, false);
-        return root;
+        TextView textView = new TextView(getActivity());
+        textView.setText(R.string.hello_blank_fragment);
+        return textView;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
@@ -60,7 +62,7 @@ public class ForumFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((MainActivity)activity).getForumInteraction();
+        mListener = ((MainActivity)mListener).getUserCenterInteraction();
     }
 
     @Override
@@ -70,8 +72,8 @@ public class ForumFragment extends Fragment {
     }
 
 
-    public interface OnForumInteractionListener {
-        // TODO: Update argument type and name
+    public interface OnUserCenterInteractionListener {
+        
         public void onFragmentInteraction(Uri uri);
     }
 

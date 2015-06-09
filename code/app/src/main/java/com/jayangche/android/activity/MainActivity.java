@@ -24,6 +24,7 @@ import com.jayangche.android.R;
 import com.jayangche.android.fragment.home.BigDiscountFragment;
 import com.jayangche.android.fragment.home.ForumFragment;
 import com.jayangche.android.fragment.home.HomeFragment;
+import com.jayangche.android.fragment.home.UserCenterFragment;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -160,11 +161,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -179,5 +175,21 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 fragmentPager.setCurrentItem(2,true);
                 break;
         }
+    }
+
+    public BigDiscountFragment.OnBigDiscountInteractionListener getBigDiscountInteraction() {
+        return null;
+    }
+
+    public ForumFragment.OnForumInteractionListener getForumInteraction() {
+        return null;
+    }
+
+    public HomeFragment.OnHomeInteractionListener getHomeInteraction() {
+        return null;
+    }
+
+    public UserCenterFragment.OnUserCenterInteractionListener getUserCenterInteraction() {
+        return null;
     }
 }

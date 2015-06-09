@@ -12,6 +12,13 @@ public class CoreManager {
 
     private static List<DiscountInfoToShow> discountList = new ArrayList<DiscountInfoToShow>();
 
+
+    // demo
+    static {
+        DiscountInfoToShow discount1 = new DiscountInfoToShow();
+        discount1.
+    }
+
     public List<DiscountInfoToShow> getDiscounts() {
         return discountList;
     }
