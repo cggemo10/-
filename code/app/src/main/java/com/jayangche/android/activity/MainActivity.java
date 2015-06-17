@@ -1,24 +1,17 @@
 package com.jayangche.android.activity;
 
-import android.graphics.Color;
+import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.jayangche.android.R;
 import com.jayangche.android.fragment.home.BigDiscountFragment;
@@ -50,12 +43,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       initView();
+        initView();
     }
 
     private void initView() {
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerlayout,toolbar,R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerlayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerlayout.setDrawerListener(mDrawerToggle);
 
@@ -127,6 +120,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     /**
      * handle pager event
+     *
      * @param position
      * @param positionOffset
      * @param positionOffsetPixels
@@ -166,30 +160,63 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         int id = v.getId();
         switch (id) {
             case R.id.ll_menu_home:
-                fragmentPager.setCurrentItem(0,true);
+                fragmentPager.setCurrentItem(0, true);
                 break;
             case R.id.ll_menu_forum:
-                fragmentPager.setCurrentItem(1,true);
+                fragmentPager.setCurrentItem(1, true);
                 break;
             case R.id.ll_menu_onsale:
-                fragmentPager.setCurrentItem(2,true);
+                fragmentPager.setCurrentItem(2, true);
                 break;
         }
     }
 
+    //------------------------------------------------------------------------------------------------------------fragment interaction
+
     public BigDiscountFragment.OnBigDiscountInteractionListener getBigDiscountInteraction() {
-        return null;
+        return new BigDiscountInteraction();
+    }
+
+    private class BigDiscountInteraction implements BigDiscountFragment.OnBigDiscountInteractionListener {
+
+        @Override
+        public void onFragmentInteraction(Uri uri) {
+
+        }
     }
 
     public ForumFragment.OnForumInteractionListener getForumInteraction() {
-        return null;
+        return new ForumInteraction();
+    }
+
+    private class ForumInteraction implements ForumFragment.OnForumInteractionListener {
+
+        @Override
+        public void onFragmentInteraction(Uri uri) {
+
+        }
     }
 
     public HomeFragment.OnHomeInteractionListener getHomeInteraction() {
-        return null;
+        return new HomeInteraction();
+    }
+
+    private class HomeInteraction implements HomeFragment.OnHomeInteractionListener {
+
+        @Override
+        public void onFragmentInteraction(Uri uri) {
+
+        }
     }
 
     public UserCenterFragment.OnUserCenterInteractionListener getUserCenterInteraction() {
-        return null;
+        return new UserCenterInteraction();
+    }
+
+    private class UserCenterInteraction implements UserCenterFragment.OnUserCenterInteractionListener {
+        @Override
+        public void onFragmentInteraction(Uri uri) {
+
+        }
     }
 }
