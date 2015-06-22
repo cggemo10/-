@@ -1,0 +1,121 @@
+基本格式
+{
+	result:true|false,
+	data:{},
+	code:[int],
+	description:"xxxx"
+}
+code : 	0-> success
+		~0-> failed
+description: 	success->""
+				failed->"具体错误描述，一般为网络错误，该提示会直接提醒到用户，具体提示语由进辉完善"
+
+
+引导页 接口暂无
+首页
+	顶部广告 改为企业展示	需提供图片
+	
+	下部gridview 为 巨优惠信息， 需要分页
+	提交参数：无
+	json格式：
+		{
+			result:true,
+			data{
+				goodsList:
+				[
+					{
+						goodsName:"",
+						goodsId:"",
+						range:"",
+						discount_date:"",
+						discount_content:"",
+						tel:"",
+						discount_detal:""
+						pic_small:"",
+						pic_large:""
+					}
+				]
+			}
+		}
+登录页面
+	手机号码验证登录，无密码，需要authtoken, 本次登录后记录authToken，下次进入app可使用authToken验证登录，并刷新authToken
+	验证码登录：mobile_nm, verify_code
+		{
+			result:true,
+			data:{
+				user:{
+					mobile_nm:""
+					userId:"",
+					authtoken:"",
+					avatar:"",
+					nick_name:""，
+					cars:[
+						{
+							carId:"",
+							car_no:"",
+							车辆名称:"",
+							车辆品牌:""
+						}
+					]
+				}
+				
+			}
+
+		}
+	自动登录：authtoken
+		{
+			{
+			result:true,
+			data:{
+				user:{
+					mobile_nm:""
+					userId:"",
+					authtoken:"",
+					avatar:"",
+					nick_name:"",
+					cars:[
+						{
+							carId:"",
+							car_no:"",
+							车辆名称:"",
+							车辆品牌:""
+						}
+					]
+
+				}
+				
+			}
+
+		}
+		}
+
+巨优惠详情
+	title 改为 具体商品名称
+
+上门保养
+	获取保养产品种类列表，获取种类下子列表，UI及接口参考pp养车
+	需加服务列表的接口，及服务对应的商品列表的接口
+
+订单
+	提交参数
+		姓名，电话，服务地点，预约时间，支付方式，是否需要发票，邮件地址（邮寄费用？）
+	获取参数
+		订单号码
+获取订单列表
+	提交参数，用户ID
+	获取数据
+		订单及订单状态
+优惠券列表
+	所有优惠券列表
+	我的优惠券，未过期列表，已过期列表
+	在所有优惠券中领券时会有一次提交
+		提交内容为优惠券的类型\id
+
+优惠券 	优惠券类型\ID（唯一）
+		优惠券名称，内容，有效期
+
+
+
+
+
+
