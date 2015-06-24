@@ -4,7 +4,6 @@
                 android:background="@color/c_bg_base"
                 android:layout_height="wrap_content">
 
-
     <LinearLayout
         android:id="@+id/ll_home_menu"
         android:layout_width="match_parent"
@@ -39,6 +38,29 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_menu_onsale"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/img_main_menu_onsale"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/d_menu_onsale"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@string/str_menu_coupons"
+                android:textColor="@android:color/darker_gray"/>
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/ll_menu_forum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -61,28 +83,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_menu_onsale"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/img_main_menu_onsale"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@drawable/d_menu_onsale"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:text="@string/str_menu_onsale"
-                android:textColor="@android:color/darker_gray"/>
-
-        </LinearLayout>
 
     </LinearLayout>
 

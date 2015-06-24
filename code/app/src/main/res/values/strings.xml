@@ -8,7 +8,7 @@
     <string name="title_activity_car_info">CarInfoActivity</string>
     <string name="str_menu_home">首页</string>
     <string name="str_menu_forum">论坛</string>
-    <string name="str_menu_onsale">巨优惠</string>
+    <string name="str_menu_coupons">优惠券</string>
 
     <!-- normal -->
     <string name="str_commit">提交</string>
