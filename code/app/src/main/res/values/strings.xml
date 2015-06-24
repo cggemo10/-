@@ -116,7 +116,7 @@
     <string name="str_name_order_amount">订单金额：</string>
     
     <!-- 上门养护 -->
-    <string name="title_door_maintenance">上门养护</string>
+    <string name="title_home_maintenance">上门养护</string>
     <string name="title_conform_order">确认订单</string>
     <string name="btn_comform_maintenance">确认预约</string>
     <string name="btn_maintenance_order_by_ali">支付宝支付</string>
@@ -150,6 +150,12 @@
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_on_dore_care">OnDoreCareActivity</string>
+    <string name="title_activity_on_dore_wash">OnDoreWashActivity</string>
+    <string name="title_activity_maintenance">MaintenanceActivity</string>
+    <string name="title_activity_violation">ViolationActivity</string>
+    <string name="title_activity_discount">DiscountActivity</string>
+    <string name="demo_content">污水冷却液接口发IE减肥IE减肥啦看似饿污水冷却液接口发IE减肥IE减肥啦看似饿i污水冷却液接口发IE减肥IE减肥啦看似饿i污水冷却液接口发IE减肥IE减肥啦看似饿i污水冷却液接口发IE减肥IE减肥啦看似饿i污水冷却液接口发IE减肥IE减肥啦看似饿i污水冷却液接口发IE减肥IE减肥啦看似饿i咖啡不仅爱哦额就康复了噢噢噢噢噢快快快快快快快乐啦啦啦啦啦啦姐啊锕锕锕锕锕锕锕锕</string>
 
 
 </resources>

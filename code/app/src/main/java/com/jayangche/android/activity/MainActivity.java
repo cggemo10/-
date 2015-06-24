@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.jayangche.android.R;
 import com.jayangche.android.fragment.home.BigDiscountFragment;
@@ -47,9 +48,23 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     private void initView() {
+
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer);
-        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerlayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerlayout, toolbar, R.string.drawer_open, R.string.drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                setTitle(R.string.title_main_page);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                setTitle(R.string.title_user_center);
+            }
+        };
         mDrawerToggle.syncState();
+
         mDrawerlayout.setDrawerListener(mDrawerToggle);
 
         homeFragment = HomeFragment.getFragment();
@@ -66,9 +81,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     case 0:
                         return homeFragment;
                     case 1:
-                        return forumFragment;
-                    case 2:
                         return discountFragment;
+                    case 2:
+                        return forumFragment;
                 }
 
                 return null;
@@ -140,13 +155,13 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                 break;
             case 1:
                 imgMenuHome.setImageLevel(0);
-                imgMenuForum.setImageLevel(1);
-                imgMenuDiscount.setImageLevel(0);
+                imgMenuDiscount.setImageLevel(1);
+                imgMenuForum.setImageLevel(0);
                 break;
             case 2:
                 imgMenuHome.setImageLevel(0);
-                imgMenuForum.setImageLevel(0);
-                imgMenuDiscount.setImageLevel(1);
+                imgMenuDiscount.setImageLevel(0);
+                imgMenuForum.setImageLevel(1);
         }
     }
 
@@ -162,10 +177,10 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             case R.id.ll_menu_home:
                 fragmentPager.setCurrentItem(0, true);
                 break;
-            case R.id.ll_menu_forum:
+            case R.id.ll_menu_onsale:
                 fragmentPager.setCurrentItem(1, true);
                 break;
-            case R.id.ll_menu_onsale:
+            case R.id.ll_menu_forum:
                 fragmentPager.setCurrentItem(2, true);
                 break;
         }

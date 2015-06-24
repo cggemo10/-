@@ -1,6 +1,7 @@
 package com.jayangche.android.adapter;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,6 +15,7 @@ import com.jayangche.android.core.CoreManager;
 import com.jayangche.android.model.DiscountInfoToShow;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by Administrator on 2015/6/6.
@@ -65,12 +67,19 @@ public class DiscountAdapter extends BaseAdapter {
         holder.discountScope.setText(discount.getScope());
         holder.discountTime.setText(discount.getTime());
         holder.discountContent.setText(discount.getContent());
+        /* TODO later
         if (!TextUtils.isEmpty(discount.getImgUrl())) {
             if (discount.getImgUrl().contains("http")) {
                 // TODO load from download service
             } else {
                 holder.pic.setImageURI(Uri.fromFile(new File(discount.getImgUrl())));
             }
+        }*/
+
+        try {
+            holder.pic.setImageBitmap(BitmapFactory.decodeStream(context.getAssets().open("juyouhui-img.jpg")));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return convertView;

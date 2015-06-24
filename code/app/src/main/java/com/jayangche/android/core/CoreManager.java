@@ -1,8 +1,16 @@
-﻿package com.jayangche.android.core;
+package com.jayangche.android.core;
+
+import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.jayangche.android.model.DiscountInfoToShow;
 import com.jayangche.android.model.UserInfo;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +21,7 @@ public class CoreManager {
 
     private static List<DiscountInfoToShow> discountList = new ArrayList<DiscountInfoToShow>();
     private UserInfo currUser;
+    private static List<ImageView> companyInfoImgs = new ArrayList<>();
 
     // demo
     static {
@@ -48,6 +57,37 @@ public class CoreManager {
         currUser = currUser;
     }
 
+    // company info
+    public void initCompanyInfo(final Context context) {
+        for (int i = 0; i < 3; i++) {
+            ImageView ad = new ImageView(context);
+            ad.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            LinearLayout.LayoutParams adParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            ad.setLayoutParams(adParams);
+            try {
+                ad.setImageBitmap(BitmapFactory.decodeStream(context.getAssets().open("banner.jpg")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            ad.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(context, "TODO 显示公司简介", Toast.LENGTH_LONG).show();
+                }
+            });
+
+            companyInfoImgs.add(ad);
+        }
+
+    }
+
+    public List<ImageView> getCompanyInfo() {
+        return companyInfoImgs;
+    }
+
+
+
+    // single instance
     private static class ManagerHolder {
         private static CoreManager holder = new CoreManager();
     }

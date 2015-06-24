@@ -2,20 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <android.support.v4.view.ViewPager
         android:id="@+id/pager_main_ad"
         android:layout_width="match_parent"
-        android:layout_height="150dp">
+        android:layout_height="120dp">
     </android.support.v4.view.ViewPager>
 
     <LinearLayout
+        android:layout_marginBottom="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="5dp"
         android:background="@android:color/white"
         android:orientation="horizontal">
 
         <LinearLayout
+            android:id="@+id/ll_home_maintenance"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -32,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/str_main_on_door"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"/>
@@ -40,6 +43,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_on_dore_wash"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -56,7 +60,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/str_main_on_door_watch"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"/>
@@ -64,6 +68,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_store_reservation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -80,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/str_main_maintenance"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"/>
@@ -88,6 +93,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/ll_violation"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -104,7 +110,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="5dp"
                 android:text="@string/str_main_violation"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="13sp"/>

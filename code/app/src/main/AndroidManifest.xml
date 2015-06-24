@@ -44,6 +44,26 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.jayangche.android.activity.BaseActivity" />
         </activity>
+        <activity
+            android:name=".activity.HomeMaintenanceActivity"
+            android:label="@string/title_home_maintenance" >
+        </activity>
+        <activity
+            android:name=".activity.OnDoreWashActivity"
+            android:label="@string/title_wash_car_door" >
+        </activity>
+        <activity
+            android:name=".activity.StoreReservationActivity"
+            android:label="@string/title_store_reservation" >
+        </activity>
+        <activity
+            android:name=".activity.ViolationActivity"
+            android:label="@string/title_violation_inquiry" >
+        </activity>
+        <activity
+            android:name=".activity.DiscountActivity"
+            android:label="@string/title_activity_discount" >
+        </activity>
     </application>
 
 </manifest>
