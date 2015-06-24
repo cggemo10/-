@@ -7,9 +7,36 @@ public class DiscountInfoToShow {
 
     private String productId;
     private String name;
+    private String scope;
     private String time;
+    private String content;
+    private String mobileNo;
     private String detial;
     private String imgUrl;
+
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
 
     public String getProductId() {
         return productId;

@@ -7,9 +7,17 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.GridView;
+import android.widget.ListView;
 
+import com.handmark.pulltorefresh.library.PullToRefreshGridView;
+import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.jayangche.android.R;
 import com.jayangche.android.activity.MainActivity;
+import com.jayangche.android.adapter.DiscountAdapter;
+import com.jayangche.android.adapter.GridAdapter;
 
 
 public class HomeFragment extends Fragment {
@@ -21,6 +29,10 @@ public class HomeFragment extends Fragment {
 
     private OnHomeInteractionListener mListener;
 
+    private PullToRefreshListView refreshListDiscount;
+    private ListView listDiscount;
+    private GridAdapter gridAdapter;
+    private DiscountAdapter discountAdapter;
 
     public static HomeFragment getFragment() {
         HomeFragment fragment = new HomeFragment();
@@ -48,7 +60,26 @@ public class HomeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_home, container, false);
+        refreshListDiscount = (PullToRefreshListView) root.findViewById(R.id.pull_refresh_grid_dicsount);
+        listDiscount = refreshListDiscount.getRefreshableView();
+
+        discountAdapter = new DiscountAdapter(getActivity());
+        gridAdapter = new GridAdapter(getActivity(),discountAdapter);
+
+        gridAdapter.setNumColumns(2);
+
+
+        View header = inflater.inflate(R.layout.view_fg_home_header, null);
+        initHeader(header);
+
+        listDiscount.addHeaderView(header);
+        listDiscount.setAdapter(discountAdapter);
+//        GridView
         return root;
+    }
+
+    private void initHeader(View header) {
+
     }
 
 

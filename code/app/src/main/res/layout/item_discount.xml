@@ -36,6 +36,7 @@
         android:layout_height="wrap_content" />
 
     <TextView
+        android:id="@+id/txt_item_discount_scope_content"
         android:textColor="@android:color/darker_gray"
         android:layout_toRightOf="@id/txt_item_discount_scope"
         android:layout_alignTop="@id/txt_item_discount_scope"
@@ -74,6 +75,7 @@
 
     <TextView
         android:layout_marginRight="20dp"
+        android:id="@+id/txt_item_discount_detial_content"
         android:singleLine="false"
         android:textColor="@android:color/darker_gray"
         android:layout_toRightOf="@id/txt_item_discount_detial"
