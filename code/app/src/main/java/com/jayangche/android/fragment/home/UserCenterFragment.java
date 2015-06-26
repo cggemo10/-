@@ -1,8 +1,15 @@
 package com.jayangche.android.fragment.home;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +21,14 @@ import android.widget.TextView;
 
 import com.jayangche.android.R;
 import com.jayangche.android.activity.MainActivity;
+import com.jayangche.android.constant.Constant;
 import com.jayangche.android.core.CoreManager;
 import com.jayangche.android.model.UserInfo;
 
+import java.io.IOException;
 
-public class UserCenterFragment extends Fragment implements View.OnClickListener {
+
+public class UserCenterFragment extends Fragment implements View.OnClickListener, Handler.Callback {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -32,7 +42,11 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     Button btnLogin;
     ListView listSetting;
 
+
+    private UserReceiver userReceiver;
     private OnUserCenterInteractionListener mListener;
+
+    private Handler mHandler;
 
 
     public static UserCenterFragment newInstance(String param1, String param2) {
@@ -55,6 +69,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        mHandler = new Handler(this);
     }
 
     @Override
@@ -72,27 +88,36 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         btnModifyNick = (Button) view.findViewById(R.id.btn_modify_nick_name);
         btnModifyNick.setOnClickListener(this);
 
-        btnLogin = (Button) view.findViewById(R.id.btn_login);
+        btnLogin = (Button) view.findViewById(R.id.btn_show_login);
         btnLogin.setOnClickListener(this);
 
-    }
+        checkLogin();
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mListener = ((MainActivity)mListener).getUserCenterInteraction();
+        registUserReceiver();
     }
+
+
 
     @Override
     public void onDetach() {
         super.onDetach();
+        unregistUserReceiver();
         mListener = null;
+    }
+
+    private void checkLogin() {
+        UserInfo userInfo = CoreManager.getManager().getCurrUser();
+        if (userInfo == null) {
+            onLogout();
+        } else {
+            onLogin(userInfo);
+        }
     }
 
     public void onLogout() {
@@ -105,13 +130,14 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         btnLogin.setVisibility(View.VISIBLE);
     }
 
-    public void onLogin() {
-        UserInfo userInfo = CoreManager.getManager().getCurrUser();
-        if (userInfo == null) {
-            onLogout();
-        }
+    public void onLogin(UserInfo userInfo) {
 
         // TODO show avatar from path
+        try {
+            imgAvatar.setImageBitmap(BitmapFactory.decodeStream(getActivity().getAssets().open("user.jpg")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         txtAccount.setText(userInfo.getName());
         txtNickName.setText(userInfo.getNikeName());
         imgAvatar.setVisibility(View.VISIBLE);
@@ -122,24 +148,65 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         btnLogin.setVisibility(View.GONE);
     }
 
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
+
     @Override
     public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.btn_modify_nick_name:
+                mListener.modifyNickname();
+                break;
+            case R.id.btn_show_login:
+                mListener.loginInteraction();
                 break;
         }
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        checkLogin();
+        return false;
     }
 
 
     public interface OnUserCenterInteractionListener {
         
-        public void onFragmentInteraction(Uri uri);
+        public void loginInteraction();
+        public void modifyNickname();
     }
+
+    private void registUserReceiver() {
+        if (userReceiver == null) {
+            userReceiver = new UserReceiver();
+        }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.ACTION_LOGIN);
+        filter.addAction(Constant.ACTION_MODIFY_NICK_NAME);
+        getActivity().registerReceiver(userReceiver, filter);
+    }
+    private void unregistUserReceiver() {
+        if (userReceiver == null) {
+            return;
+        }
+        getActivity().unregisterReceiver(userReceiver);
+        userReceiver = null;
+    }
+
+    private class UserReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_LOGIN.equals(action)) {
+                mHandler.sendEmptyMessage(0);
+            }
+
+            if (Constant.ACTION_MODIFY_NICK_NAME.equals(action)) {
+                mHandler.sendEmptyMessage(0);
+            }
+        }
+    }
+
 
 }

@@ -145,6 +145,7 @@
             android:textStyle="bold"/>
 
         <TextView
+            android:id="@+id/txt_item_discount_detial_content"
             android:layout_marginTop="20dp"
             android:textColor="@android:color/tertiary_text_dark"
             android:text="@string/demo_content"

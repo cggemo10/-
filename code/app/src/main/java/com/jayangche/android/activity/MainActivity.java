@@ -133,13 +133,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * handle pager event
-     *
-     * @param position
-     * @param positionOffset
-     * @param positionOffsetPixels
-     */
     @Override
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -229,8 +222,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     }
 
     private class UserCenterInteraction implements UserCenterFragment.OnUserCenterInteractionListener {
+
         @Override
-        public void onFragmentInteraction(Uri uri) {
+        public void loginInteraction() {
+
+        }
+
+        @Override
+        public void modifyNickname() {
 
         }
     }
