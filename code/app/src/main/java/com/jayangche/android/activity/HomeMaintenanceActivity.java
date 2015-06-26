@@ -20,8 +20,13 @@ public class HomeMaintenanceActivity extends BaseActivity {
             llloc.setVisibility(View.GONE);
         }
 
-//        toolbar.setNavigationIcon(R.drawable.);
-//        findViewById(R.id.img_discount)
+        toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 }
