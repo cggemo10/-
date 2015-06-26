@@ -30,7 +30,7 @@
     <string name="str_engine_number">发动机号</string>
     <string name="str_last_four_number">（后四位）</string>
     <string name="str_optional_info">（选填）</string>
-    <string name="btn_search">查询</string>
+    <string name="btn_add_search_car">添加车辆</string>
     
     <!-- 我的订单 -->
     <string name="title_my_order">我的订单</string>
