@@ -1,18 +1,27 @@
 package com.jayangche.android.fragment.home;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.jayangche.android.R;
+import com.jayangche.android.activity.CouponsDetalActivity;
 import com.jayangche.android.activity.MainActivity;
+import com.jayangche.android.adapter.CouponsAdapter;
+import com.jayangche.android.core.CoreManager;
 
 
-public class BigDiscountFragment extends Fragment {
+public class CouponsFragment extends Fragment implements AdapterView.OnItemClickListener{
+
+    ListView couponGoodList;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -20,16 +29,16 @@ public class BigDiscountFragment extends Fragment {
     private String mParam2;
 
     private OnBigDiscountInteractionListener mListener;
-    private static BigDiscountFragment fragment = new BigDiscountFragment();
+    private static CouponsFragment fragment = new CouponsFragment();
 
-    public static BigDiscountFragment getFragment() {
+    public static CouponsFragment getFragment() {
         Bundle args = new Bundle();
 
         fragment.setArguments(args);
         return fragment;
     }
 
-    public BigDiscountFragment() {
+    public CouponsFragment() {
 
     }
 
@@ -44,7 +53,12 @@ public class BigDiscountFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_big_discount, container, false);
+        View root = inflater.inflate(R.layout.fragment_coupons, container, false);
+
+        couponGoodList = (ListView) root.findViewById(R.id.list_discount);
+        couponGoodList.setAdapter(new CouponsAdapter(getActivity()));
+        couponGoodList.setOnItemClickListener(this);
+
         return root;
     }
 
@@ -61,7 +75,14 @@ public class BigDiscountFragment extends Fragment {
         mListener = null;
     }
 
-    
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Intent intent = new Intent(getActivity(), CouponsDetalActivity.class);
+        intent.putExtra("coupons", CoreManager.getManager().getCoupons().get(position));
+        startActivity(intent);
+    }
+
+
     public interface OnBigDiscountInteractionListener {
         
         public void onFragmentInteraction(Uri uri);

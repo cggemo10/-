@@ -57,12 +57,27 @@
             android:label="@string/title_store_reservation" >
         </activity>
         <activity
+            android:name=".activity.StoreReservationDetalActivity"
+            android:label="@string/title_store_detial" />
+        <activity
             android:name=".activity.ViolationActivity"
             android:label="@string/title_violation_inquiry" >
         </activity>
         <activity
             android:name=".activity.DiscountActivity"
             android:label="@string/title_activity_discount" >
+        </activity>
+        <activity
+            android:name=".activity.CityListActivity"
+            android:label="@string/title_my_city" >
+        </activity>
+        <activity
+            android:name=".activity.CouponsDetalActivity"
+            android:label="@string/title_activity_coupons_detal" >
+        </activity>
+        <activity
+            android:name=".activity.AddCarActivity"
+            android:label="@string/title_activity_add_car" >
         </activity>
     </application>
 

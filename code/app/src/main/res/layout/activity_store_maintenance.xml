@@ -1,0 +1,30 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:ptr="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/c_bg_base"
+              android:orientation="vertical"
+              tools:context="com.jayangche.android.activity.ViolationActivity">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/view_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.handmark.pulltorefresh.library.PullToRefreshListView
+        android:id="@+id/refresh_stroe_reservation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:gravity="fill"
+        android:horizontalSpacing="1dp"
+        android:numColumns="2"
+        android:showDividers="middle"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="1dp"
+        ptr:ptrDrawable="@drawable/default_ptr_rotate"
+        ptr:ptrMode="both"/>
+
+</LinearLayout>

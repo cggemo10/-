@@ -10,8 +10,8 @@
     <com.handmark.pulltorefresh.library.PullToRefreshListView
 
         android:id="@+id/pull_refresh_grid_dicsount"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:gravity="fill"
         android:horizontalSpacing="1dp"
         android:numColumns="2"

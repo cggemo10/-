@@ -1,9 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/c_bg_base"
-                tools:context="com.jayangche.android.activity.HomeMaintenanceActivity">
+                tools:context="com.jayangche.android.activity.CityListActivity">
 
     <include
         android:id="@+id/titlebar"
@@ -11,4 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</RelativeLayout>
+    <ListView
+        android:id="@+id/list_city"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
+</LinearLayout>

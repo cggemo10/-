@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/c_bg_base"
+              android:orientation="vertical">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/view_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/white"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/txt_store_name_detal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日日建安滨北店"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="16sp"/>
+
+        <ImageView
+            android:id="@+id/img_store_pic_detal"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_below="@id/txt_store_name_detal"
+            android:layout_marginLeft="3dp"
+            android:layout_marginTop="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_coupon"/>
+
+        <TextView
+            android:id="@+id/txt_store_address_detal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/img_store_pic_detal"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@id/img_store_pic_detal"
+            android:text="地址："
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_address_detal_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_store_address_detal"
+            android:layout_toRightOf="@id/txt_store_address_detal"
+            android:text="思明区金尚路禹州花园三期"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_area"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_store_address_detal"
+            android:layout_below="@id/txt_store_address_detal"
+            android:text="区域："
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_area_detal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_store_area"
+            android:layout_toRightOf="@id/txt_store_area"
+            android:text="厦门"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_store_address_detal"
+            android:layout_below="@id/txt_store_area"
+            android:text="联系电话："
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_tel_detal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_store_tel"
+            android:layout_toRightOf="@id/txt_store_tel"
+            android:text="0592-123456"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_opentime_detal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_store_address_detal"
+            android:layout_below="@+id/txt_store_tel"
+            android:text="营业时间:"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_opentime_detal_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_store_opentime_detal"
+            android:layout_toRightOf="@id/txt_store_opentime_detal"
+            android:text="8:00~18:00"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_paytype"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_store_address_detal"
+            android:layout_below="@+id/txt_store_opentime_detal"
+            android:text="付款方式："
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/txt_store_paytype_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_store_paytype"
+            android:layout_toRightOf="@id/txt_store_paytype"
+            android:text="现金、刷卡、支付宝"
+            android:textColor="@android:color/secondary_text_light"
+            android:textSize="12sp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:padding="10dp"
+        android:background="@android:color/white"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textColor="@android:color/primary_text_light"
+            android:textSize="16sp"
+            android:text="服务门店支持项目"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <View
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <TextView
+            android:id="@+id/txt_store_service_content"
+            android:minHeight="100dp"
+            android:textColor="@android:color/secondary_text_light"
+            android:text="汽车维修、汽车美容、汽车装潢、汽车保险、汽车钣喷、汽车精品、24小时救援站等一站式服务的综合性的汽车服务连锁企业"
+            android:singleLine="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_commit_store_reservation"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:text="@string/btn_comform_store_reservation"
+        android:background="@color/c_style_red"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

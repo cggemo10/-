@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="10dp">
+
+    <ImageView
+        android:scaleType="centerCrop"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/img_item_discount"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
+
+    <TextView
+        android:layout_alignTop="@id/img_item_discount"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/img_item_discount"
+        android:textColor="@android:color/tertiary_text_dark"
+        android:textSize="16sp"
+        android:id="@+id/txt_item_discount_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="爱温无水冷却液" />
+
+    <TextView
+        android:layout_alignLeft="@id/txt_item_discount_title"
+        android:layout_marginTop="5dp"
+        android:text="优惠范围："
+        android:textColor="#333333"
+        android:layout_below="@id/txt_item_discount_title"
+        android:id="@+id/txt_item_discount_scope"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txt_item_discount_scope_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_toRightOf="@id/txt_item_discount_scope"
+        android:layout_alignTop="@id/txt_item_discount_scope"
+        android:text="厦门各直营店"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_alignLeft="@id/txt_item_discount_title"
+        android:layout_marginTop="5dp"
+        android:text="优惠时间："
+        android:textColor="#333333"
+        android:layout_below="@id/txt_item_discount_scope"
+        android:id="@+id/txt_item_discount_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/txt_item_discount_time_content"
+        android:textColor="@android:color/darker_gray"
+        android:layout_toRightOf="@id/txt_item_discount_time"
+        android:layout_alignTop="@id/txt_item_discount_time"
+        android:text="2015年5月 至\n2015年7月"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_alignLeft="@id/txt_item_discount_title"
+        android:layout_marginTop="5dp"
+        android:text="优惠内容："
+        android:textColor="#333333"
+        android:layout_below="@id/txt_item_discount_time_content"
+        android:id="@+id/txt_item_discount_detial"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:layout_marginRight="20dp"
+        android:id="@+id/txt_item_discount_detial_content"
+        android:singleLine="false"
+        android:textColor="@android:color/darker_gray"
+        android:layout_toRightOf="@id/txt_item_discount_detial"
+        android:layout_alignTop="@id/txt_item_discount_detial"
+        android:text="商品8折优惠，门店更换免收服务费"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+
+</RelativeLayout>

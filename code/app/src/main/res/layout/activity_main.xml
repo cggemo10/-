@@ -47,6 +47,12 @@
             android:layout_gravity="start"
             android:background="#88FFFFFF"/>
 
+        <!--ListView
+            android:id="@+id/side_right"
+            android:background="#88FFFFFF"
+            android:layout_gravity="end"
+            android:layout_width="320dp"
+            android:layout_height="match_parent"/-->
 
     </android.support.v4.widget.DrawerLayout>
 

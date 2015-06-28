@@ -2,12 +2,13 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.jayangche.android.fragment.home.BigDiscountFragment">
+             android:background="@color/c_bg_base"
+             tools:context="com.jayangche.android.fragment.home.CouponsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ListView
-        android:background="@color/c_bg_base"
+        android:background="@android:color/white"
         android:divider="@android:color/transparent"
         android:id="@+id/list_discount"
         android:layout_width="match_parent"

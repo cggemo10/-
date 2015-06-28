@@ -7,12 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.jayangche.android.R;
 import com.jayangche.android.activity.MainActivity;
+import com.jayangche.android.adapter.ForumAdapter;
 
 
-public class ForumFragment extends Fragment {
+public class ForumFragment extends Fragment implements AdapterView.OnItemClickListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -47,6 +50,10 @@ public class ForumFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_forum, container, false);
+
+        ListView list = (ListView) root.findViewById(R.id.list_forum);
+        list.setAdapter(new ForumAdapter((getActivity())));
+        list.setOnItemClickListener(this);
         return root;
     }
 
@@ -67,6 +74,11 @@ public class ForumFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
     }
 
 

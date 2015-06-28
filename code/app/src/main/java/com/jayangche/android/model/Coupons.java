@@ -12,7 +12,7 @@ public class Coupons implements Parcelable {
     private String couponCode;
     private String name;
     private String time;
-    private String number;
+    private String tel;
     private String address;
     private String content;
     private String detal;
@@ -50,12 +50,12 @@ public class Coupons implements Parcelable {
         this.time = time;
     }
 
-    public String getNumber() {
-        return number;
+    public String getTelNumber() {
+        return tel;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setTelNumber(String number) {
+        this.tel = number;
     }
 
     public String getAddress() {
@@ -102,14 +102,14 @@ public class Coupons implements Parcelable {
         dest.writeString(couponCode);
         dest.writeString(name);
         dest.writeString(time);
-        dest.writeString(number);
+        dest.writeString(tel);
         dest.writeString(address);
         dest.writeString(content);
         dest.writeString(detal);
         dest.writeString(picUrl);
     }
 
-    public static Parcelable.Creator<Coupons> CREATER = new Parcelable.Creator<Coupons>() {
+    public static Parcelable.Creator<Coupons> CREATOR = new Parcelable.Creator<Coupons>() {
 
         @Override
         public Coupons createFromParcel(Parcel source) {
@@ -118,7 +118,7 @@ public class Coupons implements Parcelable {
             coupon.setCouponCode(source.readString());
             coupon.setName(source.readString());
             coupon.setTime(source.readString());
-            coupon.setNumber(source.readString());
+            coupon.setTelNumber(source.readString());
             coupon.setAddress(source.readString());
             coupon.setContent(source.readString());
             coupon.setDetal(source.readString());

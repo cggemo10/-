@@ -1,5 +1,6 @@
 package com.jayangche.android.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,10 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.jayangche.android.R;
-import com.jayangche.android.fragment.home.BigDiscountFragment;
+import com.jayangche.android.fragment.home.CouponsFragment;
 import com.jayangche.android.fragment.home.ForumFragment;
 import com.jayangche.android.fragment.home.HomeFragment;
 import com.jayangche.android.fragment.home.UserCenterFragment;
@@ -23,17 +23,19 @@ import com.jayangche.android.fragment.home.UserCenterFragment;
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
 
+    public static int REQUEST_CITY = 10;
+
     DrawerLayout mDrawerlayout;
     ActionBarDrawerToggle mDrawerToggle;
     ViewPager fragmentPager;
 
     HomeFragment homeFragment;
-    BigDiscountFragment discountFragment;
+    CouponsFragment couponsFragment;
     ForumFragment forumFragment;
 
     ImageView imgMenuHome;
     ImageView imgMenuForum;
-    ImageView imgMenuDiscount;
+    ImageView imgMenuCoupons;
 
     LinearLayout llHOme;
     LinearLayout llForum;
@@ -43,6 +45,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        LinearLayout lllocation = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
+        lllocation.setOnClickListener(this);
 
         initView();
     }
@@ -54,21 +59,42 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                setTitle(R.string.title_main_page);
+                    setTitle(R.string.title_main_page);
+
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
+//                if (drawerView.getId() == R.id.side_left) {
+                    setTitle(R.string.title_user_center);
+//                    mDrawerlayout.closeDrawer(Gravity.END);
+//                }
+//                if (drawerView.getId() == R.id.side_right) {
+//                    setTitle(R.string.title_my_city);
+//                    mDrawerlayout.closeDrawer(Gravity.START);
+//                }
                 super.onDrawerOpened(drawerView);
-                setTitle(R.string.title_user_center);
+
+
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
             }
         };
+
         mDrawerToggle.syncState();
 
         mDrawerlayout.setDrawerListener(mDrawerToggle);
 
         homeFragment = HomeFragment.getFragment();
-        discountFragment = BigDiscountFragment.getFragment();
+        couponsFragment = CouponsFragment.getFragment();
         forumFragment = ForumFragment.getFragment();
 
         fragmentPager = (ViewPager) findViewById(R.id.pager_main_content);
@@ -81,7 +107,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     case 0:
                         return homeFragment;
                     case 1:
-                        return discountFragment;
+                        return couponsFragment;
                     case 2:
                         return forumFragment;
                 }
@@ -98,7 +124,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         imgMenuHome = (ImageView) findViewById(R.id.img_main_menu_home);
         imgMenuForum = (ImageView) findViewById(R.id.img_main_menu_forum);
-        imgMenuDiscount = (ImageView) findViewById(R.id.img_main_menu_onsale);
+        imgMenuCoupons = (ImageView) findViewById(R.id.img_main_menu_onsale);
 
         llHOme = (LinearLayout) findViewById(R.id.ll_menu_home);
         llHOme.setOnClickListener(this);
@@ -115,7 +141,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+        return false;
     }
 
     @Override
@@ -126,9 +152,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+//        if (id == R.id.action_settings) {
+//            return true;
+//        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -144,16 +170,16 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             case 0:
                 imgMenuHome.setImageLevel(1);
                 imgMenuForum.setImageLevel(0);
-                imgMenuDiscount.setImageLevel(0);
+                imgMenuCoupons.setImageLevel(0);
                 break;
             case 1:
                 imgMenuHome.setImageLevel(0);
-                imgMenuDiscount.setImageLevel(1);
+                imgMenuCoupons.setImageLevel(1);
                 imgMenuForum.setImageLevel(0);
                 break;
             case 2:
                 imgMenuHome.setImageLevel(0);
-                imgMenuDiscount.setImageLevel(0);
+                imgMenuCoupons.setImageLevel(0);
                 imgMenuForum.setImageLevel(1);
         }
     }
@@ -176,16 +202,33 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             case R.id.ll_menu_forum:
                 fragmentPager.setCurrentItem(2, true);
                 break;
+            case R.id.ll_cur_loc:
+                Intent intent = new Intent(this, CityListActivity.class);
+                startActivityForResult(intent, REQUEST_CITY);
+                break;
         }
+    }
+
+    /**
+     * Dispatch incoming result to the correct fragment.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // TODO
     }
 
     //------------------------------------------------------------------------------------------------------------fragment interaction
 
-    public BigDiscountFragment.OnBigDiscountInteractionListener getBigDiscountInteraction() {
+    public CouponsFragment.OnBigDiscountInteractionListener getBigDiscountInteraction() {
         return new BigDiscountInteraction();
     }
 
-    private class BigDiscountInteraction implements BigDiscountFragment.OnBigDiscountInteractionListener {
+    private class BigDiscountInteraction implements CouponsFragment.OnBigDiscountInteractionListener {
 
         @Override
         public void onFragmentInteraction(Uri uri) {

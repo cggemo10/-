@@ -1,0 +1,170 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:background="@color/c_bg_base"
+              tools:context="com.jayangche.android.activity.ViolationActivity">
+
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/view_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/img_coupons"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleType="centerCrop"/>
+
+        <!--<TextView-->
+        <!--android:id="@+id/txt_item_discount_title"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignTop="@id/img_item_discount"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:layout_toRightOf="@id/img_item_discount"-->
+        <!--android:text="爱温无水冷却液"-->
+        <!--android:textColor="@android:color/tertiary_text_dark"-->
+        <!--android:textSize="16sp"-->
+        <!--android:textStyle="bold"/>-->
+
+        <TextView
+            android:layout_toRightOf="@id/img_coupons"
+            android:layout_alignTop="@id/img_coupons"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/txt_item_coupons_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="优惠范围："
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/txt_item_discount_scope_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/txt_item_coupons_address"
+            android:layout_toRightOf="@id/txt_item_coupons_address"
+            android:text="厦门各直营店"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_item_coupons_address"
+            android:layout_below="@id/txt_item_coupons_address"
+            android:layout_marginTop="5dp"
+            android:text="优惠时间："
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_time_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/txt_item_coupons_time"
+            android:layout_toRightOf="@id/txt_item_coupons_time"
+            android:text="2015年5月 至\n2015年7月"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_item_coupons_address"
+            android:layout_below="@id/txt_item_coupons_time_content"
+            android:layout_marginTop="5dp"
+            android:text="优惠内容："
+            android:textColor="#333333"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_content_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/txt_item_coupons_content"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/txt_item_coupons_content"
+            android:singleLine="false"
+            android:text="商品8折优惠，门店更换免收服务费"
+            android:textColor="@android:color/darker_gray"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_tel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/txt_item_coupons_address"
+            android:layout_below="@id/txt_item_coupons_content_content"
+            android:layout_marginTop="10dp"
+            android:text="电话咨询："
+            android:textColor="#de2530"/>
+
+        <TextView
+            android:id="@+id/txt_item_coupons_tel_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/txt_item_coupons_tel"
+            android:layout_alignTop="@id/txt_item_coupons_tel"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/txt_item_coupons_tel"
+            android:background="#de2530"
+            android:padding="3dp"
+            android:singleLine="false"
+            android:text="123456789"
+            android:textColor="@android:color/white"/>
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:background="@android:color/white"
+        android:padding="@dimen/indicator_corner_radius"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:showDividers="beginning"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="商品详情"
+            android:textColor="@android:color/tertiary_text_dark"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/txt_coupons_content"
+            android:layout_marginTop="20dp"
+            android:textColor="@android:color/tertiary_text_dark"
+            android:text="@string/demo_content"
+            android:singleLine="false"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_commit_store_reservation"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:text="@string/str_gain_coupons"
+        android:background="@color/c_style_red"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
