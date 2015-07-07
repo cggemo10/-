@@ -4,7 +4,7 @@
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:background="@color/c_bg_base"
-              tools:context="com.jayangche.android.activity.ViolationActivity">
+              tools:context="com.jayangche.carja.activity.ViolationActivity">
 
     <include
         android:id="@+id/titlebar"
@@ -154,7 +154,8 @@
 
     </LinearLayout>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
+        android:backgroundTint="@color/c_style_red"
         android:id="@+id/btn_commit_store_reservation"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -162,7 +163,6 @@
         android:layout_marginTop="20dp"
         android:textColor="@android:color/white"
         android:text="@string/str_gain_coupons"
-        android:background="@color/c_style_red"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

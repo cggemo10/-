@@ -30,7 +30,6 @@
             android:layout_height="wrap_content"/>
 
 
-
         <!-- demo
         <include
             layout="@layout/fragment_home"
@@ -39,14 +38,14 @@
         start -->
 
         <!-- demo end -->
-        <include
+
+        <fragment
             android:id="@+id/side_left"
-            layout="@layout/fragment_user_center"
+            android:name="com.rrja.carja.fragment.home.UserCenterFragment"
             android:layout_width="320dp"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:background="#88FFFFFF"/>
-
         <!--ListView
             android:id="@+id/side_right"
             android:background="#88FFFFFF"

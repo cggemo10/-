@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Jayangche</string>
+    <string name="app_name">车捷安</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -14,7 +14,7 @@
     <string name="str_commit">提交</string>
 
     <!-- 首页 -->
-    <string name="title_main_page">养车专家</string>
+    <string name="title_main_page">车捷安</string>
     <string name="str_main_on_door">上门养护</string>
     <string name="str_main_on_door_watch">上门洗车</string>
     <string name="str_main_maintenance">门店预约</string>
@@ -82,9 +82,10 @@
 
     <!-- car -->
     <string name="title_car_name">车辆信息</string>
-
-    <!-- car -->
-    <string name="title_car_series">选品牌车系</string>
+    <string name="title_car_series">选择品牌车系</string>
+    <string name="lable_car_series">品牌车系</string>
+    <string name="str_btn_save">保存</string>
+    <string name="str_btn_delete_car">删除车型</string>
 
     <!-- car info -->
     <string name="title_car_inf">车辆信息</string>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+       android:insetLeft="@dimen/abc_control_corner_material"
+       android:insetTop="@dimen/abc_control_corner_material"
+       android:insetRight="@dimen/abc_control_corner_material"
+       android:insetBottom="@dimen/abc_control_corner_material">
+    <shape android:shape="rectangle">
+        <corners android:radius="@dimen/abc_control_corner_material" />
+        <solid android:color="@color/c_style_red" />
+        <padding android:left="@dimen/abc_control_corner_material"
+                 android:top="@dimen/abc_control_corner_material"
+                 android:right="@dimen/abc_control_corner_material"
+                 android:bottom="@dimen/abc_control_corner_material" />
+    </shape>
+
+</inset>

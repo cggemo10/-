@@ -173,7 +173,8 @@
 
     </LinearLayout>
 
-    <Button
+    <android.support.v7.widget.AppCompatButton
+        android:backgroundTint="@color/c_style_red"
         android:id="@+id/btn_commit_store_reservation"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -181,7 +182,6 @@
         android:layout_marginTop="20dp"
         android:textColor="@android:color/white"
         android:text="@string/btn_comform_store_reservation"
-        android:background="@color/c_style_red"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

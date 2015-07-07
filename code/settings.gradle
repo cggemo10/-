@@ -1,1 +1,1 @@
-include ':app', ':pulltorefreshview'
+include ':app', ':pulltorefreshview', ':httpclient_expand'

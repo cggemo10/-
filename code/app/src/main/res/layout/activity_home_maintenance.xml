@@ -3,7 +3,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/c_bg_base"
-                tools:context="com.jayangche.android.activity.HomeMaintenanceActivity">
+                tools:context="com.jayangche.carja.activity.HomeMaintenanceActivity">
 
     <include
         android:id="@+id/titlebar"
