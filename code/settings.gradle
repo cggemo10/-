@@ -1,1 +1,1 @@
-include ':app', ':pulltorefreshview', ':httpclient_expand'
+include ':app', ':pulltorefreshview', ':httpclient_expand', ':stickysideheaderrecycle'
