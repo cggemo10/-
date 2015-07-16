@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +15,10 @@ import com.rrja.carja.model.Forum;
 /**
  * Created by Administrator on 2015/6/6.
  */
-public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> {
+public class ForumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener {
+
+    private static final int TYPE_HEADER = 0;
+    private static final int TYPE_ITEM = 1;
 
     private Context context;
 
@@ -25,19 +27,75 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_forum, viewGroup, false);
-        return new ViewHolder(v);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        if (i == TYPE_HEADER) {
+            View header = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_forum_header, viewGroup, false);
+            return new HeaderHolder(header);
+        } else {
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_forum, viewGroup, false);
+            return new HeaderHolder(v);
+        }
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
 
+        int viewType = getItemViewType(position);
+        if (viewType == TYPE_HEADER) {
+            HeaderHolder headerHolder = (HeaderHolder) viewHolder;
+//            headerHolder.txtAll.
+        } else {
+            Forum discount = CoreManager.getManager().getForums().get(position);
+//        viewHolder.title.setText(discount.());
+//        viewHolder.discountScope.setText(discount.getScope());
+//        viewHolder.discountTime.setText(discount.getTime());
+//        viewHolder.discountContent.setText(discount.getContent());
+        }
+
+
+    }
+
+    /**
+     * Return the view type of the item at <code>position</code> for the purposes
+     * of view recycling.
+     * <p/>
+     * <p>The default implementation of this method returns 0, making the assumption of
+     * a single view type for the adapter. Unlike ListView adapters, types need not
+     * be contiguous. Consider using id resources to uniquely identify item view types.
+     *
+     * @param position position to query
+     * @return integer value identifying the type of the view needed to represent the item at
+     * <code>position</code>. Type codes need not be contiguous.
+     */
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_HEADER;
+        } else {
+            return TYPE_ITEM;
+        }
     }
 
     @Override
     public int getItemCount() {
         return CoreManager.getManager().getDiscounts().size();
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.txt_all_tag:
+                break;
+            case R.id.txt_same_tag:
+                break;
+            case R.id.txt_master_tag:
+                break;
+        }
     }
 
 //    @Override
@@ -92,15 +150,36 @@ public class ForumAdapter extends RecyclerView.Adapter<ForumAdapter.ViewHolder> 
 //        return convertView;
 //    }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ForumViewHolder extends RecyclerView.ViewHolder {
         TextView title;
         TextView discountScope;
         TextView discountTime;
         TextView discountContent;
         ImageView pic;
 
-        public ViewHolder(View itemView) {
+        public ForumViewHolder(View itemView) {
             super(itemView);
         }
+    }
+
+    public class HeaderHolder extends RecyclerView.ViewHolder {
+
+        TextView txtAll;
+        TextView txtSame;
+        TextView txtMaster;
+
+        public HeaderHolder(View itemView) {
+            super(itemView);
+
+            txtAll = (TextView) itemView.findViewById(R.id.txt_all_tag);
+            txtAll.setOnClickListener(ForumAdapter.this);
+            txtSame = (TextView) itemView.findViewById(R.id.txt_same_tag);
+            txtSame.setOnClickListener(ForumAdapter.this);
+            txtMaster = (TextView) itemView.findViewById(R.id.txt_master_tag);
+            txtMaster.setOnClickListener(ForumAdapter.this);
+
+        }
+
+
     }
 }

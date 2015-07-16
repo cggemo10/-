@@ -63,11 +63,10 @@ public class ForumFragment extends Fragment implements AdapterView.OnItemClickLi
 
         RecyclerView list = (RecyclerView) root.findViewById(R.id.list_forum);
 
+
+
         mLayoutManager = new LinearLayoutManager(getActivity());
         list.setLayoutManager(mLayoutManager);
-
-        LinearLayout llHeader = (LinearLayout) root.findViewById(R.id.ll_forum_header);
-        
 
         list.setHasFixedSize(true);
         list.setItemAnimator(new DefaultItemAnimator());

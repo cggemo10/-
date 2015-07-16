@@ -1,6 +1,7 @@
 package com.rrja.carja.service.impl;
 
 import android.content.Context;
+import android.os.Binder;
 import android.os.RemoteException;
 
 import com.rrja.carja.service.IUserAidlInterface;
@@ -8,7 +9,7 @@ import com.rrja.carja.service.IUserAidlInterface;
 /**
  * Created by Administrator on 2015/7/8.
  */
-public class UserBinder extends IUserAidlInterface.Stub {
+public class UserBinder extends Binder {
 
     Context mContext;
 
@@ -16,8 +17,5 @@ public class UserBinder extends IUserAidlInterface.Stub {
         this.mContext = context;
     }
 
-    @Override
-    public void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat, double aDouble, String aString) throws RemoteException {
 
-    }
 }

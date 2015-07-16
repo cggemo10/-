@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
@@ -36,7 +37,7 @@ import java.util.List;
  */
 public class Network {
 
-    public static JSONObject doGet(String urlStr) throws IOException {
+    public static JSONObject doGet(String urlStr)  {
 
         try {
             URL url = new URL(urlStr);
@@ -77,6 +78,10 @@ public class Network {
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return createErrorNetJsonObject();

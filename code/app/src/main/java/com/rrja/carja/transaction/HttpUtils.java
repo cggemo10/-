@@ -1,21 +1,21 @@
 package com.rrja.carja.transaction;
 
-import android.location.Address;
-import android.location.Geocoder;
-
 import com.rrja.carja.model.CareInfo;
 import com.rrja.carja.model.UserInfo;
 
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Created by chongge on 15/7/8.
  */
 public class HttpUtils {
 
+    private static final String BASE_URL = "http://120.25.201.50/api";
+
+    private static final String SERVICE_AREA = "/area";
+
+    private static final String INTERFACE_PROVINCE = "/getProvinceList";
+    private static final String INTERFACE_CITY = "/getCityListByProvinceId";
 
     //-------------------------------------------------------------------------------------------------------------------
     // user interface
@@ -85,11 +85,13 @@ public class HttpUtils {
     //-------------------------------------------------------------------------------------------------------------------
     // location interface
     public static JSONObject getProvinceList() {
-        return null;
+        String url = String.format("%s%s%s", BASE_URL, SERVICE_AREA, INTERFACE_PROVINCE);
+        return Network.doGet(url);
     }
 
     public static JSONObject getCityList(String provinceId) {
-        return null;
+        String url = String.format("%s%s%s?provinceId=%s", BASE_URL, SERVICE_AREA, INTERFACE_CITY, provinceId);
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
