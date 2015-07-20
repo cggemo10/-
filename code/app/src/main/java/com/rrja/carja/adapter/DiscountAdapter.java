@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.rrja.carja.R;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.DiscountInfoToShow;
+import com.rrja.carja.model.DiscountInfo;
 
 import java.io.IOException;
 
@@ -59,7 +59,7 @@ public class DiscountAdapter extends BaseAdapter {
             holder = (Holder) convertView.getTag();
         }
 
-        DiscountInfoToShow discount = CoreManager.getManager().getDiscounts().get(position);
+        DiscountInfo discount = CoreManager.getManager().getDiscounts().get(position);
         holder.title.setText(discount.getName());
         holder.discountScope.setText(discount.getScope());
         holder.discountTime.setText(discount.getTime());

@@ -8,7 +8,7 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfoToShow;
+import com.rrja.carja.model.DiscountInfo;
 
 /**
  * Created by Administrator on 2015/7/19.
@@ -19,7 +19,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private static final String DB_NAME = "rrja_db";
 
     private Dao<Coupons, Integer> couponDao = null;
-    private Dao<DiscountInfoToShow, Integer> discountDao = null;
+    private Dao<DiscountInfo, Integer> discountDao = null;
 
     public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
@@ -29,7 +29,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
 
         try {
-            TableUtils.createTable(connectionSource, DiscountInfoToShow.class);
+            TableUtils.createTable(connectionSource, DiscountInfo.class);
             TableUtils.createTable(connectionSource, Coupons.class);
         } catch (Exception e) {
             e.printStackTrace();
@@ -40,10 +40,10 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int oldVersion, int newVersion) {
         try {
             if (oldVersion < newVersion) {
-                TableUtils.dropTable(connectionSource, DiscountInfoToShow.class, true);
+                TableUtils.dropTable(connectionSource, DiscountInfo.class, true);
                 TableUtils.dropTable(connectionSource, Coupons.class, true);
 
-                TableUtils.createTable(connectionSource, DiscountInfoToShow.class);
+                TableUtils.createTable(connectionSource, DiscountInfo.class);
                 TableUtils.createTable(connectionSource, Coupons.class);
             }
 
@@ -62,9 +62,9 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         return couponDao;
     }
 
-    public Dao<DiscountInfoToShow, Integer> getDiscountDao(){
+    public Dao<DiscountInfo, Integer> getDiscountDao(){
         if (discountDao == null) {
-            discountDao = getRuntimeExceptionDao(DiscountInfoToShow.class);
+            discountDao = getRuntimeExceptionDao(DiscountInfo.class);
         }
         return discountDao;
     }

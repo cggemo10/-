@@ -13,4 +13,10 @@ public class Constant {
     public static final String ACTION_CAR_SERVICE = "request.car.service";
     public static final String ACTION_FORUM_SERVICE = "request.forum.service";
     public static final String ACTION_PRODUCT_SERVICE = "request.product.service";
+
+    public static final String DIR_BASE = "rrja";
+    public static final String DIR_IMG_CACHE = "cacheImg";
+    public static final String DIR_DISCOUNT = "discount";
+    public static final String DIR_COUPONS = "coupons";
+    public static final String DIR_FORUM = "forum";
 }

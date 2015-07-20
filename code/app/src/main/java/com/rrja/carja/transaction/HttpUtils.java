@@ -18,6 +18,14 @@ public class HttpUtils {
     private static final String INTERFACE_CITY = "/getCityListByProvinceId";
 
     //-------------------------------------------------------------------------------------------------------------------
+    // normal
+    public static boolean getPicture(String url, String path) {
+
+        Network.doGet()
+    }
+
+
+    //-------------------------------------------------------------------------------------------------------------------
     // user interface
     public static JSONObject checkAuth(String authToken, String phoneNo) {
 

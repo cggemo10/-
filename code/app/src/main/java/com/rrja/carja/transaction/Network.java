@@ -5,9 +5,12 @@ import android.text.TextUtils;
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGetHC4;
 import org.apache.http.client.methods.HttpPostHC4;
+import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
@@ -165,7 +168,30 @@ public class Network {
 //        }
 //
 //        return null;
+    }
 
+    public static boolean doDownload(String url, File toWrite) {
+
+        if (toWrite == null || toWrite.exists()) {
+            
+        }
+
+        CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties()
+                .build();
+        HttpGetHC4 get = new HttpGetHC4(url);
+
+        try {
+            CloseableHttpResponse response = httpClient.execute(get);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == HttpURLConnection.HTTP_OK) {
+
+
+
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

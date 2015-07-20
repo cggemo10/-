@@ -9,7 +9,7 @@ import android.widget.Toast;
 
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfoToShow;
+import com.rrja.carja.model.DiscountInfo;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.UserInfo;
 
@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class CoreManager {
 
-    private static List<DiscountInfoToShow> discountList = new ArrayList<DiscountInfoToShow>();
+    private static List<DiscountInfo> discountList = new ArrayList<DiscountInfo>();
     private UserInfo currUser;
     private static List<ImageView> companyInfoImgs = new ArrayList<>();
     private static List<CarStore> stores = new ArrayList<>();
@@ -33,7 +33,7 @@ public class CoreManager {
     static {
 
         for (int i = 0; i < 10; i++) {
-            DiscountInfoToShow discount1 = new DiscountInfoToShow();
+            DiscountInfo discount1 = new DiscountInfo();
             discount1.setName("爱温无水冷却液");
             discount1.setScope("厦门各直营店");
             discount1.setTime("2015年5月至\n2015年7月");
@@ -86,7 +86,7 @@ public class CoreManager {
 
     }
 
-    public List<DiscountInfoToShow> getDiscounts() {
+    public List<DiscountInfo> getDiscounts() {
         return discountList;
     }
 

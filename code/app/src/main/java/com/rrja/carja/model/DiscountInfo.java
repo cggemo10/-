@@ -10,7 +10,7 @@ import com.j256.ormlite.table.DatabaseTable;
  * Created by Administrator on 2015/6/6.
  */
 @DatabaseTable(tableName = "discount")
-public class DiscountInfoToShow implements Parcelable{
+public class DiscountInfo implements Parcelable{
 
     @DatabaseField(id = true)
     private String productId;
@@ -124,10 +124,10 @@ public class DiscountInfoToShow implements Parcelable{
         dest.writeString(imgUrl);
     }
 
-    public static Parcelable.Creator<DiscountInfoToShow> CREATOR = new Parcelable.Creator<DiscountInfoToShow>() {
+    public static Parcelable.Creator<DiscountInfo> CREATOR = new Parcelable.Creator<DiscountInfo>() {
         @Override
-        public DiscountInfoToShow createFromParcel(Parcel source) {
-            DiscountInfoToShow discountInfo = new DiscountInfoToShow();
+        public DiscountInfo createFromParcel(Parcel source) {
+            DiscountInfo discountInfo = new DiscountInfo();
             discountInfo.setProductId(source.readString());
             discountInfo.setName(source.readString());
             discountInfo.setScope(source.readString());
@@ -140,8 +140,8 @@ public class DiscountInfoToShow implements Parcelable{
         }
 
         @Override
-        public DiscountInfoToShow[] newArray(int size) {
-            return new DiscountInfoToShow[size];
+        public DiscountInfo[] newArray(int size) {
+            return new DiscountInfo[size];
         }
     };
 }
