@@ -1,12 +1,21 @@
 package com.rrja.carja.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by chongge on 15/5/31.
  */
+@DatabaseTable(tableName = "user")
 public class UserInfo {
+
+    @DatabaseField(id = true)
     private String id;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String nikeName;
+    @DatabaseField
     private String avatarPath;
 
     public String getId() {

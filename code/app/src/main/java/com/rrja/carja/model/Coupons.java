@@ -3,19 +3,32 @@ package com.rrja.carja.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by Administrator on 2015/6/25.
  */
+@DatabaseTable(tableName = "coupons")
 public class Coupons implements Parcelable {
 
+    @DatabaseField(id = true)
     private String couponId;
+    @DatabaseField
     private String couponCode;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String time;
+    @DatabaseField
     private String tel;
+    @DatabaseField
     private String address;
+    @DatabaseField
     private String content;
+    @DatabaseField
     private String detal;
+    @DatabaseField
     private String picUrl;
 
     public String getCouponId() {

@@ -26,6 +26,8 @@ public class FileService extends Service {
 
         }
 
+        return "";
+
     }
 
     public void downloadFile(FileRequest request) {

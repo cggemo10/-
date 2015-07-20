@@ -13,7 +13,7 @@ public class FileRequest {
     public static final String TYPE_STORE = "type_store";
     public static final String TYPE_AVATAR = "type_avatar";
     public static final String TYPE_COUPONS = "typ_coupons";
-    public static final String TYPE_
+    public static final String TYPE_DISCOUNT = "type_discount";
 
     private String type;
     private String id;
@@ -44,6 +44,7 @@ public class FileRequest {
     }
 
     public boolean isUseable() {
-        boolean typeEnable =  !TextUtils.isEmpty(type) && ()
+        boolean typeEnable =  !TextUtils.isEmpty(type);
+        return typeEnable;
     }
 }

@@ -3,23 +3,36 @@ package com.rrja.carja.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by chongge on 15/6/27.
  */
+@DatabaseTable(tableName = "car_store")
 public class CarStore implements Parcelable {
 
+    @DatabaseField(id = true)
     private String storeId;
+    @DatabaseField
     private String storeName;
+    @DatabaseField
     private String address;
+    @DatabaseField
     private String storeImg;
+    @DatabaseField
     private String area;
+    @DatabaseField
     private String tel;
+    @DatabaseField
     private String openTime;
+    @DatabaseField
     private String payType;
-
+    @DatabaseField
     private String desc;
-
+    @DatabaseField
     private double lat;
+    @DatabaseField
     private double lng;
 
     public String getStoreId() {

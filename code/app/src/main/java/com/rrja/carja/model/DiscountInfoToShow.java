@@ -3,18 +3,30 @@ package com.rrja.carja.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by Administrator on 2015/6/6.
  */
+@DatabaseTable(tableName = "discount")
 public class DiscountInfoToShow implements Parcelable{
 
+    @DatabaseField(id = true)
     private String productId;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String scope;
+    @DatabaseField
     private String time;
+    @DatabaseField
     private String content;
+    @DatabaseField
     private String mobileNo;
+    @DatabaseField
     private String detial;
+    @DatabaseField
     private String imgUrl;
 
     public String getMobileNo() {

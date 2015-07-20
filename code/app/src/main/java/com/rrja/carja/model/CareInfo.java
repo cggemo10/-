@@ -3,15 +3,24 @@ package com.rrja.carja.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by chongge on 15/6/26.
  */
+@DatabaseTable(tableName = "car_info")
 public class CareInfo implements Parcelable{
 
+    @DatabaseField(id = true)
     private String id;
+    @DatabaseField
     private String frameNo6;
+    @DatabaseField
     private String buyTime;
+    @DatabaseField
     private String engineNo;
+    @DatabaseField
     private String phoneNo;
 
     public String getId() {
