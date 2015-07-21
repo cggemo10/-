@@ -13,14 +13,6 @@ import com.rrja.carja.R;
 import com.rrja.carja.adapter.CarBrandAdapter;
 import com.rrja.cja.view.recycler.stickyside.LayoutManager;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CarSeriesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link CarSeriesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class CarBrandFragment extends Fragment {
 
     private int mHeaderDisplay;

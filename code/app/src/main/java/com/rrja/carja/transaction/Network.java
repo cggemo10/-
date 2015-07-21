@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -170,10 +171,22 @@ public class Network {
 //        return null;
     }
 
-    public static boolean doDownload(String url, File toWrite) {
+    public static boolean doDownload(String url, String path) {
 
-        if (toWrite == null || toWrite.exists()) {
-            
+        String fileName = url.substring(url.lastIndexOf("/") + 1);
+        File file = new File(path, fileName);
+        File dir = new File(path);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        if (file.exists()) {
+            file.delete();
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
 
         CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties()
@@ -184,14 +197,17 @@ public class Network {
             CloseableHttpResponse response = httpClient.execute(get);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpURLConnection.HTTP_OK) {
-
-
-
+                FileOutputStream fos = new FileOutputStream(file);
+                response.getEntity().writeTo(fos);
+                fos.flush();
+                fos.close();
+                return true;
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return false;
 
     }
 

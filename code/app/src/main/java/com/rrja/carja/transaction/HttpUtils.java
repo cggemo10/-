@@ -21,7 +21,7 @@ public class HttpUtils {
     // normal
     public static boolean getPicture(String url, String path) {
 
-        Network.doGet()
+        return Network.doDownload(url,path);
     }
 
 

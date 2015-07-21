@@ -1,29 +1,43 @@
 package com.rrja.carja.service;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
 import com.rrja.carja.model.DiscountInfo;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.transaction.HttpUtils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class FileService extends Service {
+public class FileService extends Service implements Handler.Callback{
 
     public static final String ACTION_IMG_COUPONS = "rrja.coupons.img";
     public static final String ACTION_IMG_DISCOUNT = "rrja.discount.img";
     public static final String ACTION_IMG_FORUM = "rrja.forum.img";
     public static final String ACTION_IMG_STORE = "rrja.store.img";
+    public static final String ACTION_APP_CLOSE = "rrja.app.close";
+
+    private static final int WHAT_COUPONS = 10;
+    private static final int WHAT_DISCOUNT = 11;
+    private static final int WHAT_FORUM = 12;
+    private static final int WHAT_STORE = 13;
+
+    private static final int MSG_DOWNLOAD_SUCC = 21;
+    private static final int MSG_DOWNLOAD_FAILED = 22;
 
 
     Executor executor;
@@ -96,6 +110,12 @@ public class FileService extends Service {
 
         }
 
+        if (ACTION_APP_CLOSE.equals(action)) {
+            loadingCouponsMap.clear();
+            loadingDiscountMap.clear();
+            loadingStoreMap.clear();
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -103,6 +123,43 @@ public class FileService extends Service {
     public IBinder onBind(Intent intent) {
 
         return null;
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+
+        switch (msg.what) {
+
+            case WHAT_COUPONS:
+                String key = (String) msg.obj;
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    // TODO send broadcast
+                }
+                loadingCouponsMap.remove(key);
+                break;
+            case WHAT_DISCOUNT:
+                String discountKey = (String) msg.obj;
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    // TODO send broadcast
+                }
+                loadingDiscountMap.remove(discountKey);
+                break;
+            case WHAT_FORUM:
+                String forumKey = (String) msg.obj;
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    // TODO send broadcast
+                }
+//                loadingForumMap.remove(forumKey);
+                break;
+            case WHAT_STORE:
+                String storeKey = (String) msg.obj;
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    // TODO send broadcast
+                }
+                loadingStoreMap.remove(storeKey);
+                break;
+        }
+        return false;
     }
 
     private static class CouponsImgTask implements Runnable {
@@ -115,9 +172,22 @@ public class FileService extends Service {
 
         @Override
         public void run() {
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                // TODO send message
+                return;
+            }
+            String path = Environment.getExternalStorageDirectory().getPath() +
+                    File.separatorChar + Constant.DIR_BASE + File.separator +
+                    Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_COUPONS + File.separator;
 
             String url = mCoupons.getPicUrl();
-            HttpUtils.getPicture()
+
+            boolean result = HttpUtils.getPicture(url, path);
+            if (result) {
+
+            } else {
+
+            }
 
         }
     }
@@ -162,6 +232,10 @@ public class FileService extends Service {
         public void run() {
 
         }
+    }
+
+    private void sendBroadCast() {
+        Intent intent = new Intent(Action)
     }
 
 }
