@@ -7,11 +7,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
 import com.rrja.carja.model.DiscountInfoToShow;
 import com.rrja.carja.model.Forum;
+import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.service.impl.CarBinder;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +31,8 @@ public class CoreManager {
     private static List<CarStore> stores = new ArrayList<>();
     private static List<Coupons> couponsList = new ArrayList<>();
     private static List<Forum> forums = new ArrayList<>();
+    private static List<Region> regions = new ArrayList<>();
+    private static List<CarBrand> brandList = new ArrayList<>();
 
     // demo
     static {
@@ -88,6 +93,9 @@ public class CoreManager {
 
     public List<DiscountInfoToShow> getDiscounts() {
         return discountList;
+    }
+    public List<CarBrand> getCarBrand() {
+        return brandList;
     }
 
     public UserInfo getCurrUser() {
