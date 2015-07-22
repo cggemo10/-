@@ -33,7 +33,7 @@ public class ForumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return new HeaderHolder(header);
         } else {
             View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_list_forum, viewGroup, false);
-            return new HeaderHolder(v);
+            return new ForumViewHolder(v);
         }
     }
 
@@ -43,6 +43,9 @@ public class ForumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         int viewType = getItemViewType(position);
         if (viewType == TYPE_HEADER) {
             HeaderHolder headerHolder = (HeaderHolder) viewHolder;
+            headerHolder.txtAll.setOnClickListener(ForumAdapter.this);
+            headerHolder.txtSame.setOnClickListener(ForumAdapter.this);
+            headerHolder.txtMaster.setOnClickListener(ForumAdapter.this);
 //            headerHolder.txtAll.
         } else {
             Forum discount = CoreManager.getManager().getForums().get(position);
@@ -172,11 +175,8 @@ public class ForumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             super(itemView);
 
             txtAll = (TextView) itemView.findViewById(R.id.txt_all_tag);
-            txtAll.setOnClickListener(ForumAdapter.this);
             txtSame = (TextView) itemView.findViewById(R.id.txt_same_tag);
-            txtSame.setOnClickListener(ForumAdapter.this);
             txtMaster = (TextView) itemView.findViewById(R.id.txt_master_tag);
-            txtMaster.setOnClickListener(ForumAdapter.this);
 
         }
 

@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,8 @@ import com.rrja.carja.core.CoreManager;
 
 public class CouponsFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-    ListView couponGoodList;
+    RecyclerView couponGoodList;
+    RecyclerView.LayoutManager mLayoutManager;
 
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
@@ -55,9 +58,11 @@ public class CouponsFragment extends Fragment implements AdapterView.OnItemClick
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_coupons, container, false);
 
-        couponGoodList = (ListView) root.findViewById(R.id.list_discount);
+        couponGoodList = (RecyclerView) root.findViewById(R.id.list_discount);
+        mLayoutManager = new LinearLayoutManager(getActivity());
+        couponGoodList.setLayoutManager(mLayoutManager);
         couponGoodList.setAdapter(new CouponsAdapter(getActivity()));
-        couponGoodList.setOnItemClickListener(this);
+//        couponGoodList.setOnItemClickListener(this);
 
         return root;
     }

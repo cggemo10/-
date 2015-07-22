@@ -59,7 +59,7 @@ public class ForumFragment extends Fragment implements AdapterView.OnItemClickLi
                              Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_forum, container, false);
 
-         swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_forum);
+        swipeRefreshLayout = (SwipeRefreshLayout) root.findViewById(R.id.swipe_refresh_forum);
 
         RecyclerView list = (RecyclerView) root.findViewById(R.id.list_forum);
 

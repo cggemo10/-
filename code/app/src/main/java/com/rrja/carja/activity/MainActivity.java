@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.rrja.carja.R;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.fragment.home.CouponsFragment;
 import com.rrja.carja.fragment.home.ForumFragment;
 import com.rrja.carja.fragment.home.HomeFragment;
@@ -50,6 +51,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         lllocation.setOnClickListener(this);
 
         initView();
+
+        // for example
+        CoreManager.getManager().initCompanyInfo(this);
     }
 
     private void initView() {

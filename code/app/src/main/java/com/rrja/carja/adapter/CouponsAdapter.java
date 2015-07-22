@@ -1,7 +1,12 @@
 package com.rrja.carja.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,15 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.Coupons;
+import com.rrja.carja.service.FileService;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.zip.Inflater;
 
-/**
- * Created by chongge on 15/6/29.
- */
-public class CouponsAdapter extends BaseAdapter {
+
+public class CouponsAdapter extends RecyclerView.Adapter {
+
+    private static final String TAG = CouponsAdapter.class.getName();
 
     Context mContext;
 
@@ -26,98 +35,85 @@ public class CouponsAdapter extends BaseAdapter {
     }
 
     @Override
-    public int getCount() {
-        return CoreManager.getManager().getCoupons().size();
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_coupons, parent, false);
+        CouponsHolder holder = new CouponsHolder(view);
+        return holder;
     }
 
-    /**
-     * Get the data item associated with the specified position in the data set.
-     *
-     * @param position Position of the item whose data we want within the adapter's
-     *                 data set.
-     * @return The data at the specified position.
-     */
     @Override
-    public Object getItem(int position) {
-        return CoreManager.getManager().getCoupons().get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        Coupons coupon = CoreManager.getManager().getCoupons().get(position);
+
+        CouponsHolder couponsHolder = (CouponsHolder) holder;
+
+        couponsHolder.title.setText(coupon.getName());
+        couponsHolder.couponsScope.setText(coupon.getAddress());
+        couponsHolder.couponsTime.setText(coupon.getTime());
+        couponsHolder.couponsContent.setText(coupon.getContent());
+        // TODO later
+        String picUrl = coupon.getPicUrl();
+        if (!TextUtils.isEmpty(picUrl)) {
+
+            String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1);
+
+            File img = new File(Constant.getCouponsCacheDir(), fileName);
+            if (img.exists()) {
+                try {
+                    couponsHolder.pic.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
+                } catch (Exception e) {
+                    try {
+                        couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    Log.e(TAG, e.getMessage(), e);
+                }
+
+            } else {
+                Intent intent = new Intent(mContext, FileService.class);
+                intent.setAction(FileService.ACTION_IMG_COUPONS);
+                intent.putExtra("coupons", coupon);
+                mContext.startService(intent);
+            }
+        }
+
+        // for example
+        try {
+            couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    /**
-     * Get the row id associated with the specified position in the list.
-     *
-     * @param position The position of the item within the adapter's data set whose row id we want.
-     * @return The id of the item at the specified position.
-     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
-    /**
-     * Get a View that displays the data at the specified position in the data set. You can either
-     * create a View manually or inflate it from an XML layout file. When the View is inflated, the
-     * parent View (GridView, ListView...) will apply default layout parameters unless you use
-     * {@link android.view.LayoutInflater#inflate(int, android.view.ViewGroup, boolean)}
-     * to specify a root view and to prevent attachment to the root.
-     *
-     * @param position    The position of the item within the adapter's data set of the item whose view
-     *                    we want.
-     * @param convertView The old view to reuse, if possible. Note: You should check that this view
-     *                    is non-null and of an appropriate type before using. If it is not possible to convert
-     *                    this view to display the correct data, this method can create a new view.
-     *                    Heterogeneous lists can specify their number of view types, so that this View is
-     *                    always of the right type (see {@link #getViewTypeCount()} and
-     *                    {@link #getItemViewType(int)}).
-     * @param parent      The parent that this view will eventually be attached to
-     * @return A View corresponding to the data at the specified position.
-     */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Holder holder = null;
-        if (convertView == null) {
-            convertView = View.inflate(mContext, R.layout.item_coupons,null);
-
-            holder = new Holder();
-            holder.pic = (ImageView) convertView.findViewById(R.id.img_item_discount);
-            holder.title = (TextView) convertView.findViewById(R.id.txt_item_discount_title);
-            holder.discountScope = (TextView) convertView.findViewById(R.id.txt_item_discount_scope_content);
-            holder.discountTime = (TextView) convertView.findViewById(R.id.txt_item_discount_time_content);
-            holder.discountContent = (TextView) convertView.findViewById(R.id.txt_item_discount_detial_content);
-            convertView.setTag(holder);
-        }
-
-        if (holder == null) {
-            holder = (Holder) convertView.getTag();
-        }
-
-        Coupons coupon = CoreManager.getManager().getCoupons().get(position);
-        holder.title.setText(coupon.getName());
-        holder.discountScope.setText(coupon.getAddress());
-        holder.discountTime.setText(coupon.getTime());
-        holder.discountContent.setText(coupon.getContent());
-        /* TODO later
-        if (!TextUtils.isEmpty(discount.getImgUrl())) {
-            if (discount.getImgUrl().contains("http")) {
-                // TODO load from download service
-            } else {
-                holder.pic.setImageURI(Uri.fromFile(new File(discount.getImgUrl())));
-            }
-        }*/
-
-        try {
-            holder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return convertView;
+    public int getItemCount() {
+        return   CoreManager.getManager().getCoupons().size();
     }
 
-    private class Holder {
+
+    private class CouponsHolder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView discountScope;
-        TextView discountTime;
-        TextView discountContent;
+        TextView couponsScope;
+        TextView couponsTime;
+        TextView couponsContent;
         ImageView pic;
+
+        public CouponsHolder(View itemView) {
+            super(itemView);
+
+            title = (TextView) itemView.findViewById(R.id.txt_item_coupons_title);
+            couponsScope = (TextView) itemView.findViewById(R.id.txt_item_coupons_scope_content);
+            couponsTime = (TextView) itemView.findViewById(R.id.txt_item_coupons_time_content);
+            couponsContent = (TextView) itemView.findViewById(R.id.txt_item_coupons_detial_content);
+            pic = (ImageView) itemView.findViewById(R.id.img_item_coupons);
+        }
     }
 }

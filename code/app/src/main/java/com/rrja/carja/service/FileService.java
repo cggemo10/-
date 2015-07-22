@@ -1,14 +1,15 @@
 package com.rrja.carja.service;
 
-import android.app.Notification;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.rrja.carja.constant.Constant;
@@ -23,7 +24,7 @@ import java.util.HashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class FileService extends Service implements Handler.Callback{
+public class FileService extends Service implements Handler.Callback {
 
     public static final String ACTION_IMG_COUPONS = "rrja.coupons.img";
     public static final String ACTION_IMG_DISCOUNT = "rrja.discount.img";
@@ -39,12 +40,14 @@ public class FileService extends Service implements Handler.Callback{
     private static final int MSG_DOWNLOAD_SUCC = 21;
     private static final int MSG_DOWNLOAD_FAILED = 22;
 
-
+    Handler mHandler;
     Executor executor;
 
     HashMap<String, Coupons> loadingCouponsMap;
     HashMap<String, DiscountInfo> loadingDiscountMap;
     HashMap<String, CarStore> loadingStoreMap;
+
+    private RecycleBoradcastReceiver recycleReceiver;
 
     public FileService() {
     }
@@ -55,10 +58,15 @@ public class FileService extends Service implements Handler.Callback{
 
         executor = Executors.newCachedThreadPool();
 
+        mHandler = new Handler(this);
+
         loadingCouponsMap = new HashMap<>();
         loadingDiscountMap = new HashMap<>();
         loadingStoreMap = new HashMap<>();
+
+        registRecycleReceiver();
     }
+
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -126,6 +134,12 @@ public class FileService extends Service implements Handler.Callback{
     }
 
     @Override
+    public void onDestroy() {
+        unRegistRecycleReceiver();
+        super.onDestroy();
+    }
+
+    @Override
     public boolean handleMessage(Message msg) {
 
         switch (msg.what) {
@@ -133,28 +147,28 @@ public class FileService extends Service implements Handler.Callback{
             case WHAT_COUPONS:
                 String key = (String) msg.obj;
                 if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
-                    // TODO send broadcast
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS);
                 }
                 loadingCouponsMap.remove(key);
                 break;
             case WHAT_DISCOUNT:
                 String discountKey = (String) msg.obj;
                 if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
-                    // TODO send broadcast
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT);
                 }
                 loadingDiscountMap.remove(discountKey);
                 break;
             case WHAT_FORUM:
                 String forumKey = (String) msg.obj;
                 if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
-                    // TODO send broadcast
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_FORUM);
                 }
 //                loadingForumMap.remove(forumKey);
                 break;
             case WHAT_STORE:
                 String storeKey = (String) msg.obj;
                 if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
-                    // TODO send broadcast
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
                 }
                 loadingStoreMap.remove(storeKey);
                 break;
@@ -162,7 +176,7 @@ public class FileService extends Service implements Handler.Callback{
         return false;
     }
 
-    private static class CouponsImgTask implements Runnable {
+    private class CouponsImgTask implements Runnable {
 
         Coupons mCoupons;
 
@@ -172,41 +186,63 @@ public class FileService extends Service implements Handler.Callback{
 
         @Override
         public void run() {
+            Message msg = mHandler.obtainMessage(WHAT_COUPONS);
+            msg.obj = mCoupons.getCouponId();
             if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                // TODO send message
-                return;
-            }
-            String path = Environment.getExternalStorageDirectory().getPath() +
-                    File.separatorChar + Constant.DIR_BASE + File.separator +
-                    Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_COUPONS + File.separator;
-
-            String url = mCoupons.getPicUrl();
-
-            boolean result = HttpUtils.getPicture(url, path);
-            if (result) {
-
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
             } else {
+                String path = Environment.getExternalStorageDirectory().getPath() +
+                        File.separatorChar + Constant.DIR_BASE + File.separator +
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_COUPONS + File.separator;
 
+                String url = mCoupons.getPicUrl();
+
+                boolean result = HttpUtils.getPicture(url, path);
+
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
             }
-
+            msg.sendToTarget();
         }
     }
 
-    private static class StoreImgTask implements Runnable {
+    private class StoreImgTask implements Runnable {
 
         CarStore mStore;
 
-        StoreImgTask (CarStore store) {
+        StoreImgTask(CarStore store) {
             this.mStore = store;
         }
 
         @Override
         public void run() {
+            Message msg = mHandler.obtainMessage(WHAT_STORE);
+            msg.obj = mStore.getStoreId();
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
+            } else {
+                String path = Environment.getExternalStorageDirectory().getPath() +
+                        File.separatorChar + Constant.DIR_BASE + File.separator +
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_STORE + File.separator;
 
+                String url = mStore.getStoreImg();
+
+                boolean result = HttpUtils.getPicture(url, path);
+
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
+            }
+            msg.sendToTarget();
         }
     }
 
-    private static class FuromImgTask implements Runnable {
+    private class FuromImgTask implements Runnable {
 
         Forum forumItem;
 
@@ -220,7 +256,7 @@ public class FileService extends Service implements Handler.Callback{
         }
     }
 
-    private static class DiscountImgTask implements Runnable {
+    private class DiscountImgTask implements Runnable {
 
         DiscountInfo mDiscountInfo;
 
@@ -231,11 +267,62 @@ public class FileService extends Service implements Handler.Callback{
         @Override
         public void run() {
 
+            Message msg = mHandler.obtainMessage(WHAT_DISCOUNT);
+            msg.obj = mDiscountInfo.getProductId();
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
+            } else {
+                String path = Environment.getExternalStorageDirectory().getPath() +
+                        File.separatorChar + Constant.DIR_BASE + File.separator +
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_DISCOUNT + File.separator;
+
+                String url = mDiscountInfo.getImgUrl();
+
+                boolean result = HttpUtils.getPicture(url, path);
+
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
+            }
+            msg.sendToTarget();
+
         }
     }
 
-    private void sendBroadCast() {
-        Intent intent = new Intent(Action)
+    private void sendBroadCast(String action) {
+        Intent intent = new Intent(action);
+        sendBroadcast(intent);
+    }
+
+    private void registRecycleReceiver() {
+
+        if (recycleReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_FORUM);
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT);
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS);
+
+            recycleReceiver = new RecycleBoradcastReceiver();
+            registerReceiver(recycleReceiver, filter);
+        }
+    }
+
+    private void unRegistRecycleReceiver() {
+        if (recycleReceiver != null) {
+            unregisterReceiver(recycleReceiver);
+            recycleReceiver = null;
+        }
+    }
+
+    private class RecycleBoradcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // do nothing
+        }
     }
 
 }

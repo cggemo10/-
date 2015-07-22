@@ -6,7 +6,6 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import com.rrja.carja.R;
 import com.rrja.carja.adapter.holder.CarBrandHeaderHolder;
@@ -14,7 +13,6 @@ import com.rrja.carja.adapter.holder.CarBrandHolder;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.cja.view.recycler.stickyside.GridSLM;
-import com.rrja.cja.view.recycler.stickyside.LayoutManager;
 import com.rrja.cja.view.recycler.stickyside.LinearSLM;
 
 import java.util.ArrayList;
@@ -36,7 +34,7 @@ public class CarBrandAdapter extends RecyclerView.Adapter{
 
     private boolean mMarginsFixed;
 
-    // brand “—æ≠∞¥firstLetter ≈≈∫√–Ú
+    // brand Â∑≤ÁªèÊåâfirstLetter ÊéíÂ•ΩÂ∫è
     public CarBrandAdapter(Context context) {
         List<CarBrand> carBrandList = CoreManager.getManager().getCarBrand();
         this.mContext = context;

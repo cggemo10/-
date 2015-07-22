@@ -18,12 +18,12 @@ public class FileBinder extends Binder {
 
     public String getFile(FileRequest request) {
 
-        String file = mService.findFile(request);
-        if (file != null) {
-            return file;
-        } else {
-            mService.downloadFile(request);
-        }
+//        String file = mService.findFile(request);
+//        if (file != null) {
+//            return file;
+//        } else {
+//            mService.downloadFile(request);
+//        }
 
         return null;
     }
