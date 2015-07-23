@@ -2,11 +2,14 @@ package com.rrja.carja.core;
 
 import android.content.Context;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.j256.ormlite.dao.Dao;
+import com.rrja.carja.activity.SplshActivity;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
@@ -14,9 +17,11 @@ import com.rrja.carja.model.DiscountInfo;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.CarBinder;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -91,20 +96,6 @@ public class CoreManager {
 
     }
 
-    public List<DiscountInfo> getDiscounts() {
-        return discountList;
-    }
-    public List<CarBrand> getCarBrand() {
-        return brandList;
-    }
-
-    public UserInfo getCurrUser() {
-        return currUser;
-    }
-
-    public void setCurrUser(UserInfo currUser) {
-        this.currUser = currUser;
-    }
 
     // company info
     public void initCompanyInfo(final Context context) {
@@ -130,6 +121,13 @@ public class CoreManager {
 
     }
 
+    public void setCurrUser(UserInfo currUser) {
+        this.currUser = currUser;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //-------------------------------------getter---------------------------------------------------
+    //----------------------------------------------------------------------------------------------
     public List<ImageView> getCompanyInfo() {
         return companyInfoImgs;
     }
@@ -142,16 +140,75 @@ public class CoreManager {
         return couponsList;
     }
 
-    public  List<Forum> getForums() {
+    public List<Forum> getForums() {
         return forums;
     }
 
-    // single instance
+    public List<DiscountInfo> getDiscounts() {
+        return discountList;
+    }
+
+    public List<CarBrand> getCarBrand() {
+        return brandList;
+    }
+
+    public UserInfo getCurrUser() {
+        return currUser;
+    }
+
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------single instance---------------------------------------------
+    //----------------------------------------------------------------------------------------------
     private static class ManagerHolder {
         private static CoreManager holder = new CoreManager();
     }
 
     public static CoreManager getManager() {
         return ManagerHolder.holder;
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------load data---------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    public void init(SplshActivity splshActivity) {
+
+    }
+
+    public void refreshRegions(Context context) throws SQLException {
+        DBHelper helper = DBHelper.getInstance(context);
+        if (helper != null) {
+
+
+            Dao<Region, Integer> regionsDao = helper.getRegionDao();
+            List<Region> queryForAll = regionsDao.queryForAll();
+            if (queryForAll != null && queryForAll.size() != 0) {
+                regions.clear();
+                regions.addAll(queryForAll);
+
+                // TODO notify
+            }
+        } else {
+            Log.e("rrja.CoreManager", "refreshRegions->get DBHelper failed");
+        }
+
+    }
+
+    public void refreshCarBrand(Context context) throws SQLException {
+        DBHelper helper = DBHelper.getInstance(context);
+        if (helper != null) {
+
+            Dao<CarBrand, Integer> carBrandsDao = helper.getCarBrandDao();
+            List<CarBrand> queryForAll = carBrandsDao.queryForAll();
+            if (queryForAll != null && queryForAll.size() != 0) {
+                brandList.clear();
+                brandList.addAll(queryForAll);
+
+                // TODO notify
+            }
+
+        } else {
+            Log.e("rrja.CoreManager", "refreshCarBrand->get DBHelper failed");
+        }
     }
 }

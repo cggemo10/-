@@ -1,48 +1,30 @@
 package com.rrja.carja.activity;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.service.DataCenterService;
 
-public class SplshActivity extends ActionBarActivity {
+public class SplshActivity extends Activity {
 
-
-
-    @Override
-    protected void onNewIntent(Intent intent) {
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        CoreManager.getManager().init(this);
+
+        Intent service = new Intent(this, DataCenterService.class);
+        service.setAction(Constant.ACTION_INIT_SERVICE);
+        startService(service);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splsh);
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_splsh, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }

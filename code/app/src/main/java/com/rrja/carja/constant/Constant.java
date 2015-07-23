@@ -10,19 +10,27 @@ import java.lang.reflect.Field;
  */
 public class Constant {
 
+    public static final String SP_CONSTANT_TIME = "constant_data";
+
     public static final String ACTION_LOGIN = "LOGIN";
     public static final String ACTION_LOGIN_MOBILE_VERIFY = "MOBILE_VERIFY";
     public static final String ACTION_MODIFY_NICK_NAME = "MODIFY_NICK_NAME";
 
-    public static final String ACTION_USER_SERVICE = "request.user.service";
-    public static final String ACTION_CAR_SERVICE = "request.car.service";
-    public static final String ACTION_FORUM_SERVICE = "request.forum.service";
-    public static final String ACTION_PRODUCT_SERVICE = "request.product.service";
+    public static final String ACTION_INIT_SERVICE = "rrja.request.init";
+    public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
+    public static final String ACTION_CAR_SERVICE = "rrja.request.car.service";
+    public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
+    public static final String ACTION_PRODUCT_SERVICE = "rrja.request.product.service";
 
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS = "rrja.broadcast.download.COUPONS_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT = "rrja.broadcast.download.DISCOUNT_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_FORUM = "rrja.broadcast.download.FORUM_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_STORE = "rrja.broadcast.download.STORE_IMG";
+
+    public static final String ACTION_BROADCAST_REFRESH_REGION = "rrja.boradcast.refresh.REGIONS";
+    public static final String ACTION_BROADCAST_REFRESH_REGION_ERROR = "rrja.boradcast.refresh.REGIONS_ERROR";
+    public static final String ACTION_BROADCAST_REFRESH_CARBRAND = "rrja.broadcast.refresh.CARBRAND";
+    public static final String ACTION_BROADCAST_REFRESH_CARBRAND_ERROR = "rrja.broadcast.refresh.CARBRAND_ERROR";
 
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";

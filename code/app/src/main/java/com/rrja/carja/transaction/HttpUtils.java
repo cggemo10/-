@@ -13,9 +13,18 @@ public class HttpUtils {
     private static final String BASE_URL = "http://120.25.201.50/api";
 
     private static final String SERVICE_AREA = "/area";
+    private static final String SERVICE_CAR = "/car";
+//    http://120.25.201.50/api/car/getBrands?firstLetter=
+//    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
+//    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
 
     private static final String INTERFACE_PROVINCE = "/getProvinceList";
     private static final String INTERFACE_CITY = "/getCityListByProvinceId";
+    private static final String INTERFACE_ALL_CITY = "/getAllAreaList";
+
+    private static final String INTERFACE_BRAND = "/getBrands";
+    private static final String INTERFACE_SERIES = "/getSeries";
+    private static final String INTERFACE_MODEL = "/getModels";
 
     //-------------------------------------------------------------------------------------------------------------------
     // normal
@@ -77,21 +86,35 @@ public class HttpUtils {
 
     // 获取汽车品牌
     public static JSONObject getCarBrands(String firstLetter) {
-        return null;
+
+        String url = String.format("%s%s%s%s%s", BASE_URL, SERVICE_CAR, INTERFACE_BRAND, "?firstLetter=", firstLetter);
+        return Network.doGet(url);
     }
 
     // 获取品牌车系
     public static JSONObject getCarSeries(String brandName, String brandId) {
-        return null;
+
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_CAR, INTERFACE_SERIES, "?brandName=",
+                brandName, "&brandId=", brandId);
+        return Network.doGet(url);
     }
 
     // 获取车系型号
     public static JSONObject getCarModels(String seriesName, String seriesId) {
-        return null;
+
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_CAR, INTERFACE_MODEL, "?seriesName=",
+                seriesName, "&seriesId=", seriesId);
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
     // location interface
+
+    public static JSONObject getAllCityList() {
+        String url = String.format("%s%s%s", BASE_URL, SERVICE_AREA, INTERFACE_ALL_CITY);
+        return Network.doGet(url);
+    }
+
     public static JSONObject getProvinceList() {
         String url = String.format("%s%s%s", BASE_URL, SERVICE_AREA, INTERFACE_PROVINCE);
         return Network.doGet(url);
