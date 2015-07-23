@@ -61,7 +61,7 @@ public class Region {
     code: "110000",
     id: 2,
     level: 2,
-    name: "±±¾©ÊÐ"
+    name: "åŒ—äº¬å¸‚"
      */
 
     public static Region parse(JSONObject proviceJson) {

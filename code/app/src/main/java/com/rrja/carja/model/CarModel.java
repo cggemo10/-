@@ -4,10 +4,10 @@ package com.rrja.carja.model;
 engineCapacity: "2000",
 id: 60,
 seriesId: 8,
-seriesName: "°ÂµÏA4(½ø¿Ú)",
-transmission: "ÊÖ×ÔÒ»Ìå",
-typeName: "3.0 quattro³¨Åî",
-typeSeries: "2003 ¿î"
+seriesName: "å¥¥è¿ªA4(è¿›å£)",
+transmission: "æ‰‹è‡ªä¸€ä½“",
+typeName: "3.0 quattroæ•è“¬",
+typeSeries: "2003 æ¬¾"
  */
 
 import android.os.Parcel;
