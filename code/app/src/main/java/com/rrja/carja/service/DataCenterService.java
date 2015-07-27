@@ -36,6 +36,8 @@ public class DataCenterService extends Service implements Handler.Callback {
     Executor executor;
     Handler mHandler;
 
+    UserBinder userBinder;
+
     public DataCenterService() {
     }
 
@@ -53,6 +55,13 @@ public class DataCenterService extends Service implements Handler.Callback {
         String action = intent.getAction();
         if (Constant.ACTION_INIT_SERVICE.equals(action)) {
             checkConstantData();
+        }
+
+        userBinder = new UserBinder(this);
+        if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
+            String auth = intent.getStringExtra("auth");
+            String tel = intent.getStringExtra("tel");
+            userBinder.checkAuth(auth, tel);
         }
 
         return super.onStartCommand(intent, flags, startId);

@@ -1,6 +1,7 @@
 package com.rrja.carja.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +17,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.fragment.home.CouponsFragment;
 import com.rrja.carja.fragment.home.ForumFragment;
 import com.rrja.carja.fragment.home.HomeFragment;
 import com.rrja.carja.fragment.home.UserCenterFragment;
+import com.rrja.carja.service.DataCenterService;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -54,6 +58,18 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         // for example
         CoreManager.getManager().initCompanyInfo(this);
+
+        SharedPreferences sp = getSharedPreferences("authsp", MODE_PRIVATE);
+        String auth = sp.getString("auth", "");
+        String tel = sp.getString("tel", "");
+        if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(tel)) {
+            Intent intent = new Intent(this, DataCenterService.class);
+            intent.putExtra("auth", auth);
+            intent.putExtra("tel", tel);
+            intent.setAction(Constant.ACTION_LOGIN_BY_AUTH);
+            startActivity(intent);
+        }
+
     }
 
     private void initView() {
@@ -272,6 +288,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         @Override
         public void loginInteraction() {
+            mDrawerlayout.closeDrawers();
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         }

@@ -28,6 +28,7 @@ public class HttpUtils {
     private static final String INTERFACE_MODEL = "/getModels";
 
     private static final String INTERFACE_PREREGIST = "/preRegister";
+    private static final String INTERFACE_REGIST_OR_LOGIN = "/register";
 
     //-------------------------------------------------------------------------------------------------------------------
     // normal
@@ -50,7 +51,9 @@ public class HttpUtils {
     }
 
     public static JSONObject login(String phoneNo, String smsCode) {
-        return null;
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_REGIST_OR_LOGIN, "?nattel=", phoneNo,
+                "&nickname=&email=&address=&captcha=", smsCode);
+        return Network.doGet(url);
     }
 
     public static JSONObject updateUserInfo(UserInfo userInfo) {

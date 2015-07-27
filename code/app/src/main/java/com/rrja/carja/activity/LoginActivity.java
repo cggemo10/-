@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -23,8 +25,10 @@ import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.UserBinder;
+import com.rrja.carja.utils.SecurityCodeUtil;
 
 import static android.os.Handler.Callback;
 
@@ -34,10 +38,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private EditText mobileEd;
     private EditText smsEd;
+    private EditText localVeriEd;
     private AppCompatButton btnRequestSms;
     private AppCompatButton btnRegistOrLogin;
     private ImageView imgMobileClear;
     private ImageView imgSmsClear;
+    private ImageView imgVerify;
+
+    Bitmap bitmapVerify;
+    String scuCode;
+    SecurityCodeUtil scu = SecurityCodeUtil.getInstance();
 
     private Handler mHandler;
     private UserBinder userService;
@@ -67,7 +77,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         mHandler = new Handler(this);
 
+
     }
+
 
     @Override
     protected void onStart() {
@@ -148,6 +160,24 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         btnRegistOrLogin = (AppCompatButton) findViewById(R.id.btn_user_login);
         btnRegistOrLogin.setOnClickListener(this);
 
+        localVeriEd = (EditText) findViewById(R.id.ed_local_verify);
+
+
+        imgVerify = (ImageView) findViewById(R.id.img_local_verify);
+        refreshVerifyCode();
+        imgVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                refreshVerifyCode();
+            }
+        });
+    }
+
+    private void refreshVerifyCode() {
+        localVeriEd.setText("");
+        Bitmap bitmapVerify = scu.createCodeBitmap();
+        scuCode = scu.getCode();
+        imgVerify.setImageBitmap(bitmapVerify);
     }
 
 
@@ -164,17 +194,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             case R.id.btn_get_sms_code:
 
                 if (btnRequestSms.isEnabled()) {
-                    btnRequestSms.setEnabled(false);
-
 
                     String mobileNm = mobileEd.getText().toString();
-                    if (checkMobileNumber(mobileNm)) {
-                        userService.getSmsCode(mobileNm);
-                    } else {
+                    if (!checkMobileNumber(mobileNm)) {
                         Toast.makeText(LoginActivity.this, "手机号码不正确，请重新输入。", Toast.LENGTH_LONG).show();
-                        btnRequestSms.setEnabled(true);
+                        return;
                     }
 
+                    String localVerify = localVeriEd.getText().toString();
+                    if (TextUtils.isEmpty(localVerify)) {
+                        Toast.makeText(this, "请输入验证码！", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    if (!TextUtils.equals(localVerify, scuCode)) {
+                        Toast.makeText(this, "验证码不正确，请重新输入。", Toast.LENGTH_LONG).show();
+                        refreshVerifyCode();
+                        return;
+                    }
+
+                    btnRequestSms.setEnabled(false);
+
+                    userService.getSmsCode(mobileNm);
 
                 }
                 break;
@@ -271,6 +312,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             String action = intent.getAction();
             if (Constant.ACTION_LOGIN_BY_PHONE.equals(action)) {
                 Toast.makeText(context, "登录成功。", Toast.LENGTH_LONG).show();
+                SharedPreferences sp = context.getSharedPreferences("authsp", MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("auth", CoreManager.getManager().getCurrUser().getAuthToken());
+                edit.putString("tel", CoreManager.getManager().getCurrUser().getTel());
+                edit.commit();
                 LoginActivity.this.onBackPressed();
             }
 
