@@ -12,6 +12,7 @@ public class HttpUtils {
 
     private static final String BASE_URL = "http://120.25.201.50/api";
 
+    private static final String SERVICE_USER = "/user";
     private static final String SERVICE_AREA = "/area";
     private static final String SERVICE_CAR = "/car";
 //    http://120.25.201.50/api/car/getBrands?firstLetter=
@@ -26,11 +27,13 @@ public class HttpUtils {
     private static final String INTERFACE_SERIES = "/getSeries";
     private static final String INTERFACE_MODEL = "/getModels";
 
+    private static final String INTERFACE_PREREGIST = "/preRegister";
+
     //-------------------------------------------------------------------------------------------------------------------
     // normal
     public static boolean getPicture(String url, String path) {
 
-        return Network.doDownload(url,path);
+        return Network.doDownload(url, path);
     }
 
 
@@ -42,7 +45,8 @@ public class HttpUtils {
     }
 
     public static JSONObject getSmsCode(String phoneNo) {
-        return null;
+        String url = String.format("%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_PREREGIST, "?nattel=", phoneNo);
+        return Network.doGet(url);
     }
 
     public static JSONObject login(String phoneNo, String smsCode) {

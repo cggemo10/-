@@ -14,9 +14,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.CouponsDetalActivity;
+import com.rrja.carja.activity.DiscountActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.Coupons;
+import com.rrja.carja.model.DiscountInfo;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
@@ -80,6 +83,8 @@ public class CouponsAdapter extends RecyclerView.Adapter {
             }
         }
 
+        holder.itemView.setOnClickListener(new CouponsClickListener(mContext, coupon));
+
         // for example
         try {
             couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
@@ -114,6 +119,23 @@ public class CouponsAdapter extends RecyclerView.Adapter {
             couponsTime = (TextView) itemView.findViewById(R.id.txt_item_coupons_time_content);
             couponsContent = (TextView) itemView.findViewById(R.id.txt_item_coupons_detial_content);
             pic = (ImageView) itemView.findViewById(R.id.img_item_coupons);
+        }
+    }
+
+    private class CouponsClickListener implements View.OnClickListener {
+
+        Coupons mInfo;
+
+        CouponsClickListener(Context context, Coupons info) {
+            this.mInfo = info;
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(mContext, CouponsDetalActivity.class);
+            intent.putExtra("coupons", mInfo);
+            mContext.startActivity(intent);
         }
     }
 }

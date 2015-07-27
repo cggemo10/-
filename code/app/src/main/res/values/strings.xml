@@ -61,13 +61,17 @@
     <!-- login -->
     <string name="title_login">手机号登陆</string>
     <string name="hint_login_account">手机号码</string>
-    <string name="hint_login_verify_mn">验证码</string>
+    <string name="hint_login_verify_mn">短信验证码</string>
+    <string name="hint_verify_nm">验证码</string>
 
     <string name="str_login_bt_verify">获取验证码</string>
 
     <!-- 用户中心 -->
     <string name="title_user_center">用户中心</string>
-    <string name="str_txt_my_order">我的订单</string>
+    <string name="str_txt_setting_my_order">我的订单</string>
+    <string name="str_txt_setting_mycar">我的爱车档案</string>
+    <string name="str_txt_setting_mycoupons">我的优惠券</string>
+    <string name="str_txt_setting_feedback">意见反馈</string>
     <string name="str_check_all_paid">查看全部已购买商品</string>
 
     <!-- 选择位置 -->

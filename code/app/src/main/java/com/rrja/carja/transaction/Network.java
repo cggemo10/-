@@ -43,52 +43,23 @@ public class Network {
 
     public static JSONObject doGet(String urlStr)  {
 
+        CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties()
+                .build();
         try {
-            URL url = new URL(urlStr);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
-            conn.setConnectTimeout(10000);
-            conn.setReadTimeout(10000);
-            conn.setDoInput(true);
-            conn.setDoOutput(true);
-            conn.setRequestMethod("GET");
+            HttpGetHC4 request = new HttpGetHC4(urlStr);
+            CloseableHttpResponse response = httpClient.execute(request);
+            String resultStr = EntityUtilsHC4.toString(response.getEntity(), "UTF-8");
+            JSONObject result = new JSONObject(resultStr);
+            return result;
 
-            conn.setUseCaches(false);// 忽略缓存
+        } catch (Exception e) {
 
-            conn.setRequestProperty("Accept", "*/*");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("User-Agent",
-                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
+            return createErrorNetJsonObject();
 
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");;
-
-            conn.setRequestProperty("Charset", "UTF-8");
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                InputStream inputStream = conn.getInputStream();
-                StringBuffer str = new StringBuffer();
-                int len = -1;
-                byte[] buf = new byte[1024];
-                while ((len = inputStream.read(buf)) != -1) {
-                    str.append(new String(buf,0,len));
-                }
-
-                JSONObject json = new JSONObject(str.toString());
-                return json;
-            }
-
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-        return createErrorNetJsonObject();
+
+
     }
 
     public static JSONObject doPost(String urlStr, List<TextKeyValuePair> params, List<FileKeyValuePair> fileParams) {
@@ -212,8 +183,16 @@ public class Network {
     }
 
     private static JSONObject createErrorNetJsonObject() {
-        JSONObject errJson = new JSONObject();
-        // TODO add net err msg
-        return errJson;
+
+        try {
+            JSONObject errJson = new JSONObject();
+            errJson.put("code", -1);
+            errJson.put("description", "网络异常，请稍后再试！");
+            return errJson;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }

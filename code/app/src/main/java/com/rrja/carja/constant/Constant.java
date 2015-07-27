@@ -12,9 +12,17 @@ public class Constant {
 
     public static final String SP_CONSTANT_TIME = "constant_data";
 
-    public static final String ACTION_LOGIN = "LOGIN";
-    public static final String ACTION_LOGIN_MOBILE_VERIFY = "MOBILE_VERIFY";
-    public static final String ACTION_MODIFY_NICK_NAME = "MODIFY_NICK_NAME";
+    public static final String ACTION_LOGIN_BY_AUTH = "rrja.LOGIN_AUTH";
+    public static final String ACTION_LOGIN_BY_AUTH_ERROR = "rrja.LOGIN_AUTH_ERROR";
+
+    public static final String ACTION_LOGIN_BY_PHONE = "rrja.LOGIN_PHONE";
+    public static final String ACTION_LOGIN_BY_PHONE_ERROR = "rrja.LOGIN_PHONE_ERROR";
+
+    public static final String ACTION_LOGIN_MOBILE_SMS = "rrja.MOBILE_SMS";
+    public static final String ACTION_LOGIN_MOBILE_SMS_ERROR = "rrja.MOBILE_SMS_ERROR";
+
+    public static final String ACTION_MODIFY_NICK_NAME = "rrja.MODIFY_NICK_NAME";
+    public static final String ACTION_MODIFY_NICK_NAME_ERROR = "rrja.MODIFY_NICK_NAME_ERROR";
 
     public static final String ACTION_INIT_SERVICE = "rrja.request.init";
     public static final String ACTION_USER_SERVICE = "rrja.request.user.service";

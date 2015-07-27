@@ -105,6 +105,16 @@ public class DataCenterService extends Service implements Handler.Callback {
         super.onDestroy();
     }
 
+    public Handler getHandler() {
+        return mHandler;
+    }
+
+    public void execute(Runnable task) {
+        if (task != null && executor != null) {
+            executor.execute(task);
+        }
+    }
+
 
     private void loadCityData() {
 

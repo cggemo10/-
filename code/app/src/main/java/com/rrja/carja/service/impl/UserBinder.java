@@ -1,17 +1,119 @@
 package com.rrja.carja.service.impl;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Binder;
+import android.text.TextUtils;
+import android.util.Log;
 
-/**
- * Created by Administrator on 2015/7/8.
- */
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.service.DataCenterService;
+import com.rrja.carja.transaction.HttpUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class UserBinder extends Binder {
 
-    Context mContext;
+    private static String TAG = "rrja.UserBinder";
 
-    public UserBinder(Context context) {
+    DataCenterService mContext;
+
+    public UserBinder(DataCenterService context) {
         this.mContext = context;
+    }
+
+    public void getSmsCode(final String mobileNum) {
+
+        if (TextUtils.isEmpty(mobileNum)) {
+            Intent intent = new Intent(Constant.ACTION_LOGIN_MOBILE_SMS_ERROR);
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                JSONObject smsCodeJson = HttpUtils.getSmsCode(mobileNum);
+                try {
+                    int code = smsCodeJson.getInt("code");
+                    if (code == 0) {
+                        Intent intent = new Intent(Constant.ACTION_LOGIN_MOBILE_SMS);
+                        intent.putExtra("data", smsCodeJson.toString());
+                        mContext.sendBroadcast(intent);
+                        return;
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_LOGIN_MOBILE_SMS_ERROR);
+                        String errMsg = null;
+                        if (smsCodeJson.has("description")) {
+                            errMsg = smsCodeJson.getString("description");
+                        }
+
+                        if (TextUtils.isEmpty(errMsg)) {
+                            errMsg = "网络异常，请稍后再试。";
+                        }
+                        intent.putExtra("description", errMsg);
+                        mContext.sendBroadcast(intent);
+                        return;
+                    }
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage(), e);
+                }
+
+                Intent intent = new Intent(Constant.ACTION_LOGIN_MOBILE_SMS_ERROR);
+                mContext.sendBroadcast(intent);
+            }
+        };
+
+        mContext.execute(task);
+    }
+
+    public void checkAuth() {
+
+    }
+
+    public void registOrLogin(String mobileNum, String smsCode) {
+
+        if (TextUtils.isEmpty(mobileNum) || TextUtils.isEmpty(smsCode)) {
+            Intent intent = new Intent(Constant.ACTION_LOGIN_BY_PHONE_ERROR);
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        try {
+
+            JSONObject loginJson = HttpUtils.login(mobileNum, smsCode);
+            int code = loginJson.getInt("code");
+            if (code == 0) {
+
+                // TODO parse data
+                // TODO set userinfo to CoreDataManager
+                // TODO save auth
+
+                Intent intent = new Intent(Constant.ACTION_LOGIN_BY_PHONE);
+                mContext.sendBroadcast(intent);
+                return;
+            } else {
+                Intent intent = new Intent(Constant.ACTION_LOGIN_BY_PHONE_ERROR);
+                String errMsg = null;
+                if (loginJson.has("description")) {
+                    errMsg = loginJson.getString("description");
+                }
+
+                if (TextUtils.isEmpty(errMsg)) {
+                    errMsg = "网络异常，请稍后再试。";
+                }
+                intent.putExtra("description", errMsg);
+                mContext.sendBroadcast(intent);
+                return;
+            }
+
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+
+        Intent intent = new Intent(Constant.ACTION_LOGIN_BY_PHONE_ERROR);
+        mContext.sendBroadcast(intent);
     }
 
 

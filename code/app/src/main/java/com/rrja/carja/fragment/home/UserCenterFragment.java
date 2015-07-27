@@ -16,7 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
@@ -41,7 +42,18 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     TextView txtNickName;
     Button btnModifyNick;
     Button btnLogin;
-    ListView listSetting;
+
+    RelativeLayout rlOrder;
+    LinearLayout llOrderContent;
+
+    LinearLayout llOrderPayed;
+    LinearLayout llOrderUnpay;
+    LinearLayout llOrderFinished;
+    LinearLayout llOrderCancel;
+
+    RelativeLayout rlMyCar;
+    RelativeLayout rlCoupons;
+    RelativeLayout rlFeedback;
 
 
     private UserReceiver userReceiver;
@@ -77,8 +89,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_center,null);
+        View view = inflater.inflate(R.layout.fragment_user_center, null);
         initView(view);
+        view.setOnClickListener(this);
         return view;
     }
 
@@ -92,6 +105,19 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         btnLogin = (Button) view.findViewById(R.id.btn_show_login);
         btnLogin.setOnClickListener(this);
 
+        rlOrder = (RelativeLayout) view.findViewById(R.id.rl_setting_order);
+        rlOrder.setOnClickListener(this);
+        llOrderContent = (LinearLayout) view.findViewById(R.id.ll_setting_order_content);
+
+        llOrderPayed = (LinearLayout) view.findViewById(R.id.ll_setting_order_payed);
+        llOrderUnpay = (LinearLayout) view.findViewById(R.id.ll_setting_order_unpay);
+        llOrderFinished = (LinearLayout) view.findViewById(R.id.ll_setting_order_finished);
+        llOrderCancel = (LinearLayout) view.findViewById(R.id.ll_setting_order_cancel);
+
+        rlMyCar = (RelativeLayout) view.findViewById(R.id.rl_setting_mycar);
+        rlCoupons = (RelativeLayout) view.findViewById(R.id.rl_setting_coupons);
+        rlFeedback = (RelativeLayout) view.findViewById(R.id.rl_setting_feedback);
+
         checkLogin();
 
     }
@@ -99,10 +125,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((MainActivity)activity).getUserCenterInteraction();
+        mListener = ((MainActivity) activity).getUserCenterInteraction();
         registUserReceiver();
     }
-
 
 
     @Override
@@ -162,6 +187,12 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             case R.id.btn_show_login:
                 mListener.loginInteraction();
                 break;
+            case R.id.rl_setting_order:
+                if (llOrderContent.getVisibility() == View.VISIBLE) {
+                    llOrderContent.setVisibility(View.GONE);
+                } else {
+                    llOrderContent.setVisibility(View.VISIBLE);
+                }
         }
     }
 
@@ -173,8 +204,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
 
     public interface OnUserCenterInteractionListener {
-        
+
         public void loginInteraction();
+
         public void modifyNickname();
     }
 
@@ -184,10 +216,14 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         }
 
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Constant.ACTION_LOGIN);
+        filter.addAction(Constant.ACTION_LOGIN_BY_AUTH);
+        filter.addAction(Constant.ACTION_LOGIN_BY_AUTH_ERROR);
         filter.addAction(Constant.ACTION_MODIFY_NICK_NAME);
+        filter.addAction(Constant.ACTION_MODIFY_NICK_NAME_ERROR);
+
         getActivity().registerReceiver(userReceiver, filter);
     }
+
     private void unregistUserReceiver() {
         if (userReceiver == null) {
             return;
@@ -201,12 +237,20 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (Constant.ACTION_LOGIN.equals(action)) {
+            if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
                 mHandler.sendEmptyMessage(0);
             }
 
             if (Constant.ACTION_MODIFY_NICK_NAME.equals(action)) {
                 mHandler.sendEmptyMessage(0);
+            }
+
+            if (Constant.ACTION_MODIFY_NICK_NAME_ERROR.equals(action)) {
+                // TODO
+            }
+
+            if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
+                // TODO
             }
         }
     }

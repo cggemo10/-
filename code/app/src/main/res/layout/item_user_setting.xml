@@ -13,20 +13,31 @@
         android:src="@drawable/icon_orderlist"/>
 
     <TextView
+        android:textColor="@android:color/secondary_text_light"
         android:id="@+id/txt_user_setting_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="5dp"
         android:layout_toRightOf="@id/img_user_setting_icon"
         android:text="我的订单"/>
 
     <ImageView
+        android:id="@+id/img_setting_index"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:src="@drawable/icon_go"/>
+
+    <TextView
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginRight="5dp"
+        android:id="@+id/txt_user_setting_des"
+        android:layout_toLeftOf="@id/img_setting_index"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </RelativeLayout>
