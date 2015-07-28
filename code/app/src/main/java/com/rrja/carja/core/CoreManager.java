@@ -1,5 +1,6 @@
 package com.rrja.carja.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -29,6 +30,8 @@ import java.util.List;
  * Created by Administrator on 2015/6/6.
  */
 public class CoreManager {
+
+    private static final String TAG = "rrja.CoreManager";
 
     private static List<DiscountInfo> discountList = new ArrayList<DiscountInfo>();
     private UserInfo currUser;
@@ -171,7 +174,13 @@ public class CoreManager {
     //----------------------------------------------------------------------------------------------
     //----------------------------------load data---------------------------------------------------
     //----------------------------------------------------------------------------------------------
-    public void init(SplshActivity splshActivity) {
+    public void init(Activity context) {
+        try {
+            refreshRegions(context);
+            refreshCarBrand(context);
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
 
     }
 
