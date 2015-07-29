@@ -35,14 +35,17 @@ public class ResponseUtils {
 
                 try {
                     JSONArray cityArray = proviceJson.getJSONArray("citys");
-                    List cityList = parseAllCity(cityArray);
-                    if (cityList != null) {
-                        regions.addAll(cityList);
-                    } else {
-                        return null;
+                    if (cityArray.length() != 0) {
+                        List cityList = parseAllCity(cityArray);
+                        if (cityList != null) {
+                            regions.addAll(cityList);
+                        } else {
+                            return null;
+                        }
                     }
+
                 } catch (Exception e) {
-                    Log.e("rrja.ResponseUtils", "parseAllCity", e);
+                    Log.e("rrja.ResponseUtils", "parseAllCity" + proviceJson.toString(), e);
                     return null;
                 }
 

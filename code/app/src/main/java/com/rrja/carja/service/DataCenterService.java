@@ -6,8 +6,10 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -29,6 +31,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class DataCenterService extends Service implements Handler.Callback {
+
+    private static final String TAG = "rrja.DataCenterService";
 
     private static final int MSG_REFRESH_CITYS = 12;
     private static final int MSG_REFRESH_CAR_BRAND = 13;
@@ -145,6 +149,7 @@ public class DataCenterService extends Service implements Handler.Callback {
                         }
                     }
                 } catch (Exception e) {
+                    e.printStackTrace();
                     // TODO nothing
                 }
             }
@@ -193,11 +198,10 @@ public class DataCenterService extends Service implements Handler.Callback {
 
                     TableUtils.clearTable(helper.getConnectionSource(), Region.class);
 
-                    Dao<Region, Integer> regionDao = helper.getRegionDao();
+                    RuntimeExceptionDao<Region, Integer> regionDao = helper.getRegionDao();
                     regionDao.create(regions);
 
                     CoreManager.getManager().refreshRegions(DataCenterService.this);
-                    sendReceiver(Constant.ACTION_BROADCAST_REFRESH_REGION);
                 } catch (Exception e) {
                     sendReceiver(Constant.ACTION_BROADCAST_REFRESH_REGION_ERROR);
                 }
@@ -210,7 +214,7 @@ public class DataCenterService extends Service implements Handler.Callback {
 
                     TableUtils.clearTable(helper.getConnectionSource(), CarBrand.class);
 
-                    Dao<CarBrand, Integer> carBrandIntegerDao = helper.getCarBrandDao();
+                    RuntimeExceptionDao<CarBrand, Integer> carBrandIntegerDao = helper.getCarBrandDao();
                     carBrandIntegerDao.create(brands);
 
                     CoreManager.getManager().refreshCarBrand(DataCenterService.this);
@@ -225,6 +229,7 @@ public class DataCenterService extends Service implements Handler.Callback {
 
     private void sendReceiver(String action) {
         Intent intent = new Intent(action);
+        intent.putExtra("action", action);
         sendBroadcast(intent);
     }
 }

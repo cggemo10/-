@@ -1,16 +1,21 @@
 package com.rrja.carja.core;
 
 import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.rrja.carja.activity.SplshActivity;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
@@ -189,11 +194,15 @@ public class CoreManager {
         if (helper != null) {
 
 
-            Dao<Region, Integer> regionsDao = helper.getRegionDao();
+            RuntimeExceptionDao<Region, Integer> regionsDao = helper.getRegionDao();
             List<Region> queryForAll = regionsDao.queryForAll();
             if (queryForAll != null && queryForAll.size() != 0) {
                 regions.clear();
                 regions.addAll(queryForAll);
+
+                Intent intent = new Intent(Constant.ACTION_BROADCAST_REFRESH_REGION);
+                intent.putExtra("regions", "regions");
+                context.sendBroadcast(intent);
 
                 // TODO notify
             }
@@ -207,7 +216,7 @@ public class CoreManager {
         DBHelper helper = DBHelper.getInstance(context);
         if (helper != null) {
 
-            Dao<CarBrand, Integer> carBrandsDao = helper.getCarBrandDao();
+            RuntimeExceptionDao<CarBrand, Integer> carBrandsDao = helper.getCarBrandDao();
             List<CarBrand> queryForAll = carBrandsDao.queryForAll();
             if (queryForAll != null && queryForAll.size() != 0) {
                 brandList.clear();
