@@ -1,6 +1,6 @@
 package com.rrja.carja.transaction;
 
-import com.rrja.carja.model.CareInfo;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
 
 import org.json.JSONObject;
@@ -64,7 +64,7 @@ public class HttpUtils {
         return null;
     }
 
-    public static JSONObject addPrivateCar(UserInfo userInfo, CareInfo careInfo) {
+    public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
         return null;
     }
 
@@ -72,7 +72,7 @@ public class HttpUtils {
         return null;
     }
 
-    public static JSONObject removePrivateCar(UserInfo userInfo, CareInfo careInfo) {
+    public static JSONObject removePrivateCar(UserInfo userInfo, CarInfo carInfo) {
         return null;
     }
 
@@ -190,7 +190,7 @@ public class HttpUtils {
 
     //-------------------------------------------------------------------------------------------------------------------
     // query interface
-    public static JSONObject queryIllegal(CareInfo careInfo) {
+    public static JSONObject queryIllegal(CarInfo carInfo) {
         return null;
     }
 }

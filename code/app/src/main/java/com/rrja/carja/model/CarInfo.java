@@ -6,11 +6,8 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-/**
- * Created by chongge on 15/6/26.
- */
 @DatabaseTable(tableName = "car_info")
-public class CareInfo implements Parcelable{
+public class CarInfo implements Parcelable{
 
     @DatabaseField(id = true)
     private String id;
@@ -22,6 +19,12 @@ public class CareInfo implements Parcelable{
     private String engineNo;
     @DatabaseField
     private String phoneNo;
+    @DatabaseField
+    private String seriesID;
+    @DatabaseField
+    private String carBrandID;
+    @DatabaseField
+    private String carModelID;
 
     public String getId() {
         return id;
@@ -63,6 +66,30 @@ public class CareInfo implements Parcelable{
         this.phoneNo = phoneNo;
     }
 
+    public String getSeriesID() {
+        return seriesID;
+    }
+
+    public void setSeriesID(String seriesID) {
+        this.seriesID = seriesID;
+    }
+
+    public String getCarBrandID() {
+        return carBrandID;
+    }
+
+    public void setCarBrandID(String carBrandID) {
+        this.carBrandID = carBrandID;
+    }
+
+    public String getCarModelID() {
+        return carModelID;
+    }
+
+    public void setCarModelID(String carModelID) {
+        this.carModelID = carModelID;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -76,13 +103,16 @@ public class CareInfo implements Parcelable{
         dest.writeString(buyTime);
         dest.writeString(engineNo);
         dest.writeString(phoneNo);
+        dest.writeString(seriesID);
+        dest.writeString(carBrandID);
+        dest.writeString(carModelID);
 
     }
 
-    public static Creator<CareInfo> CREATOR = new Creator<CareInfo>() {
+    public static Creator<CarInfo> CREATOR = new Creator<CarInfo>() {
         @Override
-        public CareInfo createFromParcel(Parcel source) {
-            CareInfo info = new CareInfo();
+        public CarInfo createFromParcel(Parcel source) {
+            CarInfo info = new CarInfo();
             String id = source.readString();
             if (!"null".equals(id)) {
                 info.setId(id);
@@ -91,12 +121,15 @@ public class CareInfo implements Parcelable{
             info.setBuyTime(source.readString());
             info.setEngineNo(source.readString());
             info.setPhoneNo(source.readString());
+            info.setSeriesID(source.readString());
+            info.setCarBrandID(source.readString());
+            info.setCarModelID(source.readString());
             return info;
         }
 
         @Override
-        public CareInfo[] newArray(int size) {
-            return new CareInfo[size];
+        public CarInfo[] newArray(int size) {
+            return new CarInfo[size];
         }
     };
 }

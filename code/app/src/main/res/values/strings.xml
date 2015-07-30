@@ -171,5 +171,43 @@
     <string name="title_activity_coupons_detal">CouponsDetalActivity</string>
     <string name="title_activity_add_car">AddCarActivity</string>
 
+    <string-array name="strs_car_prefix_1">
+        <item>京(北京)</item>
+        <item>津(天津)</item>
+        <item>沪(上海)</item>
+        <item>渝(重庆)</item>
+        <item>闽(福建)</item>
+        <item>冀(河北)</item>
+        <item>晋(山西)</item>
+        <item>辽(辽宁)</item>
+        <item>吉(吉林)</item>
+        <item>黑(黑龙江)</item>
+        <item>苏(江苏)</item>
+        <item>浙(浙江)</item>
+        <item>皖(安徽)</item>
+        <item>赣(江西)</item>
+        <item>鲁(山东)</item>
+        <item>豫(河南)</item>
+        <item>川(四川)</item>
+        <item>鄂(湖北)</item>
+        <item>湘(湖南)</item>
+        <item>粤(广东)</item>
+        <item>琼(海南)</item>
+        <item>贵(贵州)</item>
+        <item>云(云南)</item>
+        <item>陕(陕西)</item>
+        <item>甘(甘肃)</item>
+        <item>青(青海)</item>
+        <item>蒙(内蒙)</item>
+        <item>桂(广西)</item>
+        <item>宁(宁夏)</item>
+        <item>新(新疆)</item>
+        <item>藏(西藏)</item>
+        <item>港(香港)</item>
+        <item>澳(澳门)</item>
+        <item>台(台湾)</item>
+
+    </string-array>
+
 
 </resources>

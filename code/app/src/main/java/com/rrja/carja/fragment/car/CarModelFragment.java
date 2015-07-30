@@ -9,17 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.AddCarActivity;
+import com.rrja.carja.model.CarModel;
 
 
 public class CarModelFragment extends Fragment {
 
 
-    private OnFragmentInteractionListener mListener;
+    private OnModelFragmentInteractionListener mListener;
 
 
-    public static CarModelFragment newInstance(String param1, String param2) {
+    public static CarModelFragment newInstance() {
         CarModelFragment fragment = new CarModelFragment();
-
         return fragment;
     }
 
@@ -41,21 +42,12 @@ public class CarModelFragment extends Fragment {
     }
 
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = ((AddCarActivity)activity).getModelInteraction();
     }
 
     @Override
@@ -65,9 +57,8 @@ public class CarModelFragment extends Fragment {
     }
 
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface OnModelFragmentInteractionListener {
+        public void onModelSelected(CarModel model);
     }
 
 }

@@ -21,7 +21,7 @@
             -->
         </activity>
         <activity
-            android:name=".activity.SplshActivity"
+            android:name="com.rrja.carja.activity.SplshActivity"
             android:label="@string/title_activity_splsh" >
 
 
@@ -33,15 +33,15 @@
 
         </activity>
         <activity
-            android:name=".activity.UserCenterActivity"
+            android:name="com.rrja.carja.activity.UserCenterActivity"
             android:label="@string/title_activity_user_center" >
         </activity>
         <activity
-            android:name=".activity.CarInfoActivity"
+            android:name="com.rrja.carja.activity.CarInfoActivity"
             android:label="@string/title_activity_car_info" >
         </activity>
         <activity
-            android:name=".activity.FeedbackActivity"
+            android:name="com.rrja.carja.activity.FeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:parentActivityName=".activity.BaseActivity" >
             <meta-data
@@ -49,52 +49,52 @@
                 android:value="com.rrja.carja.activity.BaseActivity" />
         </activity>
         <activity
-            android:name=".activity.HomeMaintenanceActivity"
+            android:name="com.rrja.carja.activity.HomeMaintenanceActivity"
             android:label="@string/title_home_maintenance" >
         </activity>
         <activity
-            android:name=".activity.OnDoreWashActivity"
+            android:name="com.rrja.carja.activity.OnDoreWashActivity"
             android:label="@string/title_wash_car_door" >
         </activity>
         <activity
-            android:name=".activity.StoreReservationActivity"
+            android:name="com.rrja.carja.activity.StoreReservationActivity"
             android:label="@string/title_store_reservation" >
         </activity>
         <activity
-            android:name=".activity.StoreReservationDetalActivity"
+            android:name="com.rrja.carja.activity.StoreReservationDetalActivity"
             android:label="@string/title_store_detial" />
         <activity
-            android:name=".activity.ViolationActivity"
+            android:name="com.rrja.carja.activity.ViolationActivity"
             android:label="@string/title_violation_inquiry" >
         </activity>
         <activity
-            android:name=".activity.DiscountActivity"
+            android:name="com.rrja.carja.activity.DiscountActivity"
             android:label="@string/title_activity_discount" >
         </activity>
         <activity
-            android:name=".activity.CityListActivity"
+            android:name="com.rrja.carja.activity.CityListActivity"
             android:label="@string/title_my_city" >
         </activity>
         <activity
-            android:name=".activity.CouponsDetalActivity"
+            android:name="com.rrja.carja.activity.CouponsDetalActivity"
             android:label="@string/title_activity_coupons_detal" >
         </activity>
         <activity
-            android:name=".activity.AddCarActivity"
+            android:name="com.rrja.carja.activity.AddCarActivity"
             android:label="@string/title_car_name" >
         </activity>
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="com.rrja.carja.activity.LoginActivity"
             android:label="@string/title_login" >
         </activity>
 
         <service
-            android:name=".service.DataCenterService"
+            android:name="com.rrja.carja.service.DataCenterService"
             android:enabled="true"
             android:exported="true" >
         </service>
         <service
-            android:name=".service.FileService"
+            android:name="com.rrja.carja.service.FileService"
             android:enabled="true"
             android:exported="false" >
         </service>

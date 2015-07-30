@@ -56,16 +56,18 @@ public class DataCenterService extends Service implements Handler.Callback {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        String action = intent.getAction();
-        if (Constant.ACTION_INIT_SERVICE.equals(action)) {
-            checkConstantData();
-        }
+        if (intent != null) {
+            String action = intent.getAction();
+            if (Constant.ACTION_INIT_SERVICE.equals(action)) {
+                checkConstantData();
+            }
 
-        userBinder = new UserBinder(this);
-        if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
-            String auth = intent.getStringExtra("auth");
-            String tel = intent.getStringExtra("tel");
-            userBinder.checkAuth(auth, tel);
+            userBinder = new UserBinder(this);
+            if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
+                String auth = intent.getStringExtra("auth");
+                String tel = intent.getStringExtra("tel");
+                userBinder.checkAuth(auth, tel);
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);

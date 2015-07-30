@@ -10,25 +10,26 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.AddCarActivity;
 import com.rrja.carja.adapter.CarBrandAdapter;
+import com.rrja.carja.model.CarBrand;
 import com.rrja.cja.view.recycler.stickyside.LayoutManager;
 
 public class CarBrandFragment extends Fragment {
 
     private int mHeaderDisplay;
 
-    private OnFragmentInteractionListener mListener;
+    private OnBrandFragmentInteractionListener mListener;
 
     private RecyclerView brandRecycleList;
     private CarBrandAdapter mAdapter;
 
 
-    public static CarSeriesFragment newInstance(String param1, String param2) {
-        return new CarSeriesFragment();
+    public static CarBrandFragment newInstance() {
+        return new CarBrandFragment();
     }
 
     public CarBrandFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -55,13 +56,6 @@ public class CarBrandFragment extends Fragment {
         brandRecycleList.setAdapter(mAdapter);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     public void smoothScrollToPosition(int position) {
         brandRecycleList.smoothScrollToPosition(position);
     }
@@ -69,12 +63,7 @@ public class CarBrandFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = ((AddCarActivity)activity).getBrandInteraction();
     }
 
     @Override
@@ -83,9 +72,9 @@ public class CarBrandFragment extends Fragment {
         mListener = null;
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+    public interface OnBrandFragmentInteractionListener {
+
+        public void onBrandSelected(CarBrand brand);
     }
 
 }

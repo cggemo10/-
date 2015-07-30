@@ -35,9 +35,6 @@ public class CouponsFragment extends Fragment implements AdapterView.OnItemClick
     private static CouponsFragment fragment = new CouponsFragment();
 
     public static CouponsFragment getFragment() {
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -48,9 +45,6 @@ public class CouponsFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            
-        }
     }
 
     @Override
