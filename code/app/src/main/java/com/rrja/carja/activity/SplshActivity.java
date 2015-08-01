@@ -42,6 +42,7 @@ public class SplshActivity extends Activity implements Handler.Callback {
             public void run() {
                 Intent intent = new Intent(SplshActivity.this, MainActivity.class);
                 startActivity(intent);
+                SplshActivity.this.finish();
             }
         }, 3000);
     }

@@ -20,11 +20,11 @@ public class CarInfo implements Parcelable{
     @DatabaseField
     private String phoneNo;
     @DatabaseField
-    private String seriesID;
+    private CarSeries series;
     @DatabaseField
-    private String carBrandID;
+    private CarBrand carBrand;
     @DatabaseField
-    private String carModelID;
+    private CarModel carModel;
 
     public String getId() {
         return id;
@@ -66,28 +66,28 @@ public class CarInfo implements Parcelable{
         this.phoneNo = phoneNo;
     }
 
-    public String getSeriesID() {
-        return seriesID;
+    public CarSeries getSeries() {
+        return series;
     }
 
-    public void setSeriesID(String seriesID) {
-        this.seriesID = seriesID;
+    public void setSeries(CarSeries seriesID) {
+        this.series = seriesID;
     }
 
-    public String getCarBrandID() {
-        return carBrandID;
+    public CarBrand getCarBrand() {
+        return carBrand;
     }
 
-    public void setCarBrandID(String carBrandID) {
-        this.carBrandID = carBrandID;
+    public void setCarBrand(CarBrand carBrandID) {
+        this.carBrand = carBrandID;
     }
 
-    public String getCarModelID() {
-        return carModelID;
+    public CarModel getCarModel() {
+        return carModel;
     }
 
-    public void setCarModelID(String carModelID) {
-        this.carModelID = carModelID;
+    public void setCarModel(CarModel carModelID) {
+        this.carModel = carModelID;
     }
 
     @Override
@@ -103,9 +103,9 @@ public class CarInfo implements Parcelable{
         dest.writeString(buyTime);
         dest.writeString(engineNo);
         dest.writeString(phoneNo);
-        dest.writeString(seriesID);
-        dest.writeString(carBrandID);
-        dest.writeString(carModelID);
+        dest.writeParcelable(series, flags);
+        dest.writeParcelable(carBrand, flags);
+        dest.writeParcelable(carModel, flags);
 
     }
 
@@ -121,9 +121,9 @@ public class CarInfo implements Parcelable{
             info.setBuyTime(source.readString());
             info.setEngineNo(source.readString());
             info.setPhoneNo(source.readString());
-            info.setSeriesID(source.readString());
-            info.setCarBrandID(source.readString());
-            info.setCarModelID(source.readString());
+            info.setSeries((CarSeries) source.readParcelable(CarSeries.class.getClassLoader()));
+            info.setCarBrand((CarBrand) source.readParcelable(CarBrand.class.getClassLoader()));
+            info.setCarModel((CarModel) source.readParcelable(CarModel.class.getClassLoader()));
             return info;
         }
 

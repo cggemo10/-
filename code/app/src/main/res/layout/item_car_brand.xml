@@ -7,16 +7,18 @@
     android:padding="16dip">
 
     <ImageView
+        android:layout_marginLeft="15dp"
         android:id="@+id/img_car_brand_ic"
         android:scaleType="centerCrop"
         android:layout_width="60dp"
         android:layout_height="wrap_content" />
 
     <TextView
+        android:layout_marginLeft="10dp"
         android:id="@+id/txt_car_brand_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#222222"
+        android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         tools:text="Text Line Item" />
 </LinearLayout>

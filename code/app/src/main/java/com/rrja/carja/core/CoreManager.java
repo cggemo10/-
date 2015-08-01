@@ -17,6 +17,8 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.rrja.carja.activity.SplshActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
+import com.rrja.carja.model.CarModel;
+import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.Coupons;
 import com.rrja.carja.model.DiscountInfo;
@@ -29,6 +31,7 @@ import com.rrja.carja.service.impl.CarBinder;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -46,6 +49,8 @@ public class CoreManager {
     private static List<Forum> forums = new ArrayList<>();
     private static List<Region> regions = new ArrayList<>();
     private static List<CarBrand> brandList = new ArrayList<>();
+    private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
+    private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
 
     // demo
     static {
@@ -160,6 +165,55 @@ public class CoreManager {
         return brandList;
     }
 
+    public List<CarSeries> getCarSeriesByBrandId(String brandId) {
+        if (carSeriesMap.containsKey(brandId)) {
+            return carSeriesMap.get(brandId);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setCarSeriesData(String key, List<CarSeries> seriesList) {
+
+        if (seriesList == null) {
+            return;
+        }
+
+        if (carSeriesMap == null) {
+            carSeriesMap = new HashMap<>();
+        }
+
+        if (carSeriesMap.containsKey(key)) {
+            carSeriesMap.remove(key);
+        }
+
+        carSeriesMap.put(key, seriesList);
+    }
+
+    public List<CarModel> getCarModelsBySeriesId(String seriesId) {
+        if (carModelMap.containsKey(seriesId)) {
+            return carModelMap.get(seriesId);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void setCarModelData(String key, List<CarModel> modelList) {
+        if (modelList == null) {
+            return;
+        }
+
+        if (carModelMap == null) {
+            carModelMap = new HashMap<>();
+        }
+
+        if (carModelMap.containsKey(key)) {
+            carModelMap.remove(key);
+        }
+
+        carModelMap.put(key, modelList);
+    }
+
     public UserInfo getCurrUser() {
         return currUser;
     }
@@ -192,7 +246,6 @@ public class CoreManager {
     public void refreshRegions(Context context) throws SQLException {
         DBHelper helper = DBHelper.getInstance(context);
         if (helper != null) {
-
 
             RuntimeExceptionDao<Region, Integer> regionsDao = helper.getRegionDao();
             List<Region> queryForAll = regionsDao.queryForAll();

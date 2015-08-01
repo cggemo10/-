@@ -3,6 +3,8 @@ package com.rrja.carja.utils;
 import android.util.Log;
 
 import com.rrja.carja.model.CarBrand;
+import com.rrja.carja.model.CarModel;
+import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.Region;
 
 import org.json.JSONArray;
@@ -79,5 +81,47 @@ public class ResponseUtils {
         }
 
         return carBrands;
+    }
+
+    public static List<CarSeries> parseCarSeriesList(JSONArray carSeriesJson) throws JSONException {
+        if (carSeriesJson == null || carSeriesJson.length() == 0) {
+            return null;
+        }
+
+        List<CarSeries> carSeriesList = new ArrayList<>();
+
+        for (int i = 0; i < carSeriesJson.length(); i++) {
+
+            JSONObject seriesJson = carSeriesJson.getJSONObject(i);
+            CarSeries carSeries = CarSeries.parse(seriesJson);
+            if (carSeriesList != null) {
+                carSeriesList.add(carSeries);
+            } else {
+                return null;
+            }
+        }
+
+        return carSeriesList;
+    }
+
+    public static List<CarModel> parseCarModelList(JSONArray carModelJson) throws JSONException {
+        if (carModelJson == null || carModelJson.length() == 0) {
+            return null;
+        }
+
+        List<CarModel> carModelList = new ArrayList<>();
+
+        for (int i = 0; i < carModelJson.length(); i++) {
+
+            JSONObject modelJson = carModelJson.getJSONObject(i);
+            CarModel carModel = CarModel.parse(modelJson);
+            if (carModelList != null) {
+                carModelList.add(carModel);
+            } else {
+                return null;
+            }
+        }
+
+        return carModelList;
     }
 }

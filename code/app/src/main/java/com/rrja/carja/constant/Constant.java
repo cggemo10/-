@@ -40,6 +40,12 @@ public class Constant {
     public static final String ACTION_BROADCAST_REFRESH_CARBRAND = "rrja.broadcast.refresh.CARBRAND";
     public static final String ACTION_BROADCAST_REFRESH_CARBRAND_ERROR = "rrja.broadcast.refresh.CARBRAND_ERROR";
 
+    public static final String ACTION_BROADCAST_GET_CAR_SERIES = "rrja.broadcast.get.CAR_SERIES";
+    public static final String ACTION_BROADCAST_GET_CAR_SERIES_ERR = "rrja.broadcast.get.CAR_SERIES_ERR";
+
+    public static final String ACTION_BROADCAST_GET_CAR_MODEL = "rrja.broadcast.get.CAR_MODEL";
+    public static final String ACTION_BROADCAST_GET_CAR_MODEL_ERR = "rrja.broadcast.get.CAR_MODEL_ERR";
+
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";
     public static final String DIR_DISCOUNT = "discount";

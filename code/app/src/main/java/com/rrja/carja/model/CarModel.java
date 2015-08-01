@@ -12,6 +12,9 @@ typeSeries: "2003 款"
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
+
+import org.json.JSONObject;
 
 public class CarModel implements Parcelable{
 
@@ -119,4 +122,21 @@ public class CarModel implements Parcelable{
             return new CarModel[size];
         }
     };
+
+    public static CarModel parse(JSONObject modelJson) {
+        if (modelJson == null || TextUtils.isEmpty(modelJson.toString())) {
+            return null;
+        }
+
+        CarModel info = new CarModel();
+
+        info.setAuthToken(userJson.getString("authToken"));
+        info.setId(userJson.getInt("id") + "");
+        info.setTel(userJson.getString("natTel"));
+        info.setLevel(userJson.getString("level"));
+        info.setUserType(userJson.getString("userType"));
+        info.setUserStoreId(userJson.getInt("userStoreId"));
+
+        return info;
+    }
 }

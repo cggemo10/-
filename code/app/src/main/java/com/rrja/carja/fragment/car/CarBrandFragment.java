@@ -1,6 +1,10 @@
 package com.rrja.carja.fragment.car;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,10 +16,13 @@ import android.view.ViewGroup;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.AddCarActivity;
 import com.rrja.carja.adapter.CarBrandAdapter;
+import com.rrja.carja.adapter.GridAdapter;
+import com.rrja.carja.adapter.decoration.CarBrandDecoration;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.cja.view.recycler.stickyside.LayoutManager;
 
-public class CarBrandFragment extends Fragment {
+public class CarBrandFragment extends Fragment implements CarBrandAdapter.onItemClickListener {
 
     private int mHeaderDisplay;
 
@@ -23,6 +30,7 @@ public class CarBrandFragment extends Fragment {
 
     private RecyclerView brandRecycleList;
     private CarBrandAdapter mAdapter;
+    private BrandRefreshReceiver receiver;
 
 
     public static CarBrandFragment newInstance() {
@@ -53,7 +61,9 @@ public class CarBrandFragment extends Fragment {
         brandRecycleList.setLayoutManager(new LayoutManager(getActivity()));
         mAdapter = new CarBrandAdapter(getActivity());
         mAdapter.setHeaderDisplay(mHeaderDisplay);
+        mAdapter.setItemListener(this);
         brandRecycleList.setAdapter(mAdapter);
+
     }
 
     public void smoothScrollToPosition(int position) {
@@ -67,14 +77,48 @@ public class CarBrandFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constant.ACTION_BROADCAST_REFRESH_CARBRAND);
+
+        receiver = new BrandRefreshReceiver();
+        getActivity().registerReceiver(receiver, filter);
+    }
+
+    @Override
+    public void onStop() {
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+            receiver = null;
+        }
+        super.onStop();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(CarBrand brand) {
+        mListener.onBrandSelected(brand);
+    }
+
     public interface OnBrandFragmentInteractionListener {
 
         public void onBrandSelected(CarBrand brand);
+    }
+
+
+    private class BrandRefreshReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
 }

@@ -23,8 +23,8 @@ import java.util.List;
  */
 public class CarBrandAdapter extends RecyclerView.Adapter{
 
-    private static final int VIEW_TYPE_HEADER = 0x01;
-    private static final int VIEW_TYPE_CONTENT = 0x00;
+    public static final int VIEW_TYPE_HEADER = 0x01;
+    public static final int VIEW_TYPE_CONTENT = 0x00;
 
     private final ArrayList<LineItem> mItems;
 
@@ -33,6 +33,7 @@ public class CarBrandAdapter extends RecyclerView.Adapter{
     private int mHeaderDisplay;
 
     private boolean mMarginsFixed;
+    private onItemClickListener itemListener;
 
     // brand 已经按firstLetter 排好序
     public CarBrandAdapter(Context context) {
@@ -94,12 +95,27 @@ public class CarBrandAdapter extends RecyclerView.Adapter{
 
             lp.headerEndMarginIsAuto = true;
             lp.headerStartMarginIsAuto = true;
+        } else {
+            CarBrandHolder itemHolder = (CarBrandHolder) holder;
+            itemHolder.bindItem(item.brand);
+            itemHolder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (itemListener != null) {
+                        itemListener.onItemClick(item.brand);
+                    }
+                }
+            });
         }
 
         lp.setSlm(LinearSLM.ID);
         lp.setColumnWidth(mContext.getResources().getDimensionPixelSize(R.dimen.grid_column_width));
         lp.setFirstPosition(item.sectionFirstPosition);
         itemView.setLayoutParams(lp);
+    }
+
+    public void setItemListener(onItemClickListener itemListener) {
+        this.itemListener = itemListener;
     }
 
     @Override
@@ -143,5 +159,9 @@ public class CarBrandAdapter extends RecyclerView.Adapter{
             this.sectionManager = sectionManager;
             this.sectionFirstPosition = sectionFirstPosition;
         }
+    }
+
+    public interface onItemClickListener {
+        public void onItemClick(CarBrand brand);
     }
 }

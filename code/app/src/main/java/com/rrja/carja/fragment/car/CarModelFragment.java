@@ -12,11 +12,15 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.AddCarActivity;
 import com.rrja.carja.model.CarModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class CarModelFragment extends Fragment {
 
 
     private OnModelFragmentInteractionListener mListener;
+    private List<CarModel> modelData = new ArrayList<>();
 
 
     public static CarModelFragment newInstance() {
@@ -41,7 +45,12 @@ public class CarModelFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_car_model, container, false);
     }
 
+    public void setModelData(List<CarModel> modelList) {
 
+        modelData.clear();
+        modelData = modelList;
+
+    }
 
 
     @Override

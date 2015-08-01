@@ -134,7 +134,6 @@ public class UserBinder extends Binder {
                     int code = loginJson.getInt("code");
                     if (code == 0) {
 
-
                         UserInfo info = UserInfo.parse(loginJson.getJSONObject("data"));
                         if (info != null) {
                             CoreManager.getManager().setCurrUser(info);

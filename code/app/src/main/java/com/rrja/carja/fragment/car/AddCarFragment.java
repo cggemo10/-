@@ -81,7 +81,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.txt_lable_car_series_content:
                 if (mListener != null) {
-                    mListener.onSeriesClicked();
+                    mListener.onBrandClicked();
                 }
                 break;
             case R.id.txt_car_munber:
@@ -97,7 +97,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
 
     public interface OnAddCarFragmentInteractionListener {
 
-        public void onSeriesClicked();
+        public void onBrandClicked();
         public void onPrefixClicked();
         public void onCommit();
     }

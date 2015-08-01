@@ -2,6 +2,9 @@ package com.rrja.carja.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
+
+import org.json.JSONObject;
 
 /**
  * Created by Administrator on 2015/7/23.
@@ -9,7 +12,7 @@ import android.os.Parcelable;
 public class CarSeries implements Parcelable{
 
     private int brandId;
-    private int id;
+    private String id;
     private String logo;
     private String seriesName;
     private String vehicleClass;
@@ -22,11 +25,11 @@ public class CarSeries implements Parcelable{
         this.brandId = brandId;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -64,7 +67,7 @@ public class CarSeries implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeInt(brandId);
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(logo);
         dest.writeString(seriesName);
         dest.writeString(vehicleClass);
@@ -77,7 +80,7 @@ public class CarSeries implements Parcelable{
 
             CarSeries series = new CarSeries();
             series.setBrandId(source.readInt());
-            series.setId(source.readInt());
+            series.setId(source.readString());
             series.setLogo(source.readString());
             series.setSeriesName(source.readString());
             series.setVehicleClass(source.readString());
@@ -90,4 +93,21 @@ public class CarSeries implements Parcelable{
             return new CarSeries[size];
         }
     };
+
+    public static CarSeries parse(JSONObject seriesJson) {
+        if (seriesJson == null || TextUtils.isEmpty(seriesJson.toString())) {
+            return null;
+        }
+
+        CarSeries info = new CarSeries();
+
+        info.setAuthToken(userJson.getString("authToken"));
+        info.setId(userJson.getInt("id") + "");
+        info.setTel(userJson.getString("natTel"));
+        info.setLevel(userJson.getString("level"));
+        info.setUserType(userJson.getString("userType"));
+        info.setUserStoreId(userJson.getInt("userStoreId"));
+
+        return info;
+    }
 }

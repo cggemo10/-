@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class CarBrand implements Parcelable{
 
     @DatabaseField(id = true)
-    private int id;
+    private String id;
     @DatabaseField
     private String name;
     @DatabaseField
@@ -21,11 +21,11 @@ public class CarBrand implements Parcelable{
     @DatabaseField
     private String logo;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -62,7 +62,7 @@ public class CarBrand implements Parcelable{
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeString(name);
         dest.writeString(firstLetter);
         dest.writeString(logo);
@@ -75,7 +75,7 @@ public class CarBrand implements Parcelable{
         public CarBrand createFromParcel(Parcel source) {
 
             CarBrand brand = new CarBrand();
-            brand.setId(source.readInt());
+            brand.setId(source.readString());
             brand.setName(source.readString());
             brand.setFirstLetter(source.readString());
             brand.setLogo(source.readString());
@@ -97,7 +97,7 @@ public class CarBrand implements Parcelable{
 
         try {
             CarBrand brand = new CarBrand();
-            brand.setId(brandJson.getInt("id"));
+            brand.setId(brandJson.getInt("id") + "");
             brand.setName(brandJson.getString("name"));
             brand.setFirstLetter(brandJson.getString("firstLetter"));
             brand.setLogo(brandJson.getString("logo"));

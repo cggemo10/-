@@ -1,6 +1,10 @@
 package com.rrja.carja.activity;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +14,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.fragment.car.AddCarFragment;
 import com.rrja.carja.fragment.car.CarBrandFragment;
 import com.rrja.carja.fragment.car.CarModelFragment;
@@ -19,6 +25,10 @@ import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
+import com.rrja.carja.service.DataCenterService;
+import com.rrja.carja.service.impl.CarBinder;
+
+import java.util.List;
 
 public class AddCarActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
 
@@ -33,6 +43,8 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     private CarSeriesFragment seriesFragment;
     private CarBrandFragment brandFragment;
     private CarModelFragment modelFragment;
+
+    private CarBinder carService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +84,10 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         brandFragment = CarBrandFragment.newInstance();
 
         modelFragment = CarModelFragment.newInstance();
+
+        Intent intent = new Intent(this, DataCenterService.class);
+        intent.setAction(Constant.ACTION_CAR_SERVICE);
+        bindService(intent, conn, BIND_AUTO_CREATE);
     }
 
     private void switchFragment(Fragment addCarFragment) {
@@ -101,9 +117,9 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     private class AddCarInteraction implements AddCarFragment.OnAddCarFragmentInteractionListener {
 
         @Override
-        public void onSeriesClicked() {
+        public void onBrandClicked() {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            CarSeriesFragment fragment = CarSeriesFragment.newInstance();
+            CarBrandFragment fragment = CarBrandFragment.newInstance();
             switchFragment(fragment);
         }
 
@@ -132,6 +148,19 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     public AddCarInteraction getAddCarInteraction() {
         return new AddCarInteraction();
     }
+
+    private ServiceConnection conn  = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            carService = (CarBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            carService = null;
+        }
+    };
 
     //----------------------------------------------------------------------------------------------
     private class PrefixInteraction implements CarNumberPrefixPickerFragment.OnPrefixFragmentInteractionListener {
@@ -162,6 +191,16 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onSeriesSelected(CarSeries series) {
 
+            carInfo.setSeries(series);
+            List<CarModel> modelList = CoreManager.getManager().getCarModelsBySeriesId(series.getId());
+            modelFragment.setModelData(modelList);
+            switchFragment(modelFragment);
+        }
+
+        @Override
+        public void onRequestSeriesData() {
+            String brandId = carInfo.getCarBrand().getId();
+            carService.
         }
     }
 
@@ -175,6 +214,10 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onBrandSelected(CarBrand brand) {
 
+            carInfo.setCarBrand(brand);
+            List<CarSeries> seriesList = CoreManager.getManager().getCarSeriesByBrandId(brand.getId());
+            seriesFragment.setSeriesData(seriesList);
+            switchFragment(seriesFragment);
         }
     }
 
@@ -187,8 +230,10 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
         @Override
         public void onModelSelected(CarModel model) {
-            if (model != null) {
-            }
+
+            carInfo.setCarModel(model);
+
+
         }
     }
 
