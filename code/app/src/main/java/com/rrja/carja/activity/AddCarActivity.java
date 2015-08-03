@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
@@ -25,6 +26,7 @@ import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
+import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.CarBinder;
 
@@ -32,7 +34,7 @@ import java.util.List;
 
 import static com.rrja.carja.fragment.car.CarModelFragment.*;
 
-public class AddCarActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
+public class AddCarActivity extends BaseActivity implements View.OnClickListener {
 
     private String prefix1 = "京";
     private String prefix2 = "A";
@@ -77,9 +79,11 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
         addCarFragment = AddCarFragment.newInstance();
 
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.fl_addcar_content, addCarFragment);
-        transaction.commitAllowingStateLoss();
+        switchFragment(addCarFragment);
+//        FragmentTransaction transaction = fragmentManager.beginTransaction();
+//        transaction.replace(R.id.fl_addcar_content, addCarFragment);
+//        transaction.addToBackStack(null);
+//        transaction.commitAllowingStateLoss();
 
         seriesFragment = CarSeriesFragment.newInstance();
 
@@ -90,6 +94,12 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_CAR_SERVICE);
         bindService(intent, conn, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onDestroy() {
+        unbindService(conn);
+        super.onDestroy();
     }
 
     private void switchFragment(Fragment addCarFragment) {
@@ -105,7 +115,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     }
 
     @Override
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (fragmentManager.getBackStackEntryCount() <= 1) {
                 finish();
@@ -113,16 +123,14 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
             }
         }
 
-        return false;
+        return super.onKeyDown(keyCode, event);
     }
 
     private class AddCarInteraction implements AddCarFragment.OnAddCarFragmentInteractionListener {
 
         @Override
         public void onBrandClicked() {
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            CarBrandFragment fragment = CarBrandFragment.newInstance();
-            switchFragment(fragment);
+            switchFragment(brandFragment);
         }
 
         @Override
@@ -132,9 +140,22 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         }
 
         @Override
-        public void onCommit() {
+        public void onCommit(String carNumber) {
+            UserInfo info = CoreManager.getManager().getCurrUser();
+            if (info == null) {
+                Intent intent = new Intent(AddCarActivity.this, LoginActivity.class);
+                startActivity(intent);
+                return;
+            }
 
+            if (!TextUtils.isEmpty(carNumber)) {
+                carService.addCarForUser(CoreManager.getManager().getCurrUser(), carInfo, carNumber);
+            }
         }
+    }
+
+    public CarInfo getCarInfo() {
+        return carInfo;
     }
 
     public String getPrefix1() {
@@ -235,9 +256,18 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         public void onModelSelected(CarModel model) {
 
             carInfo.setCarModel(model);
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.fl_addcar_content, addCarFragment);
-            transaction.commitAllowingStateLoss();
+
+            for(int i = 0; i < fragmentManager.getBackStackEntryCount() - 1; ++i) {
+                fragmentManager.popBackStack();
+            }
+//            switchFragment(addCarFragment);
+
+
+//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.replace(R.id.fl_addcar_content,addCarFragment);
+//            fragmentManager.popBackStackImmediate(CarModelFragment.class.getName(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//            fragmentTransaction.commitAllowingStateLoss();
+
 
         }
 

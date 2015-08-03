@@ -31,7 +31,6 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
 
 
     private OnModelFragmentInteractionListener mListener;
-    private List<CarModel> modelData = new ArrayList<>();
 
     private RecyclerView recyclerView;
     private CarModelAdapter adapter;
@@ -73,8 +72,7 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
 
     public void setModelData(List<CarModel> modelList) {
 
-        modelData.clear();
-        modelData = modelList;
+        adapter.setModelData(modelList);
 
     }
 

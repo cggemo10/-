@@ -74,7 +74,8 @@ public class CarModelAdapter extends RecyclerView.Adapter{
         }
 
         public void bindData(CarModel model) {
-            itemText.setText(model.getSeriesName());
+            String modelInfo = model.getSeriesName() + "\t" + model.getTypeName() + "\n\t" + model.getTransmission() + "\t" + model.getTypeName();
+            itemText.setText(modelInfo);
         }
     }
 

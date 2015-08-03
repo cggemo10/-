@@ -20,7 +20,8 @@
             android:text="@string/lable_car_series"
             android:textColor="@android:color/secondary_text_light" />
 
-        <TextView
+        <EditText
+            android:editable="false"
             android:id="@+id/txt_lable_car_series_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,8 +63,11 @@
             android:text="闽A"
             android:textColor="@color/c_style_red" />
 
-        <TextView
+        <EditText
             android:id="@+id/txt_car_munber"
+            android:inputType="text"
+            android:maxLength="5"
+            android:digits="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -79,11 +83,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
+        android:id="@+id/btn_save_car"
         android:gravity="center"
         android:text="@string/str_btn_save"
         android:textSize="16sp" />
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_del_car"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"

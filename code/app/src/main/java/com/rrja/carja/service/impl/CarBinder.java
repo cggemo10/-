@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.UserInfo;
@@ -119,7 +120,7 @@ public class CarBinder extends Binder{
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "�����쳣�����Ժ����ԡ�";
+                            errMsg = "网络异常，请稍后再试。";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -142,6 +143,8 @@ public class CarBinder extends Binder{
 
     }
 
+    public void addCarForUser(UserInfo userInfo, CarInfo carInfo, String carNum) {
 
+    }
 
 }

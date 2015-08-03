@@ -103,6 +103,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
     public void onStop() {
         if (receiver != null) {
             getActivity().unregisterReceiver(receiver);
+            receiver = null;
         }
         super.onStop();
     }
