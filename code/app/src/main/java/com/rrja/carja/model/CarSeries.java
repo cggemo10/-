@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -94,19 +95,18 @@ public class CarSeries implements Parcelable{
         }
     };
 
-    public static CarSeries parse(JSONObject seriesJson) {
+    public static CarSeries parse(JSONObject seriesJson) throws JSONException{
         if (seriesJson == null || TextUtils.isEmpty(seriesJson.toString())) {
             return null;
         }
 
         CarSeries info = new CarSeries();
 
-        info.setAuthToken(userJson.getString("authToken"));
-        info.setId(userJson.getInt("id") + "");
-        info.setTel(userJson.getString("natTel"));
-        info.setLevel(userJson.getString("level"));
-        info.setUserType(userJson.getString("userType"));
-        info.setUserStoreId(userJson.getInt("userStoreId"));
+        info.setBrandId(seriesJson.getInt("brandId"));
+        info.setId(seriesJson.getInt("id") + "");
+        info.setLogo(seriesJson.getString("logo"));
+        info.setSeriesName(seriesJson.getString("seriesName"));
+        info.setVehicleClass(seriesJson.getString("vehicleClass"));
 
         return info;
     }

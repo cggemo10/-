@@ -1,6 +1,10 @@
 package com.rrja.carja.fragment.car;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +18,8 @@ import android.widget.LinearLayout;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.AddCarActivity;
 import com.rrja.carja.adapter.CarSeriesAdapter;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.utils.DialogHelper;
 
@@ -21,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class CarSeriesFragment extends Fragment {
+public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSeriesItemClickListener{
 
 
     private OnSeriesFragmentInteractionListener mListener;
@@ -30,13 +36,17 @@ public class CarSeriesFragment extends Fragment {
     private RecyclerView recyclerView;
     private CarSeriesAdapter adapter;
 
+    private CarSeriesReceiver receiver;
+
+    private String brandId;
+
     public static CarSeriesFragment newInstance() {
         CarSeriesFragment fragment = new CarSeriesFragment();
         return fragment;
     }
 
     public CarSeriesFragment() {
-
+        receiver = new CarSeriesReceiver();
     }
 
     @Override
@@ -55,7 +65,9 @@ public class CarSeriesFragment extends Fragment {
     private void initView(View v) {
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_car_series);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(manager);
         adapter = new CarSeriesAdapter();
+        adapter.setItemClickListener(this);
         adapter.setData(seriesData);
         recyclerView.setAdapter(adapter);
     }
@@ -70,12 +82,29 @@ public class CarSeriesFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        if (seriesData== null || seriesData.size() == 0) {
+        if (adapter.getSeriesData() == null || adapter.getSeriesData().size() == 0) {
             DialogHelper.getHelper().showWaitting();
             if (mListener != null) {
                 mListener.onRequestSeriesData();
             }
         }
+
+        if (receiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_GET_CAR_SERIES);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_CAR_SERIES_ERR);
+
+
+            getActivity().registerReceiver(receiver, filter);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
+        super.onStop();
     }
 
     @Override
@@ -84,20 +113,46 @@ public class CarSeriesFragment extends Fragment {
         mListener = null;
     }
 
+    public void setBrandId(String brandId) {
+        this.brandId = brandId;
+    }
+
     public void setSeriesData(List<CarSeries> series) {
-        seriesData.clear();
-        if (series != null && series.size() != 0) {
-            this.seriesData = series;
+        adapter.setData(series);
+    }
+
+    @Override
+    public void onItemClick(CarSeries carSeries) {
+        if (mListener != null) {
+            mListener.onSeriesSelected(carSeries);
         }
     }
 
 
     public interface OnSeriesFragmentInteractionListener {
-        // TODO: Update argument type and name
+
         public void onSeriesSelected(CarSeries series);
         public void onRequestSeriesData();
     }
 
-    private class
+    private class CarSeriesReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Constant.ACTION_BROADCAST_GET_CAR_SERIES.equals(action) || Constant.ACTION_BROADCAST_GET_CAR_SERIES_ERR.equals(action)) {
+                if (intent.getExtras() != null && intent.getExtras().containsKey("brand_id")) {
+                    String brandID = intent.getExtras().getString("brand_id");
+                    if (brandId.equals(brandID)) {
+                        DialogHelper.getHelper().dismissWatting();
+                        List<CarSeries> carSeriesList = CoreManager.getManager().getCarSeriesByBrandId(brandId);
+                        setSeriesData(carSeriesList);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        }
+    }
+
 
 }

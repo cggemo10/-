@@ -30,6 +30,8 @@ import com.rrja.carja.service.impl.CarBinder;
 
 import java.util.List;
 
+import static com.rrja.carja.fragment.car.CarModelFragment.*;
+
 public class AddCarActivity extends BaseActivity implements View.OnClickListener, View.OnKeyListener {
 
     private String prefix1 = "京";
@@ -83,7 +85,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
         brandFragment = CarBrandFragment.newInstance();
 
-        modelFragment = CarModelFragment.newInstance();
+        modelFragment = newInstance();
 
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_CAR_SERVICE);
@@ -193,6 +195,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
             carInfo.setSeries(series);
             List<CarModel> modelList = CoreManager.getManager().getCarModelsBySeriesId(series.getId());
+            modelFragment.setSeriesId(series.getId());
             modelFragment.setModelData(modelList);
             switchFragment(modelFragment);
         }
@@ -200,7 +203,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onRequestSeriesData() {
             String brandId = carInfo.getCarBrand().getId();
-            carService.
+            carService.getSeriesByBrandId(brandId);
         }
     }
 
@@ -217,6 +220,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
             carInfo.setCarBrand(brand);
             List<CarSeries> seriesList = CoreManager.getManager().getCarSeriesByBrandId(brand.getId());
             seriesFragment.setSeriesData(seriesList);
+            seriesFragment.setBrandId(brand.getId());
             switchFragment(seriesFragment);
         }
     }
@@ -226,14 +230,21 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     }
 
     //----------------------------------------------------------------------------------------------
-    private class ModelInteraction implements CarModelFragment.OnModelFragmentInteractionListener {
+    private class ModelInteraction implements OnModelFragmentInteractionListener {
 
         @Override
         public void onModelSelected(CarModel model) {
 
             carInfo.setCarModel(model);
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fl_addcar_content, addCarFragment);
+            transaction.commitAllowingStateLoss();
 
+        }
 
+        @Override
+        public void onModelDataRequest(String seriesID) {
+            carService.getModelBySeriesId(seriesID);
         }
     }
 

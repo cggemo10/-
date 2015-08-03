@@ -14,12 +14,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CarModel implements Parcelable{
 
     private String engineCapacity;
-    private int id;
+    private String id;
     private int seriesId;
     private String seriesName;
     private String transmission;
@@ -35,11 +36,11 @@ public class CarModel implements Parcelable{
         this.engineCapacity = engineCapacity;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -92,7 +93,7 @@ public class CarModel implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(engineCapacity);
-        dest.writeInt(id);
+        dest.writeString(id);
         dest.writeInt(seriesId);
         dest.writeString(seriesName);
         dest.writeString(transmission);
@@ -107,7 +108,7 @@ public class CarModel implements Parcelable{
 
             CarModel model = new CarModel();
             model.setEngineCapacity(source.readString());
-            model.setId(source.readInt());
+            model.setId(source.readString());
             model.setSeriesId(source.readInt());
             model.setSeriesName(source.readString());
             model.setTransmission(source.readString());
@@ -123,19 +124,20 @@ public class CarModel implements Parcelable{
         }
     };
 
-    public static CarModel parse(JSONObject modelJson) {
+    public static CarModel parse(JSONObject modelJson) throws JSONException{
         if (modelJson == null || TextUtils.isEmpty(modelJson.toString())) {
             return null;
         }
 
         CarModel info = new CarModel();
 
-        info.setAuthToken(userJson.getString("authToken"));
-        info.setId(userJson.getInt("id") + "");
-        info.setTel(userJson.getString("natTel"));
-        info.setLevel(userJson.getString("level"));
-        info.setUserType(userJson.getString("userType"));
-        info.setUserStoreId(userJson.getInt("userStoreId"));
+        info.setEngineCapacity(modelJson.getString("engineCapacity"));
+        info.setId(modelJson.getInt("id") + "");
+        info.setSeriesId(modelJson.getInt("seriesId"));
+        info.setSeriesName(modelJson.getString("seriesName"));
+        info.setTransmission(modelJson.getString("transmission"));
+        info.setTypeName(modelJson.getString("typeName"));
+        info.setTypeSeries(modelJson.getString("typeSeries"));
 
         return info;
     }

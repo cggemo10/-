@@ -66,7 +66,7 @@ public class CarBinder extends Binder{
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£";
+                            errMsg = "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -119,7 +119,7 @@ public class CarBinder extends Binder{
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£";
+                            errMsg = "ï¿½ï¿½ï¿½ï¿½ï¿½ì³£ï¿½ï¿½ï¿½ï¿½ï¿½Ôºï¿½ï¿½ï¿½ï¿½Ô¡ï¿½";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
