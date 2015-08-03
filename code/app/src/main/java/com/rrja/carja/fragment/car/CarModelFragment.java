@@ -45,7 +45,6 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
     }
 
     public CarModelFragment() {
-        // Required empty public constructor
         adapter = new CarModelAdapter();
     }
 
@@ -67,7 +66,7 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_car_model);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
-
+        recyclerView.setAdapter(adapter);
         adapter.setOnItemListener(this);
         adapter.setModelData(CoreManager.getManager().getCarModelsBySeriesId(seriesId));
     }
@@ -86,6 +85,7 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
         if (CoreManager.getManager().getCarModelsBySeriesId(seriesId) == null || CoreManager.getManager().getCarModelsBySeriesId(seriesId).size() == 0) {
             if (mListener != null) {
                 mListener.onModelDataRequest(seriesId);
+                DialogHelper.getHelper().showWaitting();
             }
         }
 

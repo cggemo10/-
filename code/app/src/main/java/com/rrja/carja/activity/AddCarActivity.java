@@ -201,8 +201,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         }
 
         @Override
-        public void onRequestSeriesData() {
-            String brandId = carInfo.getCarBrand().getId();
+        public void onRequestSeriesData(String brandId) {
             carService.getSeriesByBrandId(brandId);
         }
     }

@@ -46,7 +46,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
     }
 
     public CarSeriesFragment() {
-        receiver = new CarSeriesReceiver();
+        adapter = new CarSeriesAdapter();
     }
 
     @Override
@@ -66,7 +66,6 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
         recyclerView = (RecyclerView) v.findViewById(R.id.recycler_car_series);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(manager);
-        adapter = new CarSeriesAdapter();
         adapter.setItemClickListener(this);
         adapter.setData(seriesData);
         recyclerView.setAdapter(adapter);
@@ -83,9 +82,10 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
         super.onStart();
 
         if (adapter.getSeriesData() == null || adapter.getSeriesData().size() == 0) {
-            DialogHelper.getHelper().showWaitting();
+
             if (mListener != null) {
-                mListener.onRequestSeriesData();
+                DialogHelper.getHelper().showWaitting();
+                mListener.onRequestSeriesData(brandId);
             }
         }
 
@@ -94,7 +94,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
             filter.addAction(Constant.ACTION_BROADCAST_GET_CAR_SERIES);
             filter.addAction(Constant.ACTION_BROADCAST_GET_CAR_SERIES_ERR);
 
-
+            receiver = new CarSeriesReceiver();
             getActivity().registerReceiver(receiver, filter);
         }
     }
@@ -132,7 +132,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
     public interface OnSeriesFragmentInteractionListener {
 
         public void onSeriesSelected(CarSeries series);
-        public void onRequestSeriesData();
+        public void onRequestSeriesData(String brandId);
     }
 
     private class CarSeriesReceiver extends BroadcastReceiver{
