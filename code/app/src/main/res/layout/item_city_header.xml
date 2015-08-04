@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_margin="2dp"
+    android:background="@color/c_style_red"
+    android:padding="@dimen/activity_horizontal_margin"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_marginLeft="@dimen/abc_button_padding_horizontal_material"
+        android:id="@+id/txt_item_city_header"
+        android:textColor="@android:color/secondary_text_dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

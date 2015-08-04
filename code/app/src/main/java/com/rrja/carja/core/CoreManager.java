@@ -42,7 +42,7 @@ public class CoreManager {
     private static final String TAG = "rrja.CoreManager";
 
     private static List<DiscountInfo> discountList = new ArrayList<DiscountInfo>();
-    private UserInfo currUser;
+
     private static List<ImageView> companyInfoImgs = new ArrayList<>();
     private static List<CarStore> stores = new ArrayList<>();
     private static List<Coupons> couponsList = new ArrayList<>();
@@ -51,6 +51,9 @@ public class CoreManager {
     private static List<CarBrand> brandList = new ArrayList<>();
     private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
     private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
+
+    private Region customRegion;
+    private UserInfo currUser;
 
     // demo
     static {
@@ -138,6 +141,10 @@ public class CoreManager {
         this.currUser = currUser;
     }
 
+    public void setCostumerRegion(Region region) {
+        this.customRegion = region;
+    }
+
     //----------------------------------------------------------------------------------------------
     //-------------------------------------getter---------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -164,6 +171,8 @@ public class CoreManager {
     public List<CarBrand> getCarBrand() {
         return brandList;
     }
+
+    public List<Region> getRegions() { return regions; }
 
     public List<CarSeries> getCarSeriesByBrandId(String brandId) {
         if (carSeriesMap.containsKey(brandId)) {
