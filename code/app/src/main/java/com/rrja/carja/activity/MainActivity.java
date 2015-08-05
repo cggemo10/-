@@ -23,7 +23,10 @@ import com.rrja.carja.fragment.home.CouponsFragment;
 import com.rrja.carja.fragment.home.ForumFragment;
 import com.rrja.carja.fragment.home.HomeFragment;
 import com.rrja.carja.fragment.home.UserCenterFragment;
+import com.rrja.carja.model.Region;
 import com.rrja.carja.service.DataCenterService;
+
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -69,7 +72,15 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             intent.setAction(Constant.ACTION_LOGIN_BY_AUTH);
             startActivity(intent);
         }
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Region costumerRegion = CoreManager.getManager().getCostumerRegion();
+        if (costumerRegion != null && !TextUtils.isEmpty(costumerRegion.getName())) {
+            txtLoc.setText(costumerRegion.getName());
+        }
     }
 
     private void initView() {
@@ -79,14 +90,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                    setTitle(R.string.title_main_page);
+                setTitle(R.string.title_main_page);
 
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
 //                if (drawerView.getId() == R.id.side_left) {
-                    setTitle(R.string.title_user_center);
+                setTitle(R.string.title_user_center);
 //                    mDrawerlayout.closeDrawer(Gravity.END);
 //                }
 //                if (drawerView.getId() == R.id.side_right) {
@@ -94,8 +105,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 //                    mDrawerlayout.closeDrawer(Gravity.START);
 //                }
                 super.onDrawerOpened(drawerView);
-
-
+                
             }
 
             @Override

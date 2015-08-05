@@ -143,7 +143,23 @@ public class CarBinder extends Binder{
 
     }
 
-    public void addCarForUser(UserInfo userInfo, CarInfo carInfo, String carNum) {
+    public void addCarForUser(final UserInfo userInfo, final CarInfo carInfo, final String carNum) {
+
+        if (userInfo == null || carInfo == null || carInfo.isDataEmpty() || TextUtils.isEmpty(carNum)) {
+            // TODO
+            return;
+        }
+
+        Runnable task = new Runnable() {
+
+            @Override
+            public void run() {
+
+                HttpUtils.addPrivateCar(userInfo, carInfo);
+            }
+        };
+
+        mContext.execute(task);
 
     }
 

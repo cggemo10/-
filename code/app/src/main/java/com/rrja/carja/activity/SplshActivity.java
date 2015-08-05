@@ -12,6 +12,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.service.DataCenterService;
+import com.rrja.carja.utils.DialogHelper;
 
 public class SplshActivity extends Activity implements Handler.Callback {
 
@@ -22,6 +23,8 @@ public class SplshActivity extends Activity implements Handler.Callback {
     protected void onCreate(Bundle savedInstanceState) {
 
         CoreManager.getManager().init(this);
+
+        DialogHelper.getHelper().init(this.getApplicationContext());
 
         Intent service = new Intent(this, DataCenterService.class);
         service.setAction(Constant.ACTION_INIT_SERVICE);

@@ -110,15 +110,20 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         llOrderContent = (LinearLayout) view.findViewById(R.id.ll_setting_order_content);
 
         llOrderPayed = (LinearLayout) view.findViewById(R.id.ll_setting_order_payed);
+        llOrderPayed.setOnClickListener(this);
         llOrderUnpay = (LinearLayout) view.findViewById(R.id.ll_setting_order_unpay);
+        llOrderUnpay.setOnClickListener(this);
         llOrderFinished = (LinearLayout) view.findViewById(R.id.ll_setting_order_finished);
+        llOrderFinished.setOnClickListener(this);
         llOrderCancel = (LinearLayout) view.findViewById(R.id.ll_setting_order_cancel);
+        llOrderCancel.setOnClickListener(this);
 
         rlMyCar = (RelativeLayout) view.findViewById(R.id.rl_setting_mycar);
+        rlMyCar.setOnClickListener(this);
         rlCoupons = (RelativeLayout) view.findViewById(R.id.rl_setting_coupons);
+        rlCoupons.setOnClickListener(this);
         rlFeedback = (RelativeLayout) view.findViewById(R.id.rl_setting_feedback);
-
-        checkLogin();
+        rlFeedback.setOnClickListener(this);
 
     }
 
@@ -135,6 +140,12 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         super.onDetach();
         unregistUserReceiver();
         mListener = null;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        checkLogin();
     }
 
     private void checkLogin() {
@@ -161,7 +172,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         // TODO show avatar from path
         try {
             Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("user.jpg"));
-            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 4);
+            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 3.14f);
             imgAvatar.setImageBitmap(roundedAvatar);
         } catch (IOException e) {
             e.printStackTrace();
@@ -179,7 +190,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-
+        UserInfo currUser = CoreManager.getManager().getCurrUser();
         switch (v.getId()) {
             case R.id.btn_modify_nick_name:
                 mListener.modifyNickname();
@@ -187,12 +198,63 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             case R.id.btn_show_login:
                 mListener.loginInteraction();
                 break;
-            case R.id.rl_setting_order:
-                if (llOrderContent.getVisibility() == View.VISIBLE) {
-                    llOrderContent.setVisibility(View.GONE);
+            case R.id.rl_setting_order: {
+                if (currUser != null) {
+                    if (llOrderContent.getVisibility() == View.VISIBLE) {
+                        llOrderContent.setVisibility(View.GONE);
+                    } else {
+                        llOrderContent.setVisibility(View.VISIBLE);
+                    }
                 } else {
-                    llOrderContent.setVisibility(View.VISIBLE);
+                    mListener.loginInteraction();
                 }
+            }
+            break;
+            case R.id.ll_setting_order_payed:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+
+                break;
+            case R.id.ll_setting_order_unpay:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+                break;
+            case R.id.ll_setting_order_finished:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+                break;
+            case R.id.ll_setting_order_cancel:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+                break;
+            case R.id.rl_setting_mycar:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+                break;
+            case R.id.rl_setting_coupons:
+                if (currUser == null) {
+                    mListener.loginInteraction();
+                } else {
+
+                }
+                break;
+            case R.id.rl_setting_feedback:
+                break;
         }
     }
 
@@ -249,7 +311,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 // TODO
             }
 
-            if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
+            if (Constant.ACTION_LOGIN_BY_AUTH_ERROR.equals(action)) {
                 // TODO
             }
         }

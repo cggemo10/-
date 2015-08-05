@@ -29,6 +29,7 @@ import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.CarBinder;
+import com.rrja.carja.utils.DialogHelper;
 
 import java.util.List;
 
@@ -54,6 +55,8 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_car);
+
+        DialogHelper.getHelper().init(this);
 
         if (llloc != null) {
             llloc.setVisibility(View.GONE);

@@ -1,8 +1,10 @@
 package com.rrja.carja.transaction;
 
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
 
+import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
 /**
@@ -26,6 +28,7 @@ public class HttpUtils {
     private static final String INTERFACE_BRAND = "/getBrands";
     private static final String INTERFACE_SERIES = "/getSeries";
     private static final String INTERFACE_MODEL = "/getModels";
+    private static final String INTERFACE_ADD_CAR = "/addUserCar";
 
     private static final String INTERFACE_PREREGIST = "/preRegister";
     private static final String INTERFACE_REGIST_OR_LOGIN = "/register";
@@ -65,7 +68,21 @@ public class HttpUtils {
     }
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
-        return null;
+        String palteNum = TextUtils.isEmpty(carInfo.getp);
+        String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
+        String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
+
+        String cityId = CoreManager.getManager().getCostumerRegion() == null ?
+                "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR +
+                "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() +
+                "&carBrandId=" + carInfo.getCarBrand().getId() + "&carBrandName=" + carInfo.getCarBrand().getName() +
+                "&carSeriesId=" + carInfo.getSeries().getId() +  "&carSeriesName=" + carInfo.getSeries().getSeriesName() +
+                "&carModelId=" + carInfo.getCarModel().getId() + "&carModelName=" + carInfo.getCarModel().getSeriesName() +
+                "&palteNumber=" + carInfo.get + "&engineno=", engineNo +
+                "&frameno=" + frameNo + "&citycode=" + cityId;
+        return Network.doGet(url);
     }
 
     public static JSONObject getPrivateCarList(UserInfo userInfo) {

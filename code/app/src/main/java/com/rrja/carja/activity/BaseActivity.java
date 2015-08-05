@@ -16,6 +16,7 @@ public class BaseActivity extends ActionBarActivity {
     Toolbar toolbar;
     TextView toolbarTitle;
     LinearLayout llloc;
+    TextView txtLoc;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -26,6 +27,7 @@ public class BaseActivity extends ActionBarActivity {
             toolbar = (Toolbar) t;
             setSupportActionBar(toolbar);
             llloc = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
+            txtLoc = (TextView) llloc.findViewById(R.id.txt_location);
             toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             if (toolbarTitle != null) {
                 getSupportActionBar().setDisplayShowTitleEnabled(false);

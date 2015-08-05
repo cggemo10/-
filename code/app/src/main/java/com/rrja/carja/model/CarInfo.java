@@ -132,4 +132,8 @@ public class CarInfo implements Parcelable{
             return new CarInfo[size];
         }
     };
+
+    public boolean isDataEmpty() {
+        return carBrand == null || series == null || carModel == null;
+    }
 }
