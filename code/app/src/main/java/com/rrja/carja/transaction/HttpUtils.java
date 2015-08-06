@@ -4,8 +4,12 @@ import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
 
+import org.apache.http.client.utils.URLEncodedUtilsHC4;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by chongge on 15/7/8.
@@ -30,8 +34,17 @@ public class HttpUtils {
     private static final String INTERFACE_MODEL = "/getModels";
     private static final String INTERFACE_ADD_CAR = "/addUserCar";
 
+    private static final String INTERFACE_CHECK_AUTH = "/login";
     private static final String INTERFACE_PREREGIST = "/preRegister";
     private static final String INTERFACE_REGIST_OR_LOGIN = "/register";
+    private static final String INTERFACE_USER_INFO_UPDATE = "/updateUserInfo";
+    private static final String INTERFACE_USRE_AVATAR_UPDATE = "/updateAvatar";
+    private static final String INTERFACE_USER_CARS = "/getUserCarList";
+    private static final String INTERFACE_USER_DEL_CAR = "/deleteUserCar";
+    private static final String INTERFACE_USER_ORDER_LIST = "/getUserOrderList";
+    private static final String INTERFACE_USER_COUPON_LIST = "/getUserCoupons";
+    private static final String INTERFACE_USER_APPOINTMENT = "/getUserAppointmentList";
+
 
     //-------------------------------------------------------------------------------------------------------------------
     // normal
@@ -45,7 +58,8 @@ public class HttpUtils {
     // user interface
     public static JSONObject checkAuth(String authToken, String phoneNo) {
 
-        return null;
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_CHECK_AUTH, "?nattel=" , phoneNo , "&authToken=" , authToken);
+        return Network.doGet(url);
     }
 
     public static JSONObject getSmsCode(String phoneNo) {
@@ -59,7 +73,19 @@ public class HttpUtils {
         return Network.doGet(url);
     }
 
+    /*
+      更新用户信息： http://120.25.201.50/api/user/updateUserInfo?nattel=xxx&authToken=xxx&nickname=xxx&email=xxx&address=xxx
+      更新用户头像： http://120.25.201.50/api/user/updateAvatar?nattel=xxx&authToken=xxx&avatar(post头像文件)
+     */
+
     public static JSONObject updateUserInfo(UserInfo userInfo) {
+//        try {
+//            String nickNameEnc = URLEncoder.encode(userInfo.getNikeName(), "UTF-8");
+//            String url =
+//            return Network.doGet()
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
         return null;
     }
 
@@ -85,24 +111,42 @@ public class HttpUtils {
         return Network.doGet(url);
     }
 
+
+
     public static JSONObject getPrivateCarList(UserInfo userInfo) {
-        return null;
+
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_USER_CARS, "?nattel=", userInfo.getTel(), "&authToken=", userInfo.getAuthToken());
+        return Network.doGet(url);
     }
 
     public static JSONObject removePrivateCar(UserInfo userInfo, CarInfo carInfo) {
-        return null;
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_DEL_CAR + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() + "&carId="+ carInfo.getId();
+        return Network.doGet(url);
     }
 
-    public static JSONObject getOrderList(UserInfo userInfo) {
-        return null;
+    public static JSONObject getOrderList(UserInfo userInfo, String type) {
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_ORDER_LIST + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() + "&type=" + type;
+        return Network.doGet(url);
     }
 
     public static JSONObject getPrivateCoupons(UserInfo userInfo) {
-        return null;
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_COUPON_LIST + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken();
+        return Network.doGet(url);
     }
 
+    //获取用户预约列表
     public static JSONObject getAppointmentList(UserInfo userInfo) {
-        return null;
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_APPOINTMENT + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken();
+        return Network.doGet(url);
+    }
+
+    public static JSONObject getAppointmentByStoreId(UserInfo info, String storeId) {
+
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
