@@ -25,6 +25,8 @@ public class CarInfo implements Parcelable{
     private CarBrand carBrand;
     @DatabaseField
     private CarModel carModel;
+    @DatabaseField
+    private String platNum;
 
     public String getId() {
         return id;
@@ -90,6 +92,14 @@ public class CarInfo implements Parcelable{
         this.carModel = carModelID;
     }
 
+    public void setPlatNum(String platNum) {
+        this.platNum = platNum;
+    }
+
+    public String getPlatNum() {
+        return this.platNum;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -106,6 +116,7 @@ public class CarInfo implements Parcelable{
         dest.writeParcelable(series, flags);
         dest.writeParcelable(carBrand, flags);
         dest.writeParcelable(carModel, flags);
+        dest.writeString(platNum);
 
     }
 
@@ -124,6 +135,7 @@ public class CarInfo implements Parcelable{
             info.setSeries((CarSeries) source.readParcelable(CarSeries.class.getClassLoader()));
             info.setCarBrand((CarBrand) source.readParcelable(CarBrand.class.getClassLoader()));
             info.setCarModel((CarModel) source.readParcelable(CarModel.class.getClassLoader()));
+            info.setPlatNum(source.readString());
             return info;
         }
 

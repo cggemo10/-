@@ -5,6 +5,7 @@ import android.util.Log;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
+import com.rrja.carja.model.DiscountInfo;
 import com.rrja.carja.model.Region;
 
 import org.json.JSONArray;
@@ -19,6 +20,31 @@ import java.util.List;
  */
 public class ResponseUtils {
 
+    public static List<DiscountInfo> parseDiscountList(JSONArray discountArray) throws JSONException {
+
+        if (discountArray == null || discountArray.length() == 0) {
+            return null;
+        }
+
+        List<DiscountInfo> infoList = new ArrayList<>();
+
+        for (int i = 0; i < discountArray.length(); i++) {
+
+            JSONObject discountJson = discountArray.getJSONObject(i);
+            DiscountInfo info = DiscountInfo.parse(discountJson);
+            if (info != null) {
+                infoList.add(info);
+            }
+        }
+
+        if (infoList.size() == 0) {
+            return null;
+        } else {
+            return infoList;
+        }
+
+    }
+
     public static List<Region> parseAllCity(JSONArray regionArray) throws JSONException {
 
         if (regionArray == null || regionArray.length() == 0) {
@@ -27,7 +53,7 @@ public class ResponseUtils {
 
         List<Region> regions = new ArrayList<>();
 
-        for (int i = 0; i< regionArray.length(); i++) {
+        for (int i = 0; i < regionArray.length(); i++) {
 
             JSONObject proviceJson = regionArray.getJSONObject(i);
             Region region = Region.parse(proviceJson);
@@ -69,7 +95,7 @@ public class ResponseUtils {
 
         List<CarBrand> carBrands = new ArrayList<>();
 
-        for (int i = 0; i<brandArray.length(); i++) {
+        for (int i = 0; i < brandArray.length(); i++) {
 
             JSONObject brandJson = brandArray.getJSONObject(i);
             CarBrand brand = CarBrand.parse(brandJson);

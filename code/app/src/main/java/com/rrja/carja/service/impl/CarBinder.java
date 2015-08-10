@@ -1,6 +1,5 @@
 package com.rrja.carja.service.impl;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.text.TextUtils;
@@ -17,12 +16,11 @@ import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.List;
 
 
-public class CarBinder extends Binder{
+public class CarBinder extends Binder {
 
     private static final String TAG = "rrja.CarBinder";
 
@@ -48,7 +46,7 @@ public class CarBinder extends Binder{
                     int code = carSeriesJson.getInt("code");
                     if (code == 0) {
 
-                        List<CarSeries> seriesList =  ResponseUtils.parseCarSeriesList(carSeriesJson.getJSONArray("data"));
+                        List<CarSeries> seriesList = ResponseUtils.parseCarSeriesList(carSeriesJson.getJSONArray("data"));
                         if (seriesList != null) {
                             CoreManager.getManager().setCarSeriesData(brandId, seriesList);
                             // TODO save auth
@@ -101,7 +99,7 @@ public class CarBinder extends Binder{
                     int code = seriesJson.getInt("code");
                     if (code == 0) {
 
-                        List<CarModel> seriesList =  ResponseUtils.parseCarModelList(seriesJson.getJSONArray("data"));
+                        List<CarModel> seriesList = ResponseUtils.parseCarModelList(seriesJson.getJSONArray("data"));
                         if (seriesList != null) {
                             CoreManager.getManager().setCarModelData(seriesId, seriesList);
                             // TODO save auth

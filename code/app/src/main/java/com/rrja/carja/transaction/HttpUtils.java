@@ -4,11 +4,9 @@ import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
 
-import org.apache.http.client.utils.URLEncodedUtilsHC4;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 /**
@@ -64,7 +62,7 @@ public class HttpUtils {
     // user interface
     public static JSONObject checkAuth(String authToken, String phoneNo) {
 
-        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_CHECK_AUTH, "?nattel=" , phoneNo , "&authToken=" , authToken);
+        String url = String.format("%s%s%s%s%s%s%s", BASE_URL, SERVICE_USER, INTERFACE_CHECK_AUTH, "?nattel=", phoneNo, "&authToken=", authToken);
         return Network.doGet(url);
     }
 
@@ -100,23 +98,25 @@ public class HttpUtils {
     }
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
-        String palteNum = TextUtils.isEmpty(carInfo.get);
+        String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum()).replace(" ", "%2b");
         String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
         String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
 
         String cityId = CoreManager.getManager().getCostumerRegion() == null ?
                 "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
 
-        String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR +
-                "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() +
-                "&carBrandId=" + carInfo.getCarBrand().getId() + "&carBrandName=" + carInfo.getCarBrand().getName() +
-                "&carSeriesId=" + carInfo.getSeries().getId() +  "&carSeriesName=" + carInfo.getSeries().getSeriesName() +
-                "&carModelId=" + carInfo.getCarModel().getId() + "&carModelName=" + carInfo.getCarModel().getSeriesName() +
-                "&palteNumber=" + carInfo.get + "&engineno=", engineNo +
+        String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR + "?nattel=" + userInfo.getTel() +
+                "&authToken=" + userInfo.getAuthToken() +
+                "&carBrandId=" + carInfo.getCarBrand().getId() +
+                "&carBrandName=" + carInfo.getCarBrand().getName() +
+                "&carSeriesId=" + carInfo.getSeries().getId() +
+                "&carSeriesName=" + carInfo.getSeries().getSeriesName() +
+                "&carModelId=" + carInfo.getCarModel().getId() +
+                "&carModelName=" + carInfo.getCarModel().getSeriesName() +
+                "&palteNumber=" + palteNum + "&engineno=" + engineNo + 
                 "&frameno=" + frameNo + "&citycode=" + cityId;
         return Network.doGet(url);
     }
-
 
 
     public static JSONObject getPrivateCarList(UserInfo userInfo) {
@@ -127,7 +127,7 @@ public class HttpUtils {
 
     public static JSONObject removePrivateCar(UserInfo userInfo, CarInfo carInfo) {
 
-        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_DEL_CAR + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() + "&carId="+ carInfo.getId();
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_DEL_CAR + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken() + "&carId=" + carInfo.getId();
         return Network.doGet(url);
     }
 
@@ -204,6 +204,7 @@ public class HttpUtils {
     public static JSONObject getRecommendProject(boolean hasCoupons) {
         return null;
     }
+
     /*
         101 保养
         102 维修

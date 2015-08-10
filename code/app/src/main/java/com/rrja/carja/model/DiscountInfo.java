@@ -6,6 +6,12 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+
 /**
  * Created by Administrator on 2015/6/6.
  */
@@ -144,4 +150,30 @@ public class DiscountInfo implements Parcelable{
             return new DiscountInfo[size];
         }
     };
+
+    public static DiscountInfo parse(JSONObject discountJson) throws JSONException{
+
+        if (discountJson == null || discountJson.length() == 0) {
+            return null;
+        }
+
+        DiscountInfo info = new DiscountInfo();
+        info.setProductId(discountJson.getString("id"));
+        info.setName(discountJson.getString("name"));
+        info.setMobileNo(discountJson.getString("mobile"));
+        info.setDetial(discountJson.getString("detail"));
+
+        long startData = discountJson.getLong("start");
+        long endData = discountJson.getLong("end");
+        SimpleDateFormat format = new SimpleDateFormat();
+        Date startDate = new Date(startData);
+        Date endDate = new Date(endData);
+        info.setTime(format.format(startDate) + " 至\n"+ format.format(endDate));
+
+        info.setContent(discountJson.getString("content"));
+        info.setImgUrl(discountJson.getString("image"));
+        info.setScope(discountJson.getString("scope"));
+
+        return info;
+    }
 }
