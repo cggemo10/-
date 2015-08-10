@@ -21,6 +21,8 @@ public class HttpUtils {
     private static final String SERVICE_USER = "/user";
     private static final String SERVICE_AREA = "/area";
     private static final String SERVICE_CAR = "/car";
+    private static final String SERVICE_GOODS = "/goods";
+    private static final String SERVICE_SERVICE = "/service";
 //    http://120.25.201.50/api/car/getBrands?firstLetter=
 //    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
 //    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
@@ -44,6 +46,10 @@ public class HttpUtils {
     private static final String INTERFACE_USER_ORDER_LIST = "/getUserOrderList";
     private static final String INTERFACE_USER_COUPON_LIST = "/getUserCoupons";
     private static final String INTERFACE_USER_APPOINTMENT = "/getUserAppointmentList";
+
+    private static final String INTERFACE_GOOD_COUPONS = "/getDiscountGoodsList";
+    private static final String INTERFACE_SERVICES = "/getServiceList";
+    private static final String INTERFACE_SERVICE_GOODS = "/getGoodsList";
 
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -94,7 +100,7 @@ public class HttpUtils {
     }
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
-        String palteNum = TextUtils.isEmpty(carInfo.getp);
+        String palteNum = TextUtils.isEmpty(carInfo.get);
         String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
         String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
 
@@ -198,17 +204,33 @@ public class HttpUtils {
     public static JSONObject getRecommendProject(boolean hasCoupons) {
         return null;
     }
-
+    /*
+        101 保养
+        102 维修
+        103 美容
+        104 洗车
+     */
     public static JSONObject getServiceList(String parentServiceId) {
-        return null;
+
+        String url = String.format("%s%s%s%s%s", BASE_URL, SERVICE_SERVICE, INTERFACE_SERVICES, "?fatherId=", parentServiceId);
+        return Network.doGet(url);
     }
 
-    public static JSONObject getGoodList(String serviceId, int count, int page) {
-        return null;
+    /*
+        二级服务下商品列表
+     */
+    public static JSONObject getGoodList(String serviceId, int page) {
+
+        int count = 15;
+        String url = BASE_URL + SERVICE_GOODS + INTERFACE_SERVICE_GOODS + "?serviceId=" + serviceId + "&count=" + count + "&page=" + page;
+        return Network.doGet(url);
     }
 
-    public static JSONObject getCoupons() {
-        return null;
+    public static JSONObject getCouponsGoods(int page) {
+        int number = 10;
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
+        return Network.doGet(url);
+
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -240,8 +262,9 @@ public class HttpUtils {
     }
 
     //-------------------------------------------------------------------------------------------------------------------
-    // store interface
-    public static JSONObject storeList() {
+    // store interface http://120.25.201.50/api/store/getStoreList?nattel=sunde&authToken=123456&area=xxx
+    public static JSONObject storeList(UserInfo userInfo, String area) {
+
         return null;
     }
 
