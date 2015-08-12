@@ -7,12 +7,17 @@ import android.util.Log;
 
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
+import com.rrja.carja.utils.ResponseUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class UserBinder extends Binder {
 
@@ -170,5 +175,120 @@ public class UserBinder extends Binder {
         mContext.execute(task);
     }
 
+    //------------------------------------------------------------------------------------ goods or service
+    public void getDiscountGoods(int page) {
+        if (page <= 0) {
+            page = 1;
+        }
+
+        final int finalPage = page;
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    JSONObject couponsJs = HttpUtils.get(finalPage);
+                    int code = couponsJs.getInt("code");
+                    if (code == 0) {
+
+                        List<DiscountGoods> info = ResponseUtils.parseDiscountList(couponsJs.getJSONArray("data"));
+                        if (info != null || info.size() > 0) {
+                            if (finalPage == 1) {
+                                CoreManager.getManager().getDiscounts().clear();
+                                CoreManager.getManager().getDiscounts().addAll(info);
+                            }
+                            // TODO save auth
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA);
+                            intent.putExtra("size", info.size());
+                            mContext.sendBroadcast(intent);
+                            return;
+                        }
+
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+                        String errMsg = null;
+                        if (couponsJs.has("description")) {
+                            errMsg = couponsJs.getString("description");
+                        }
+
+                        if (TextUtils.isEmpty(errMsg)) {
+                            errMsg = "网络异常，请稍后再试。";
+                        }
+                        intent.putExtra("description", errMsg);
+                        mContext.sendBroadcast(intent);
+                        return;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+                    intent.putExtra("page", finalPage);
+                    mContext.sendBroadcast(intent);
+                }
+            }
+        };
+
+        mContext.execute(task);
+    }
+
+    public void getCouponsGoods(int page) {
+
+        if (page <= 0) {
+            page = 1;
+        }
+
+        final int finalPage = page;
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    JSONObject couponsJs = HttpUtils.getCouponsGoods(finalPage);
+                    int code = couponsJs.getInt("code");
+                    if (code == 0) {
+
+                        List<CouponGoods> info = ResponseUtils.parseCouponsList(couponsJs.getJSONArray("data"));
+                        if (info != null || info.size() > 0) {
+                            if (finalPage == 1) {
+                                CoreManager.getManager().getCoupons().clear();
+                                CoreManager.getManager().getCoupons().addAll(info);
+                            }
+                            // TODO save auth
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA);
+                            intent.putExtra("size", info.size());
+                            mContext.sendBroadcast(intent);
+                            return;
+                        }
+
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR);
+                        String errMsg = null;
+                        if (couponsJs.has("description")) {
+                            errMsg = couponsJs.getString("description");
+                        }
+
+                        if (TextUtils.isEmpty(errMsg)) {
+                            errMsg = "网络异常，请稍后再试。";
+                        }
+                        intent.putExtra("description", errMsg);
+                        mContext.sendBroadcast(intent);
+                        return;
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR);
+                    intent.putExtra("page", finalPage);
+                    mContext.sendBroadcast(intent);
+                }
+            }
+        };
+
+        mContext.execute(task);
+    }
 
 }

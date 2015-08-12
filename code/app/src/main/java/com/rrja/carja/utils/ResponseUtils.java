@@ -5,7 +5,8 @@ import android.util.Log;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.model.Region;
 
 import org.json.JSONArray;
@@ -20,18 +21,18 @@ import java.util.List;
  */
 public class ResponseUtils {
 
-    public static List<DiscountInfo> parseDiscountList(JSONArray discountArray) throws JSONException {
+    public static List<DiscountGoods> parseDiscountList(JSONArray discountArray) throws JSONException {
 
         if (discountArray == null || discountArray.length() == 0) {
             return null;
         }
 
-        List<DiscountInfo> infoList = new ArrayList<>();
+        List<DiscountGoods> infoList = new ArrayList<>();
 
         for (int i = 0; i < discountArray.length(); i++) {
 
             JSONObject discountJson = discountArray.getJSONObject(i);
-            DiscountInfo info = DiscountInfo.parse(discountJson);
+            DiscountGoods info = DiscountGoods.parse(discountJson);
             if (info != null) {
                 infoList.add(info);
             }
@@ -42,6 +43,27 @@ public class ResponseUtils {
         } else {
             return infoList;
         }
+
+    }
+
+
+    public static List<CouponGoods> parseCouponsList(JSONArray goodJson) throws JSONException {
+        if (goodJson == null || goodJson.length() == 0) {
+            return null;
+        }
+
+        List<CouponGoods> goodsList = new ArrayList<>();
+
+        for (int i = 0; i < goodJson.length(); i++) {
+
+            JSONObject goodJ = goodJson.getJSONObject(i);
+            CouponGoods goods = CouponGoods.parse(goodJ);
+            if (goodJ != null) {
+                goodsList.add(goods);
+            }
+        }
+
+        return goodsList;
 
     }
 
@@ -150,4 +172,5 @@ public class ResponseUtils {
 
         return carModelList;
     }
+
 }

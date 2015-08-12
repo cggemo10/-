@@ -285,8 +285,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private class HomeInteraction implements HomeFragment.OnHomeInteractionListener {
 
         @Override
-        public void onFragmentInteraction(Uri uri) {
-
+        public void requestDiscountData(int page) {
+            Intent intent = new Intent(MainActivity.this, DataCenterService.class);
+            intent.setAction(Constant.ACTION_DATA_GET_DISCOUNT);
+            intent.putExtra("page",page);
+            startService(intent);
         }
     }
 

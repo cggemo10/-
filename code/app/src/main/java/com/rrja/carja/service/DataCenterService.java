@@ -62,11 +62,22 @@ public class DataCenterService extends Service implements Handler.Callback {
                 checkConstantData();
             }
 
-            userBinder = new UserBinder(this);
+            if (userBinder == null) {
+                userBinder = new UserBinder(this);
+            }
+
             if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
                 String auth = intent.getStringExtra("auth");
                 String tel = intent.getStringExtra("tel");
                 userBinder.checkAuth(auth, tel);
+            }
+
+            if (Constant.ACTION_DATA_GET_DISCOUNT.equals(action)) {
+
+            }
+
+            if (Constant.ACTION_DATA_GET_COUPONS_GOODS.equals(action)) {
+
             }
         }
 
@@ -100,7 +111,7 @@ public class DataCenterService extends Service implements Handler.Callback {
 
         String action = intent.getAction();
         if (Constant.ACTION_USER_SERVICE.equals(action)) {
-            return new UserBinder(this);
+            return userBinder;
         }
         if (Constant.ACTION_CAR_SERVICE.equals(action)) {
             return new CarBinder(this);

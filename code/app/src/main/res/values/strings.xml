@@ -12,6 +12,8 @@
 
     <!-- normal -->
     <string name="str_commit">提交</string>
+    <string name="str_err_net">请求失败，请检查您的网络。</string>
+
 
     <!-- 首页 -->
     <string name="title_main_page">车捷安</string>

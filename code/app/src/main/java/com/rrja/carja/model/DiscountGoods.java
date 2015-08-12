@@ -2,6 +2,7 @@ package com.rrja.carja.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.GetChars;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -16,7 +17,7 @@ import java.text.SimpleDateFormat;
  * Created by Administrator on 2015/6/6.
  */
 @DatabaseTable(tableName = "discount")
-public class DiscountInfo implements Parcelable{
+public class DiscountGoods implements Parcelable{
 
     @DatabaseField(id = true)
     private String productId;
@@ -25,7 +26,9 @@ public class DiscountInfo implements Parcelable{
     @DatabaseField
     private String scope;
     @DatabaseField
-    private String time;
+    private long startTime;
+    @DatabaseField
+    private long endTime;
     @DatabaseField
     private String content;
     @DatabaseField
@@ -34,6 +37,13 @@ public class DiscountInfo implements Parcelable{
     private String detial;
     @DatabaseField
     private String imgUrl;
+    @DatabaseField
+    private int price;
+    @DatabaseField
+    private int discountPrice;
+    @DatabaseField
+    private String serviceId;
+
 
     public String getMobileNo() {
         return mobileNo;
@@ -83,12 +93,36 @@ public class DiscountInfo implements Parcelable{
         this.name = name;
     }
 
-    public String getTime() {
-        return time;
+    public long getStartTime() {
+        return startTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setStartTime(long time) {
+        this.startTime = time;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long time) {
+        this.endTime = time;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setDiscountPrice(int price) {
+        this.discountPrice = price;
+    }
+
+    public int getDiscountPrice() {
+        return discountPrice;
     }
 
     public String getDetial() {
@@ -99,77 +133,78 @@ public class DiscountInfo implements Parcelable{
         this.detial = detial;
     }
 
-    /**
-     * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
-     *
-     * @return a bitmask indicating the set of special object types marshalled
-     * by the Parcelable.
-     */
+    public String getServiceId() {
+        return this.serviceId;
+    }
+
+    public void setServiceId(String id) {
+        this.serviceId = id;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /**
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest  The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     */
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(productId);
         dest.writeString(name);
         dest.writeString(scope);
-        dest.writeString(time);
+        dest.writeLong(startTime);
+        dest.writeLong(endTime);
         dest.writeString(content);
         dest.writeString(mobileNo);
         dest.writeString(detial);
         dest.writeString(imgUrl);
+        dest.writeInt(price);
+        dest.writeInt(discountPrice);
+        dest.writeString(serviceId);
     }
 
-    public static Parcelable.Creator<DiscountInfo> CREATOR = new Parcelable.Creator<DiscountInfo>() {
+    public static Parcelable.Creator<DiscountGoods> CREATOR = new Parcelable.Creator<DiscountGoods>() {
         @Override
-        public DiscountInfo createFromParcel(Parcel source) {
-            DiscountInfo discountInfo = new DiscountInfo();
+        public DiscountGoods createFromParcel(Parcel source) {
+            DiscountGoods discountInfo = new DiscountGoods();
             discountInfo.setProductId(source.readString());
             discountInfo.setName(source.readString());
             discountInfo.setScope(source.readString());
-            discountInfo.setTime(source.readString());
+            discountInfo.setStartTime(source.readLong());
+            discountInfo.setEndTime(source.readLong());
             discountInfo.setContent(source.readString());
             discountInfo.setMobileNo(source.readString());
             discountInfo.setDetial(source.readString());
             discountInfo.setImgUrl(source.readString());
+            discountInfo.setPrice(source.readInt());
+            discountInfo.setDiscountPrice(source.readInt());
+            discountInfo.setServiceId(source.readString());
             return discountInfo;
         }
 
         @Override
-        public DiscountInfo[] newArray(int size) {
-            return new DiscountInfo[size];
+        public DiscountGoods[] newArray(int size) {
+            return new DiscountGoods[size];
         }
     };
 
-    public static DiscountInfo parse(JSONObject discountJson) throws JSONException{
+    public static DiscountGoods parse(JSONObject discountJson) throws JSONException{
 
         if (discountJson == null || discountJson.length() == 0) {
             return null;
         }
 
-        DiscountInfo info = new DiscountInfo();
+        DiscountGoods info = new DiscountGoods();
         info.setProductId(discountJson.getString("id"));
         info.setName(discountJson.getString("name"));
         info.setMobileNo(discountJson.getString("mobile"));
         info.setDetial(discountJson.getString("detail"));
-
-        long startData = discountJson.getLong("start");
-        long endData = discountJson.getLong("end");
-        SimpleDateFormat format = new SimpleDateFormat();
-        Date startDate = new Date(startData);
-        Date endDate = new Date(endData);
-        info.setTime(format.format(startDate) + " 至\n"+ format.format(endDate));
-
+        info.setPrice(discountJson.getInt("price"));
+        info.setDiscountPrice(discountJson.getInt("discountPrice"));
+        info.setStartTime(discountJson.getLong("start"));
+        info.setEndTime(discountJson.getLong("end"));
+        info.setServiceId(discountJson.getLong("serficeId") + "");
         info.setContent(discountJson.getString("content"));
         info.setImgUrl(discountJson.getString("image"));
         info.setScope(discountJson.getString("scope"));

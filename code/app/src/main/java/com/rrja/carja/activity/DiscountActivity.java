@@ -7,13 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.DiscountGoods;
 
 import java.io.IOException;
 
 public class DiscountActivity extends BaseActivity {
 
-    DiscountInfo currDiscount;
+    DiscountGoods currDiscount;
 
     ImageView imgDiscount;
     TextView discountScop;

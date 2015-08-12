@@ -11,20 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.DiscountActivity;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.activity.OnDoreWashActivity;
 import com.rrja.carja.activity.StoreReservationActivity;
 import com.rrja.carja.activity.ViolationActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
@@ -39,10 +37,7 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
 
     private Context mContext;
 
-    public DiscountAdapter(Context context) {
-        this.mContext = context;
-    }
-
+    private OnDiscountItemClickListener itemClickListener;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -106,7 +101,7 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
     }
 
     private void bindItemHolder(DiscountHolder holder, int position) {
-        DiscountInfo discount = CoreManager.getManager().getDiscounts().get(position - 1);
+        final DiscountGoods discount = CoreManager.getManager().getDiscounts().get(position - 1);
 
         DiscountHolder discountHolder = holder;
         discountHolder.title.setText(discount.getName());
@@ -142,7 +137,14 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
 
         }
 
-        holder.itemView.setOnClickListener(new DiscountClickListener(mContext, discount));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener != null) {
+                    itemClickListener.onItemClick(discount);
+                }
+            }
+        });
 
         try {
             discountHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
@@ -211,6 +213,10 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
         }
     }
 
+    public void setItemClickListener(OnDiscountItemClickListener listener) {
+        this.itemClickListener = listener;
+    }
+
     private class DiscountHeaderHolder extends RecyclerView.ViewHolder {
 
         ViewPager mPager;
@@ -229,20 +235,17 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
         }
     }
 
-    private class DiscountClickListener implements View.OnClickListener {
+    private class DiscountClickListener  {
 
-        DiscountInfo mInfo;
+        DiscountGoods mInfo;
 
-        DiscountClickListener(Context context, DiscountInfo info) {
+        DiscountClickListener(Context context, DiscountGoods info) {
             this.mInfo = info;
         }
 
+    }
 
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(mContext, DiscountActivity.class);
-            intent.putExtra("discount_info", mInfo);
-            mContext.startActivity(intent);
-        }
+    public interface OnDiscountItemClickListener {
+        public void onItemClick(DiscountGoods info);
     }
 }

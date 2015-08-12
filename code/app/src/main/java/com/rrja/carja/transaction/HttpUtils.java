@@ -113,7 +113,7 @@ public class HttpUtils {
                 "&carSeriesName=" + carInfo.getSeries().getSeriesName() +
                 "&carModelId=" + carInfo.getCarModel().getId() +
                 "&carModelName=" + carInfo.getCarModel().getSeriesName() +
-                "&palteNumber=" + palteNum + "&engineno=" + engineNo + 
+                "&palteNumber=" + palteNum + "&engineno=" + engineNo +
                 "&frameno=" + frameNo + "&citycode=" + cityId;
         return Network.doGet(url);
     }
@@ -152,7 +152,7 @@ public class HttpUtils {
 
     public static JSONObject getAppointmentByStoreId(UserInfo info, String storeId) {
 
-        return Network.doGet(url);
+        return null;//Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -198,11 +198,13 @@ public class HttpUtils {
         String url = String.format("%s%s%s?provinceId=%s", BASE_URL, SERVICE_AREA, INTERFACE_CITY, provinceId);
         return Network.doGet(url);
     }
-
+    
     //-------------------------------------------------------------------------------------------------------------------
     // goods interface
-    public static JSONObject getRecommendProject(boolean hasCoupons) {
-        return null;
+    public static JSONObject getRecommendGoods(int page) {
+        int number = 15;
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
+        return Network.doGet(url);
     }
 
     /*
@@ -228,10 +230,9 @@ public class HttpUtils {
     }
 
     public static JSONObject getCouponsGoods(int page) {
-        int number = 10;
+        int number = 15;
         String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
         return Network.doGet(url);
-
     }
 
     //-------------------------------------------------------------------------------------------------------------------

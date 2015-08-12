@@ -9,22 +9,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
 import com.rrja.carja.activity.CouponsDetalActivity;
-import com.rrja.carja.activity.DiscountActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.zip.Inflater;
 
 
 public class CouponsAdapter extends RecyclerView.Adapter {
@@ -48,7 +44,7 @@ public class CouponsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        Coupons coupon = CoreManager.getManager().getCoupons().get(position);
+        CouponGoods coupon = CoreManager.getManager().getCoupons().get(position);
 
         CouponsHolder couponsHolder = (CouponsHolder) holder;
 
@@ -124,9 +120,9 @@ public class CouponsAdapter extends RecyclerView.Adapter {
 
     private class CouponsClickListener implements View.OnClickListener {
 
-        Coupons mInfo;
+        CouponGoods mInfo;
 
-        CouponsClickListener(Context context, Coupons info) {
+        CouponsClickListener(Context context, CouponGoods info) {
             this.mInfo = info;
         }
 

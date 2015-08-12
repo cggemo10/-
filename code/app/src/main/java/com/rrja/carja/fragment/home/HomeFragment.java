@@ -1,42 +1,37 @@
 package com.rrja.carja.fragment.home;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.Toast;
 
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.DiscountActivity;
-import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.activity.MainActivity;
-import com.rrja.carja.activity.StoreReservationActivity;
-import com.rrja.carja.activity.OnDoreWashActivity;
-import com.rrja.carja.activity.ViolationActivity;
 import com.rrja.carja.adapter.DiscountAdapter;
-import com.rrja.carja.adapter.GridAdapter;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.utils.DialogHelper;
 
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscountItemClickListener{
 
     private OnHomeInteractionListener mListener;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
     private DiscountAdapter discountAdapter;
+    private DiscountDataReceiver mReceiver;
 
 
     public static HomeFragment getFragment() {
@@ -48,6 +43,7 @@ public class HomeFragment extends Fragment {
     }
 
     public HomeFragment() {
+        discountAdapter = new DiscountAdapter();
     }
 
     @Override
@@ -67,9 +63,7 @@ public class HomeFragment extends Fragment {
 
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-
-        discountAdapter = new DiscountAdapter(getActivity());
-
+        discountAdapter.setItemClickListener(this);
         recyclerView.setAdapter(discountAdapter);
 
         return root;
@@ -79,7 +73,29 @@ public class HomeFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
         mListener = ((MainActivity) activity).getHomeInteraction();
+        if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
+            mListener.requestDiscountData(1);
+        }
+    }
+
+    @Override
+    public void onStart() {
+
+        registBroadcast();
+
+        if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
+            DialogHelper.getHelper().showWaitting();
+            mListener.requestDiscountData(1);
+        }
+    }
+
+
+
+    @Override
+    public void onStop() {
+        unRegistBoradcast();
     }
 
     @Override
@@ -88,10 +104,54 @@ public class HomeFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onItemClick(DiscountGoods info) {
+        Intent intent = new Intent(getActivity(), DiscountActivity.class);
+        intent.putExtra("discount_info", info);
+        getActivity().startActivity(intent);
+    }
+
 
     public interface OnHomeInteractionListener {
 
-        public void onFragmentInteraction(Uri uri);
+        public void requestDiscountData(int page);
     }
 
+    private class DiscountDataReceiver extends BroadcastReceiver {
+
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            DialogHelper.getHelper().dismissWatting();
+            String action = intent.getAction();
+            if (Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA.equals(action)) {
+                discountAdapter.notifyDataSetChanged();
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR.equals(action)) {
+                Toast.makeText(context,getString(R.string.str_err_net),Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void registBroadcast() {
+
+        if (mReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+
+            mReceiver = new DiscountDataReceiver();
+            getActivity().registerReceiver(mReceiver, filter);
+        }
+
+    }
+
+    private void unRegistBoradcast() {
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
+    }
 }

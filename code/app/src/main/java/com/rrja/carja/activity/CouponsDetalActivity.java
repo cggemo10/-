@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.model.Coupons;
+import com.rrja.carja.model.CouponGoods;
 
 import java.io.IOException;
 
 public class CouponsDetalActivity extends BaseActivity {
 
-    Coupons coupons;
+    CouponGoods coupons;
     ImageView imgCoupons;
 
     @Override

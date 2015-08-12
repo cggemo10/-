@@ -4,13 +4,12 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.j256.ormlite.android.apptools.OrmLiteSqliteOpenHelper;
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.model.CarBrand;
-import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.model.Region;
 
 
@@ -19,8 +18,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "rrja_db";
 
-    private RuntimeExceptionDao<Coupons, Integer> couponDao = null;
-    private RuntimeExceptionDao<DiscountInfo, Integer> discountDao = null;
+    private RuntimeExceptionDao<CouponGoods, Integer> couponDao = null;
+    private RuntimeExceptionDao<DiscountGoods, Integer> discountDao = null;
     private RuntimeExceptionDao<Region, Integer> regionDao = null;
     private RuntimeExceptionDao<CarBrand, Integer> carBrandDao = null;
 
@@ -40,8 +39,8 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
 
         try {
-            TableUtils.createTable(connectionSource, DiscountInfo.class);
-            TableUtils.createTable(connectionSource, Coupons.class);
+            TableUtils.createTable(connectionSource, DiscountGoods.class);
+            TableUtils.createTable(connectionSource, CouponGoods.class);
             TableUtils.createTable(connectionSource, Region.class);
             TableUtils.createTable(connectionSource, CarBrand.class);
         } catch (Exception e) {
@@ -54,14 +53,14 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         try {
             if (oldVersion < newVersion) {
                 TableUtils.dropTable(connectionSource, Region.class, true);
-                TableUtils.dropTable(connectionSource, DiscountInfo.class, true);
-                TableUtils.dropTable(connectionSource, Coupons.class, true);
+                TableUtils.dropTable(connectionSource, DiscountGoods.class, true);
+                TableUtils.dropTable(connectionSource, CouponGoods.class, true);
                 TableUtils.dropTable(connectionSource, CarBrand.class, true);
 
                 TableUtils.createTable(connectionSource, CarBrand.class);
                 TableUtils.createTable(connectionSource, Region.class);
-                TableUtils.createTable(connectionSource, DiscountInfo.class);
-                TableUtils.createTable(connectionSource, Coupons.class);
+                TableUtils.createTable(connectionSource, DiscountGoods.class);
+                TableUtils.createTable(connectionSource, CouponGoods.class);
             }
 
         } catch (Exception e) {
@@ -71,17 +70,17 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
 
 
 
-    public RuntimeExceptionDao<Coupons, Integer> getCouponsDao() {
+    public RuntimeExceptionDao<CouponGoods, Integer> getCouponsDao() {
         if (couponDao == null) {
-            couponDao = getRuntimeExceptionDao(Coupons.class);
+            couponDao = getRuntimeExceptionDao(CouponGoods.class);
         }
 
         return couponDao;
     }
 
-    public RuntimeExceptionDao<DiscountInfo, Integer> getDiscountDao(){
+    public RuntimeExceptionDao<DiscountGoods, Integer> getDiscountDao(){
         if (discountDao == null) {
-            discountDao = getRuntimeExceptionDao(DiscountInfo.class);
+            discountDao = getRuntimeExceptionDao(DiscountGoods.class);
         }
         return discountDao;
     }

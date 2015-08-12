@@ -1,32 +1,26 @@
 package com.rrja.carja.core;
 
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
-import com.rrja.carja.activity.SplshActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CarStore;
-import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
-import com.rrja.carja.service.DataCenterService;
-import com.rrja.carja.service.impl.CarBinder;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,11 +35,11 @@ public class CoreManager {
 
     private static final String TAG = "rrja.CoreManager";
 
-    private static List<DiscountInfo> discountList = new ArrayList<DiscountInfo>();
+    private static List<DiscountGoods> discountList = new ArrayList<DiscountGoods>();
 
     private static List<ImageView> companyInfoImgs = new ArrayList<>();
     private static List<CarStore> stores = new ArrayList<>();
-    private static List<Coupons> couponsList = new ArrayList<>();
+    private static List<CouponGoods> couponsList = new ArrayList<>();
     private static List<Forum> forums = new ArrayList<>();
     private static List<Region> regions = new ArrayList<>();
     private static List<CarBrand> brandList = new ArrayList<>();
@@ -59,7 +53,7 @@ public class CoreManager {
     static {
 
         for (int i = 0; i < 10; i++) {
-            DiscountInfo discount1 = new DiscountInfo();
+            DiscountGoods discount1 = new DiscountGoods();
             discount1.setName("爱温无水冷却液");
             discount1.setScope("厦门各直营店");
             discount1.setTime("2015年5月至\n2015年7月");
@@ -89,7 +83,7 @@ public class CoreManager {
         }
 
         for (int i = 0; i < 10; i++) {
-            Coupons coupons = new Coupons();
+            CouponGoods coupons = new CouponGoods();
             coupons.setName("爱温无水冷却液");
             coupons.setAddress("厦门各直营店");
             coupons.setTime("2015年5月至\n2015年7月");
@@ -160,7 +154,7 @@ public class CoreManager {
         return stores;
     }
 
-    public List<Coupons> getCoupons() {
+    public List<CouponGoods> getCoupons() {
         return couponsList;
     }
 
@@ -168,7 +162,7 @@ public class CoreManager {
         return forums;
     }
 
-    public List<DiscountInfo> getDiscounts() {
+    public List<DiscountGoods> getDiscounts() {
         return discountList;
     }
 

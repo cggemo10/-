@@ -14,8 +14,8 @@ import android.text.TextUtils;
 
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarStore;
-import com.rrja.carja.model.Coupons;
-import com.rrja.carja.model.DiscountInfo;
+import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.DiscountGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.transaction.HttpUtils;
 
@@ -43,8 +43,8 @@ public class FileService extends Service implements Handler.Callback {
     Handler mHandler;
     Executor executor;
 
-    HashMap<String, Coupons> loadingCouponsMap;
-    HashMap<String, DiscountInfo> loadingDiscountMap;
+    HashMap<String, CouponGoods> loadingCouponsMap;
+    HashMap<String, DiscountGoods> loadingDiscountMap;
     HashMap<String, CarStore> loadingStoreMap;
 
     private RecycleBoradcastReceiver recycleReceiver;
@@ -75,7 +75,7 @@ public class FileService extends Service implements Handler.Callback {
         if (ACTION_IMG_COUPONS.equals(action)) {
 
             Bundle extras = intent.getExtras();
-            Coupons coupons = extras.getParcelable("coupons");
+            CouponGoods coupons = extras.getParcelable("coupons");
             if (coupons != null && !TextUtils.isEmpty(coupons.getCouponId()) && !loadingCouponsMap.containsKey(coupons.getCouponId())) {
                 loadingCouponsMap.put(coupons.getCouponId(), coupons);
 
@@ -87,7 +87,7 @@ public class FileService extends Service implements Handler.Callback {
         if (ACTION_IMG_DISCOUNT.equals(action)) {
 
             Bundle extras = intent.getExtras();
-            DiscountInfo discountInfo = extras.getParcelable("discount_info");
+            DiscountGoods discountInfo = extras.getParcelable("discount_info");
             if (discountInfo != null && !TextUtils.isEmpty(discountInfo.getProductId()) && !loadingDiscountMap.containsKey(discountInfo.getProductId())) {
                 loadingDiscountMap.put(discountInfo.getProductId(), discountInfo);
 
@@ -178,9 +178,9 @@ public class FileService extends Service implements Handler.Callback {
 
     private class CouponsImgTask implements Runnable {
 
-        Coupons mCoupons;
+        CouponGoods mCoupons;
 
-        CouponsImgTask(Coupons coupons) {
+        CouponsImgTask(CouponGoods coupons) {
             this.mCoupons = coupons;
         }
 
@@ -258,9 +258,9 @@ public class FileService extends Service implements Handler.Callback {
 
     private class DiscountImgTask implements Runnable {
 
-        DiscountInfo mDiscountInfo;
+        DiscountGoods mDiscountInfo;
 
-        DiscountImgTask(DiscountInfo info) {
+        DiscountImgTask(DiscountGoods info) {
             this.mDiscountInfo = info;
         }
 
