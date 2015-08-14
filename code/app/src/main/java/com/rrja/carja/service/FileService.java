@@ -15,7 +15,7 @@ import android.text.TextUtils;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.transaction.HttpUtils;
 
@@ -44,7 +44,7 @@ public class FileService extends Service implements Handler.Callback {
     Executor executor;
 
     HashMap<String, CouponGoods> loadingCouponsMap;
-    HashMap<String, DiscountGoods> loadingDiscountMap;
+    HashMap<String, RecommendGoods> loadingDiscountMap;
     HashMap<String, CarStore> loadingStoreMap;
 
     private RecycleBoradcastReceiver recycleReceiver;
@@ -87,7 +87,7 @@ public class FileService extends Service implements Handler.Callback {
         if (ACTION_IMG_DISCOUNT.equals(action)) {
 
             Bundle extras = intent.getExtras();
-            DiscountGoods discountInfo = extras.getParcelable("discount_info");
+            RecommendGoods discountInfo = extras.getParcelable("discount_info");
             if (discountInfo != null && !TextUtils.isEmpty(discountInfo.getProductId()) && !loadingDiscountMap.containsKey(discountInfo.getProductId())) {
                 loadingDiscountMap.put(discountInfo.getProductId(), discountInfo);
 
@@ -258,9 +258,9 @@ public class FileService extends Service implements Handler.Callback {
 
     private class DiscountImgTask implements Runnable {
 
-        DiscountGoods mDiscountInfo;
+        RecommendGoods mDiscountInfo;
 
-        DiscountImgTask(DiscountGoods info) {
+        DiscountImgTask(RecommendGoods info) {
             this.mDiscountInfo = info;
         }
 
@@ -274,7 +274,7 @@ public class FileService extends Service implements Handler.Callback {
             } else {
                 String path = Environment.getExternalStorageDirectory().getPath() +
                         File.separatorChar + Constant.DIR_BASE + File.separator +
-                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_DISCOUNT + File.separator;
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_RECOMMEND + File.separator;
 
                 String url = mDiscountInfo.getImgUrl();
 

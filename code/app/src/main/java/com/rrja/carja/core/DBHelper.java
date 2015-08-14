@@ -9,7 +9,7 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Region;
 
 
@@ -19,7 +19,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     private static final String DB_NAME = "rrja_db";
 
     private RuntimeExceptionDao<CouponGoods, Integer> couponDao = null;
-    private RuntimeExceptionDao<DiscountGoods, Integer> discountDao = null;
+    private RuntimeExceptionDao<RecommendGoods, Integer> discountDao = null;
     private RuntimeExceptionDao<Region, Integer> regionDao = null;
     private RuntimeExceptionDao<CarBrand, Integer> carBrandDao = null;
 
@@ -39,7 +39,7 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
 
         try {
-            TableUtils.createTable(connectionSource, DiscountGoods.class);
+            TableUtils.createTable(connectionSource, RecommendGoods.class);
             TableUtils.createTable(connectionSource, CouponGoods.class);
             TableUtils.createTable(connectionSource, Region.class);
             TableUtils.createTable(connectionSource, CarBrand.class);
@@ -53,13 +53,13 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         try {
             if (oldVersion < newVersion) {
                 TableUtils.dropTable(connectionSource, Region.class, true);
-                TableUtils.dropTable(connectionSource, DiscountGoods.class, true);
+                TableUtils.dropTable(connectionSource, RecommendGoods.class, true);
                 TableUtils.dropTable(connectionSource, CouponGoods.class, true);
                 TableUtils.dropTable(connectionSource, CarBrand.class, true);
 
                 TableUtils.createTable(connectionSource, CarBrand.class);
                 TableUtils.createTable(connectionSource, Region.class);
-                TableUtils.createTable(connectionSource, DiscountGoods.class);
+                TableUtils.createTable(connectionSource, RecommendGoods.class);
                 TableUtils.createTable(connectionSource, CouponGoods.class);
             }
 
@@ -78,9 +78,9 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
         return couponDao;
     }
 
-    public RuntimeExceptionDao<DiscountGoods, Integer> getDiscountDao(){
+    public RuntimeExceptionDao<RecommendGoods, Integer> getDiscountDao(){
         if (discountDao == null) {
-            discountDao = getRuntimeExceptionDao(DiscountGoods.class);
+            discountDao = getRuntimeExceptionDao(RecommendGoods.class);
         }
         return discountDao;
     }

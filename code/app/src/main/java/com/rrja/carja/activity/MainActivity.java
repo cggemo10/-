@@ -1,9 +1,12 @@
 package com.rrja.carja.activity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -24,9 +27,9 @@ import com.rrja.carja.fragment.home.ForumFragment;
 import com.rrja.carja.fragment.home.HomeFragment;
 import com.rrja.carja.fragment.home.UserCenterFragment;
 import com.rrja.carja.model.Region;
+import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
-
-import org.w3c.dom.Text;
+import com.rrja.carja.service.impl.UserBinder;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -49,6 +52,30 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     LinearLayout llForum;
     LinearLayout llDiscount;
 
+    UserBinder userService;
+
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            userService = (UserBinder) service;
+
+            UserInfo user = CoreManager.getManager().getCurrUser();
+            if (user == null) {
+                SharedPreferences sp = getSharedPreferences("authsp", MODE_PRIVATE);
+                String auth = sp.getString("auth", "");
+                String tel = sp.getString("tel", "");
+                if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(tel)) {
+                    userService.checkAuth(auth, tel);
+                }
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            userService = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,21 +84,18 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         LinearLayout lllocation = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
         lllocation.setOnClickListener(this);
 
-        initView();
 
-        // for example
         CoreManager.getManager().initCompanyInfo(this);
 
-        SharedPreferences sp = getSharedPreferences("authsp", MODE_PRIVATE);
-        String auth = sp.getString("auth", "");
-        String tel = sp.getString("tel", "");
-        if (!TextUtils.isEmpty(auth) && !TextUtils.isEmpty(tel)) {
+        if (userService == null) {
             Intent intent = new Intent(this, DataCenterService.class);
-            intent.putExtra("auth", auth);
-            intent.putExtra("tel", tel);
-            intent.setAction(Constant.ACTION_LOGIN_BY_AUTH);
-            startActivity(intent);
+            intent.setAction(Constant.ACTION_USER_SERVICE);
+            bindService(intent, conn, BIND_AUTO_CREATE);
+
         }
+
+        initView();
+
     }
 
     @Override
@@ -81,6 +105,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         if (costumerRegion != null && !TextUtils.isEmpty(costumerRegion.getName())) {
             txtLoc.setText(costumerRegion.getName());
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (userService != null) {
+            unbindService(conn);
+        }
+        super.onDestroy();
     }
 
     private void initView() {
@@ -261,8 +293,16 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private class BigDiscountInteraction implements CouponsFragment.OnBigDiscountInteractionListener {
 
         @Override
-        public void onFragmentInteraction(Uri uri) {
+        public void requestCouponsData(int page) {
 
+            if (userService == null) {
+                Intent intent = new Intent(MainActivity.this, DataCenterService.class);
+                intent.setAction(Constant.ACTION_DATA_GET_RECOMMEND);
+                intent.putExtra("page",page);
+                startService(intent);
+            } else {
+                userService.getCouponsGoods(page);
+            }
         }
     }
 
@@ -285,11 +325,17 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     private class HomeInteraction implements HomeFragment.OnHomeInteractionListener {
 
         @Override
-        public void requestDiscountData(int page) {
-            Intent intent = new Intent(MainActivity.this, DataCenterService.class);
-            intent.setAction(Constant.ACTION_DATA_GET_DISCOUNT);
-            intent.putExtra("page",page);
-            startService(intent);
+        public void requestRecommendData(int page) {
+
+            if (userService == null) {
+                Intent intent = new Intent(MainActivity.this, DataCenterService.class);
+                intent.setAction(Constant.ACTION_DATA_GET_RECOMMEND);
+                intent.putExtra("page",page);
+                startService(intent);
+            } else {
+                userService.getRecommendGoods(page);
+            }
+
         }
     }
 

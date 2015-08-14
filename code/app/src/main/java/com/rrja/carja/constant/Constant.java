@@ -3,7 +3,6 @@ package com.rrja.carja.constant;
 import android.os.Environment;
 
 import java.io.File;
-import java.lang.reflect.Field;
 
 /**
  * Created by Administrator on 2015/6/26.
@@ -46,28 +45,28 @@ public class Constant {
     public static final String ACTION_BROADCAST_GET_CAR_MODEL = "rrja.broadcast.get.CAR_MODEL";
     public static final String ACTION_BROADCAST_GET_CAR_MODEL_ERR = "rrja.broadcast.get.CAR_MODEL_ERR";
 
-    public static final String ACTION_BROADCAST_GET_DISCOUNT_DATA = "rrja.broadcast.get.DISCOUNT_DATA";
-    public static final String ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR = "rrja.broadcast.get.DISCOUNT_DATA_ERR";
+    public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA = "rrja.broadcast.get.RECOMMEND_DATA";
+    public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR = "rrja.broadcast.get.RECOMMEND_DATA_ERR";
 
     public static final String ACTION_BROADCAST_GET_COUPONS_DATA = "rrja.broadcast.get.COUPONS_DATA";
     public static final String ACTION_BROADCAST_GET_COUPONS_DATA_ERR = "rrja.broadcast.get.COUPONS_DATA_ERR";
 
-    public static final String ACTION_DATA_GET_DISCOUNT = "rrja.data.goods.DISCOUNT";
+    public static final String ACTION_DATA_GET_RECOMMEND = "rrja.data.goods.RECOMMEND";
     public static final String ACTION_DATA_GET_COUPONS_GOODS = "rrja.data.goods.COUPONS";
 
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";
-    public static final String DIR_DISCOUNT = "discount";
+    public static final String DIR_RECOMMEND = "recommend";
     public static final String DIR_COUPONS = "coupons";
     public static final String DIR_FORUM = "forum";
     public static final String DIR_STORE = "store";
 
-    public static String getDiscountCacheDir() {
+    public static String getRecommendCacheDir() {
         String path = "";
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + DIR_BASE + File.separator + DIR_IMG_CACHE +
-                    File.separator + DIR_DISCOUNT + File.separator;
+                    File.separator + DIR_RECOMMEND + File.separator;
         }
 
         return path;

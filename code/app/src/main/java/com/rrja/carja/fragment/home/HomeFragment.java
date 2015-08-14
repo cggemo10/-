@@ -15,12 +15,12 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.DiscountActivity;
+import com.rrja.carja.activity.RecommendDetialctivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.adapter.DiscountAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.utils.DialogHelper;
 
 
@@ -49,9 +49,6 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // for example
-
     }
 
     @Override
@@ -59,8 +56,8 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
                              Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        recyclerView = (RecyclerView) root.findViewById(R.id.pull_refresh_grid_dicsount);
 
+        recyclerView = (RecyclerView) root.findViewById(R.id.pull_refresh_grid_dicsount);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         discountAdapter.setItemClickListener(this);
@@ -76,7 +73,7 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
 
         mListener = ((MainActivity) activity).getHomeInteraction();
         if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
-            mListener.requestDiscountData(1);
+            mListener.requestRecommendData(1);
         }
     }
 
@@ -87,7 +84,7 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
 
         if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
             DialogHelper.getHelper().showWaitting();
-            mListener.requestDiscountData(1);
+            mListener.requestRecommendData(1);
         }
     }
 
@@ -105,16 +102,16 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
     }
 
     @Override
-    public void onItemClick(DiscountGoods info) {
-        Intent intent = new Intent(getActivity(), DiscountActivity.class);
-        intent.putExtra("discount_info", info);
+    public void onItemClick(RecommendGoods info) {
+        Intent intent = new Intent(getActivity(), RecommendDetialctivity.class);
+        intent.putExtra("recommend_info", info);
         getActivity().startActivity(intent);
     }
 
 
     public interface OnHomeInteractionListener {
 
-        public void requestDiscountData(int page);
+        public void requestRecommendData(int page);
     }
 
     private class DiscountDataReceiver extends BroadcastReceiver {
@@ -125,11 +122,11 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
 
             DialogHelper.getHelper().dismissWatting();
             String action = intent.getAction();
-            if (Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA.equals(action)) {
+            if (Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA.equals(action)) {
                 discountAdapter.notifyDataSetChanged();
             }
 
-            if (Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR.equals(action)) {
+            if (Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR.equals(action)) {
                 Toast.makeText(context,getString(R.string.str_err_net),Toast.LENGTH_LONG).show();
             }
         }
@@ -139,8 +136,8 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
 
         if (mReceiver == null) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA);
-            filter.addAction(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
 
             mReceiver = new DiscountDataReceiver();
             getActivity().registerReceiver(mReceiver, filter);

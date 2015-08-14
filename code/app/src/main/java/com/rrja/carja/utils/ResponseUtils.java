@@ -6,7 +6,7 @@ import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Region;
 
 import org.json.JSONArray;
@@ -21,18 +21,18 @@ import java.util.List;
  */
 public class ResponseUtils {
 
-    public static List<DiscountGoods> parseDiscountList(JSONArray discountArray) throws JSONException {
+    public static List<RecommendGoods> parseDiscountList(JSONArray discountArray) throws JSONException {
 
         if (discountArray == null || discountArray.length() == 0) {
             return null;
         }
 
-        List<DiscountGoods> infoList = new ArrayList<>();
+        List<RecommendGoods> infoList = new ArrayList<>();
 
         for (int i = 0; i < discountArray.length(); i++) {
 
             JSONObject discountJson = discountArray.getJSONObject(i);
-            DiscountGoods info = DiscountGoods.parse(discountJson);
+            RecommendGoods info = RecommendGoods.parse(discountJson);
             if (info != null) {
                 infoList.add(info);
             }

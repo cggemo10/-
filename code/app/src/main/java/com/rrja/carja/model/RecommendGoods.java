@@ -2,7 +2,6 @@ package com.rrja.carja.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.text.GetChars;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -10,14 +9,11 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-
 /**
  * Created by Administrator on 2015/6/6.
  */
 @DatabaseTable(tableName = "discount")
-public class DiscountGoods implements Parcelable{
+public class RecommendGoods implements Parcelable{
 
     @DatabaseField(id = true)
     private String productId;
@@ -164,10 +160,10 @@ public class DiscountGoods implements Parcelable{
         dest.writeString(serviceId);
     }
 
-    public static Parcelable.Creator<DiscountGoods> CREATOR = new Parcelable.Creator<DiscountGoods>() {
+    public static Parcelable.Creator<RecommendGoods> CREATOR = new Parcelable.Creator<RecommendGoods>() {
         @Override
-        public DiscountGoods createFromParcel(Parcel source) {
-            DiscountGoods discountInfo = new DiscountGoods();
+        public RecommendGoods createFromParcel(Parcel source) {
+            RecommendGoods discountInfo = new RecommendGoods();
             discountInfo.setProductId(source.readString());
             discountInfo.setName(source.readString());
             discountInfo.setScope(source.readString());
@@ -184,18 +180,18 @@ public class DiscountGoods implements Parcelable{
         }
 
         @Override
-        public DiscountGoods[] newArray(int size) {
-            return new DiscountGoods[size];
+        public RecommendGoods[] newArray(int size) {
+            return new RecommendGoods[size];
         }
     };
 
-    public static DiscountGoods parse(JSONObject discountJson) throws JSONException{
+    public static RecommendGoods parse(JSONObject discountJson) throws JSONException{
 
         if (discountJson == null || discountJson.length() == 0) {
             return null;
         }
 
-        DiscountGoods info = new DiscountGoods();
+        RecommendGoods info = new RecommendGoods();
         info.setProductId(discountJson.getString("id"));
         info.setName(discountJson.getString("name"));
         info.setMobileNo(discountJson.getString("mobile"));

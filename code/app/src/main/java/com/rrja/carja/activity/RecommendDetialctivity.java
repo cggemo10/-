@@ -7,13 +7,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 
 import java.io.IOException;
 
-public class DiscountActivity extends BaseActivity {
+public class RecommendDetialctivity extends BaseActivity {
 
-    DiscountGoods currDiscount;
+    RecommendGoods currDiscount;
 
     ImageView imgDiscount;
     TextView discountScop;
@@ -28,8 +28,8 @@ public class DiscountActivity extends BaseActivity {
         setContentView(R.layout.activity_discount);
 
         Bundle extras = getIntent().getExtras();
-        if (extras.containsKey("discount_info")) {
-            currDiscount = extras.getParcelable("discount_info");
+        if (extras.containsKey("recommend_info")) {
+            currDiscount = extras.getParcelable("recommend_info");
 
         }
 

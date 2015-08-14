@@ -5,10 +5,11 @@ import android.os.Binder;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
@@ -176,7 +177,7 @@ public class UserBinder extends Binder {
     }
 
     //------------------------------------------------------------------------------------ goods or service
-    public void getDiscountGoods(int page) {
+    public void getRecommendGoods(int page) {
         if (page <= 0) {
             page = 1;
         }
@@ -188,32 +189,32 @@ public class UserBinder extends Binder {
 
                 try {
 
-                    JSONObject couponsJs = HttpUtils.get(finalPage);
+                    JSONObject couponsJs = HttpUtils.getRecommendGoods(finalPage);
                     int code = couponsJs.getInt("code");
                     if (code == 0) {
 
-                        List<DiscountGoods> info = ResponseUtils.parseDiscountList(couponsJs.getJSONArray("data"));
+                        List<RecommendGoods> info = ResponseUtils.parseDiscountList(couponsJs.getJSONArray("data"));
                         if (info != null || info.size() > 0) {
                             if (finalPage == 1) {
                                 CoreManager.getManager().getDiscounts().clear();
                                 CoreManager.getManager().getDiscounts().addAll(info);
                             }
                             // TODO save auth
-                            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA);
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA);
                             intent.putExtra("size", info.size());
                             mContext.sendBroadcast(intent);
                             return;
                         }
 
                     } else {
-                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
                         String errMsg = null;
                         if (couponsJs.has("description")) {
                             errMsg = couponsJs.getString("description");
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "网络异常，请稍后再试。";
+                            errMsg = mContext.getString(R.string.str_err_net);
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -223,7 +224,9 @@ public class UserBinder extends Binder {
                 } catch (Exception e) {
                     e.printStackTrace();
 
-                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_DISCOUNT_DATA_ERR);
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
+                    String errMsg = mContext.getString(R.string.str_err_net);
+                    intent.putExtra("description", errMsg);
                     intent.putExtra("page", finalPage);
                     mContext.sendBroadcast(intent);
                 }
@@ -271,7 +274,7 @@ public class UserBinder extends Binder {
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "网络异常，请稍后再试。";
+                            errMsg = mContext.getString(R.string.str_err_net);
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -282,6 +285,8 @@ public class UserBinder extends Binder {
                     e.printStackTrace();
 
                     Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR);
+                    String errMsg = mContext.getString(R.string.str_err_net);
+                    intent.putExtra("description", errMsg);
                     intent.putExtra("page", finalPage);
                     mContext.sendBroadcast(intent);
                 }

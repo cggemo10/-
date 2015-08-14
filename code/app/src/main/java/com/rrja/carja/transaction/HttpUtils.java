@@ -45,6 +45,7 @@ public class HttpUtils {
     private static final String INTERFACE_USER_COUPON_LIST = "/getUserCoupons";
     private static final String INTERFACE_USER_APPOINTMENT = "/getUserAppointmentList";
 
+    private static final String INTERFACE_GOOD_RECOMMEND = "/getRecommendGoods";
     private static final String INTERFACE_GOOD_COUPONS = "/getDiscountGoodsList";
     private static final String INTERFACE_SERVICES = "/getServiceList";
     private static final String INTERFACE_SERVICE_GOODS = "/getGoodsList";
@@ -203,6 +204,12 @@ public class HttpUtils {
     // goods interface
     public static JSONObject getRecommendGoods(int page) {
         int number = 15;
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_RECOMMEND, "?number=", number, "&page=", page);
+        return Network.doGet(url);
+    }
+
+    public static JSONObject getCouponsGoods(int page) {
+        int number = 15;
         String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
         return Network.doGet(url);
     }
@@ -229,11 +236,7 @@ public class HttpUtils {
         return Network.doGet(url);
     }
 
-    public static JSONObject getCouponsGoods(int page) {
-        int number = 15;
-        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
-        return Network.doGet(url);
-    }
+
 
     //-------------------------------------------------------------------------------------------------------------------
     // order interface

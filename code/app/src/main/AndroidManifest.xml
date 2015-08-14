@@ -68,7 +68,7 @@
             android:label="@string/title_violation_inquiry" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.DiscountActivity"
+            android:name=".activity.RecommendDetialctivity"
             android:label="@string/title_activity_discount" >
         </activity>
         <activity

@@ -22,7 +22,7 @@ import com.rrja.carja.activity.StoreReservationActivity;
 import com.rrja.carja.activity.ViolationActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
@@ -101,7 +101,7 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
     }
 
     private void bindItemHolder(DiscountHolder holder, int position) {
-        final DiscountGoods discount = CoreManager.getManager().getDiscounts().get(position - 1);
+        final RecommendGoods discount = CoreManager.getManager().getDiscounts().get(position - 1);
 
         DiscountHolder discountHolder = holder;
         discountHolder.title.setText(discount.getName());
@@ -115,7 +115,7 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
 
             String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1);
 
-            File img = new File(Constant.getDiscountCacheDir(), fileName);
+            File img = new File(Constant.getRecommendCacheDir(), fileName);
             if (img.exists()) {
                 try {
                     discountHolder.pic.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
@@ -237,15 +237,15 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
 
     private class DiscountClickListener  {
 
-        DiscountGoods mInfo;
+        RecommendGoods mInfo;
 
-        DiscountClickListener(Context context, DiscountGoods info) {
+        DiscountClickListener(Context context, RecommendGoods info) {
             this.mInfo = info;
         }
 
     }
 
     public interface OnDiscountItemClickListener {
-        public void onItemClick(DiscountGoods info);
+        public void onItemClick(RecommendGoods info);
     }
 }

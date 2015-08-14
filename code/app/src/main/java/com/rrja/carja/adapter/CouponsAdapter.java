@@ -21,17 +21,17 @@ import com.rrja.carja.service.FileService;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 
 public class CouponsAdapter extends RecyclerView.Adapter {
 
     private static final String TAG = CouponsAdapter.class.getName();
 
-    Context mContext;
+    private OnItemClickListener itemClickListener;
 
-    public CouponsAdapter(Context context) {
-        this.mContext = context;
-    }
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,13 +44,18 @@ public class CouponsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        CouponGoods coupon = CoreManager.getManager().getCoupons().get(position);
+        final CouponGoods coupon = CoreManager.getManager().getCoupons().get(position);
 
         CouponsHolder couponsHolder = (CouponsHolder) holder;
 
         couponsHolder.title.setText(coupon.getName());
-        couponsHolder.couponsScope.setText(coupon.getAddress());
-        couponsHolder.couponsTime.setText(coupon.getTime());
+        couponsHolder.couponsScope.setText(coupon.getScope());
+
+        Date startDate = new Date(coupon.getStartTime());
+        Date endDate = new Date(coupon.getEndTime());
+
+        String deadLine = format.format(startDate) + " 至\n " + format.format(endDate);
+        couponsHolder.couponsTime.setText(deadLine);
         couponsHolder.couponsContent.setText(coupon.getContent());
         // TODO later
         String picUrl = coupon.getPicUrl();
@@ -64,7 +69,7 @@ public class CouponsAdapter extends RecyclerView.Adapter {
                     couponsHolder.pic.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
                 } catch (Exception e) {
                     try {
-                        couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
+                        couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(holder.itemView.getContext().getAssets().open("juyouhui-img.jpg")));
                     } catch (IOException e1) {
                         e1.printStackTrace();
                     }
@@ -72,31 +77,42 @@ public class CouponsAdapter extends RecyclerView.Adapter {
                 }
 
             } else {
-                Intent intent = new Intent(mContext, FileService.class);
+                Intent intent = new Intent(holder.itemView.getContext(), FileService.class);
                 intent.setAction(FileService.ACTION_IMG_COUPONS);
                 intent.putExtra("coupons", coupon);
-                mContext.startService(intent);
+                holder.itemView.getContext().startService(intent);
             }
         }
 
-        holder.itemView.setOnClickListener(new CouponsClickListener(mContext, coupon));
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (itemClickListener != null) {
+                    itemClickListener.onCouponsGoodsClick(coupon);
+                }
+            }
+        });
 
         // for example
         try {
-            couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
+            couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(holder.itemView.getContext().getAssets().open("juyouhui-img.jpg")));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
+         public long getItemId(int position) {
+             return position;
+         }
 
     @Override
-    public int getItemCount() {
-        return   CoreManager.getManager().getCoupons().size();
+         public int getItemCount() {
+             return   CoreManager.getManager().getCoupons().size();
+         }
+
+    public void setItemClickListener(OnItemClickListener listener) {
+        this.itemClickListener = listener;
     }
 
 
@@ -118,20 +134,7 @@ public class CouponsAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private class CouponsClickListener implements View.OnClickListener {
-
-        CouponGoods mInfo;
-
-        CouponsClickListener(Context context, CouponGoods info) {
-            this.mInfo = info;
-        }
-
-
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(mContext, CouponsDetalActivity.class);
-            intent.putExtra("coupons", mInfo);
-            mContext.startActivity(intent);
-        }
+    public interface OnItemClickListener {
+        public void onCouponsGoodsClick(CouponGoods goods);
     }
 }

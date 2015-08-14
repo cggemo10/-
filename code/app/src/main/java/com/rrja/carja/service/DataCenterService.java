@@ -6,9 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 
-import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.constant.Constant;
@@ -72,12 +70,14 @@ public class DataCenterService extends Service implements Handler.Callback {
                 userBinder.checkAuth(auth, tel);
             }
 
-            if (Constant.ACTION_DATA_GET_DISCOUNT.equals(action)) {
-
+            if (Constant.ACTION_DATA_GET_RECOMMEND.equals(action)) {
+                int page = intent.getIntExtra("page", 0);
+                userBinder.getRecommendGoods(page);
             }
 
             if (Constant.ACTION_DATA_GET_COUPONS_GOODS.equals(action)) {
-
+                int page = intent.getIntExtra("page", 0);
+                userBinder.getCouponsGoods(page);
             }
         }
 

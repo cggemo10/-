@@ -12,7 +12,7 @@
 
     <!-- normal -->
     <string name="str_commit">提交</string>
-    <string name="str_err_net">请求失败，请检查您的网络。</string>
+    <string name="str_err_net">网络异常，请稍后再试。</string>
 
 
     <!-- 首页 -->

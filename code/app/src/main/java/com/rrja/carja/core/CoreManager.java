@@ -17,7 +17,7 @@ import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.DiscountGoods;
+import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
@@ -35,7 +35,7 @@ public class CoreManager {
 
     private static final String TAG = "rrja.CoreManager";
 
-    private static List<DiscountGoods> discountList = new ArrayList<DiscountGoods>();
+    private static List<RecommendGoods> discountList = new ArrayList<RecommendGoods>();
 
     private static List<ImageView> companyInfoImgs = new ArrayList<>();
     private static List<CarStore> stores = new ArrayList<>();
@@ -53,7 +53,7 @@ public class CoreManager {
     static {
 
         for (int i = 0; i < 10; i++) {
-            DiscountGoods discount1 = new DiscountGoods();
+            RecommendGoods discount1 = new RecommendGoods();
             discount1.setName("爱温无水冷却液");
             discount1.setScope("厦门各直营店");
             discount1.setTime("2015年5月至\n2015年7月");
@@ -162,7 +162,7 @@ public class CoreManager {
         return forums;
     }
 
-    public List<DiscountGoods> getDiscounts() {
+    public List<RecommendGoods> getDiscounts() {
         return discountList;
     }
 
