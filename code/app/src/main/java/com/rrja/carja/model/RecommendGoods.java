@@ -202,7 +202,7 @@ public class RecommendGoods implements Parcelable{
         info.setEndTime(discountJson.getLong("end"));
         info.setServiceId(discountJson.getLong("serviceId") + "");
         info.setContent(discountJson.getString("content"));
-        info.setImgUrl(discountJson.getString("image"));
+        info.setImgUrl(discountJson.getString("img"));
         info.setScope(discountJson.getString("scope"));
 
         return info;

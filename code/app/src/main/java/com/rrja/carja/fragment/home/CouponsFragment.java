@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +12,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
@@ -24,7 +21,6 @@ import com.rrja.carja.adapter.CouponsAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.utils.DialogHelper;
 
 
 public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemClickListener{
@@ -81,7 +77,7 @@ public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemCl
         registBroadcast();
 
         if (CoreManager.getManager().getCoupons() == null || CoreManager.getManager().getCoupons().size() == 0) {
-            DialogHelper.getHelper().showWaitting();
+//            DialogHelper.getHelper().showWaitting();
             mListener.requestCouponsData(1);
         }
     }
@@ -118,14 +114,13 @@ public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemCl
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            DialogHelper.getHelper().dismissWatting();
             String action = intent.getAction();
             if (Constant.ACTION_BROADCAST_GET_COUPONS_DATA.equals(action)) {
                 couponsAdapter.notifyDataSetChanged();
             }
 
             if (Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR.equals(action)) {
-                Toast.makeText(context, getString(R.string.str_err_net), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "coupons data error", Toast.LENGTH_LONG).show();
             }
         }
     }

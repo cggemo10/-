@@ -90,7 +90,6 @@ public class HomeFragment extends Fragment implements RecommendAdapter.OnRecomme
         registBroadcast();
 
         if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
-            //DialogHelper.getHelper().showWaitting();
             mListener.requestRecommendData(1);
         }
     }
