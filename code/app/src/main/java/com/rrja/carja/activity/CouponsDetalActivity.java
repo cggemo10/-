@@ -11,6 +11,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.model.CouponGoods;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public class CouponsDetalActivity extends BaseActivity {
 
@@ -56,6 +57,8 @@ public class CouponsDetalActivity extends BaseActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
     }
 
 

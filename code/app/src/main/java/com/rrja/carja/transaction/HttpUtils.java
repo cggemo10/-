@@ -204,13 +204,13 @@ public class HttpUtils {
     // goods interface
     public static JSONObject getRecommendGoods(int page) {
         int number = 15;
-        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_RECOMMEND, "?number=", number, "&page=", page);
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_RECOMMEND, "?count=", number, "&page=", page);
         return Network.doGet(url);
     }
 
     public static JSONObject getCouponsGoods(int page) {
         int number = 15;
-        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?count=", number, "&page=", page);
         return Network.doGet(url);
     }
 

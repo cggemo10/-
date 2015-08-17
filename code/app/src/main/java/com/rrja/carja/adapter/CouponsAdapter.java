@@ -31,7 +31,7 @@ public class CouponsAdapter extends RecyclerView.Adapter {
 
     private OnItemClickListener itemClickListener;
 
-    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {

@@ -15,23 +15,28 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.RecommendDetialctivity;
+import com.rrja.carja.activity.HomeMaintenanceActivity;
+import com.rrja.carja.activity.LoginActivity;
 import com.rrja.carja.activity.MainActivity;
-import com.rrja.carja.adapter.DiscountAdapter;
+import com.rrja.carja.activity.OnDoreWashActivity;
+import com.rrja.carja.activity.RecommendDetialActivity;
+import com.rrja.carja.activity.StoreReservationActivity;
+import com.rrja.carja.activity.ViolationActivity;
+import com.rrja.carja.adapter.RecommendAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.RecommendGoods;
-import com.rrja.carja.utils.DialogHelper;
+import com.rrja.carja.service.FileService;
 
 
-public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscountItemClickListener{
+public class HomeFragment extends Fragment implements RecommendAdapter.OnRecommendActionListener {
 
     private OnHomeInteractionListener mListener;
 
     private RecyclerView recyclerView;
     RecyclerView.LayoutManager mLayoutManager;
-    private DiscountAdapter discountAdapter;
-    private DiscountDataReceiver mReceiver;
+    private RecommendAdapter discountAdapter;
+    private RecommendDataReceiver mReceiver;
 
 
     public static HomeFragment getFragment() {
@@ -43,7 +48,7 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
     }
 
     public HomeFragment() {
-        discountAdapter = new DiscountAdapter();
+        discountAdapter = new RecommendAdapter();
     }
 
     @Override
@@ -60,7 +65,7 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
         recyclerView = (RecyclerView) root.findViewById(R.id.pull_refresh_grid_dicsount);
         mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
-        discountAdapter.setItemClickListener(this);
+        discountAdapter.setRecommendActionListener(this);
         recyclerView.setAdapter(discountAdapter);
 
         return root;
@@ -80,19 +85,21 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
     @Override
     public void onStart() {
 
+        super.onStart();
+
         registBroadcast();
 
         if (CoreManager.getManager().getDiscounts() == null || CoreManager.getManager().getDiscounts().size() == 0) {
-            DialogHelper.getHelper().showWaitting();
+            //DialogHelper.getHelper().showWaitting();
             mListener.requestRecommendData(1);
         }
     }
 
 
-
     @Override
     public void onStop() {
         unRegistBoradcast();
+        super.onStop();
     }
 
     @Override
@@ -103,9 +110,61 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
 
     @Override
     public void onItemClick(RecommendGoods info) {
-        Intent intent = new Intent(getActivity(), RecommendDetialctivity.class);
+        Intent intent = new Intent(getActivity(), RecommendDetialActivity.class);
         intent.putExtra("recommend_info", info);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onHomeMaintenanceClick() {
+        if (CoreManager.getManager().getCurrUser() != null) {
+            Intent intent = new Intent(getActivity(), HomeMaintenanceActivity.class);
+            getActivity().startActivity(intent);
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setAction(Constant.ACTION_LOGIN_AFTER_HOMEMAINTENANCE);
+            getActivity().startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onOnDoreWashClick() {
+        if (CoreManager.getManager().getCurrUser() != null) {
+            Intent onDoreWash = new Intent(getActivity(), OnDoreWashActivity.class);
+            getActivity().startActivity(onDoreWash);
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setAction(Constant.ACTION_LOGIN_AFTER_ONDOREWASH);
+            getActivity().startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void onStoreReservationClick() {
+        Intent maintenance = new Intent(getActivity(), StoreReservationActivity.class);
+        getActivity().startActivity(maintenance);
+    }
+
+    @Override
+    public void onViolationClicked() {
+        if (CoreManager.getManager().getCurrUser() != null) {
+            Intent violation = new Intent(getActivity(), ViolationActivity.class);
+            getActivity().startActivity(violation);
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setAction(Constant.ACTION_LOGIN_AFTER_VIOLATION);
+            getActivity().startActivity(intent);
+        }
+
+    }
+
+    @Override
+    public void onRequestRecommendPic(RecommendGoods recommendGoods) {
+        Intent intent = new Intent(getActivity(), FileService.class);
+        intent.setAction(FileService.ACTION_IMG_DISCOUNT);
+        intent.putExtra("recommend_info", recommendGoods);
+        getActivity().startService(intent);
     }
 
 
@@ -114,20 +173,21 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
         public void requestRecommendData(int page);
     }
 
-    private class DiscountDataReceiver extends BroadcastReceiver {
+    private class RecommendDataReceiver extends BroadcastReceiver {
 
 
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            DialogHelper.getHelper().dismissWatting();
+
             String action = intent.getAction();
             if (Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA.equals(action)) {
                 discountAdapter.notifyDataSetChanged();
             }
 
             if (Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR.equals(action)) {
-                Toast.makeText(context,getString(R.string.str_err_net),Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "aaaaaaa", Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, getString(R.string.str_err_net), Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -139,7 +199,7 @@ public class HomeFragment extends Fragment implements DiscountAdapter.OnDiscount
             filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA);
             filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
 
-            mReceiver = new DiscountDataReceiver();
+            mReceiver = new RecommendDataReceiver();
             getActivity().registerReceiver(mReceiver, filter);
         }
 

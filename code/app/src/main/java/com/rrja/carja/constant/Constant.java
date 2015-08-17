@@ -61,6 +61,10 @@ public class Constant {
     public static final String DIR_FORUM = "forum";
     public static final String DIR_STORE = "store";
 
+    public static final String ACTION_LOGIN_AFTER_HOMEMAINTENANCE = "rrja.login_HOMEMAINTENANCE";
+    public static final String ACTION_LOGIN_AFTER_ONDOREWASH = "rrja.login_ONDOREWASH";
+    public static final String ACTION_LOGIN_AFTER_VIOLATION = "rrja.login_VIOLATION";
+
     public static String getRecommendCacheDir() {
         String path = "";
         if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {

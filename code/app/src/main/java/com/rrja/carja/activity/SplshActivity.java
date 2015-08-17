@@ -24,7 +24,7 @@ public class SplshActivity extends Activity implements Handler.Callback {
 
         CoreManager.getManager().init(this);
 
-        DialogHelper.getHelper().init(this.getApplicationContext());
+        //DialogHelper.getHelper().init(this);
 
         Intent service = new Intent(this, DataCenterService.class);
         service.setAction(Constant.ACTION_INIT_SERVICE);

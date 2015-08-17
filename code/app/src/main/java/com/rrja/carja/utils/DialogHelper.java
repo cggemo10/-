@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 
+import com.rrja.carja.R;
+
 public class DialogHelper {
 
 	private static final String tag = DialogHelper.class.getName();
@@ -23,8 +25,8 @@ public class DialogHelper {
 		loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		LayoutInflater inflater = LayoutInflater.from(mContext);
-		View loadRootView = inflater.inflate(mContext.getResources().getIdentifier("quicksdk_view_loading", "layout", mContext.getPackageName()), null);
-		final ImageView imgLoading = (ImageView) loadRootView.findViewById(mContext.getResources().getIdentifier("quicksdk_img_loading", "id", mContext.getPackageName()));
+		View loadRootView = inflater.inflate(R.layout.quicksdk_view_loading, null);
+		final ImageView imgLoading = (ImageView) loadRootView.findViewById(R.id.quicksdk_img_loading);
 
 		loadingDialog.setContentView(loadRootView);
 

@@ -1,7 +1,5 @@
 package com.rrja.carja.adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,28 +14,23 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.HomeMaintenanceActivity;
-import com.rrja.carja.activity.OnDoreWashActivity;
-import com.rrja.carja.activity.StoreReservationActivity;
-import com.rrja.carja.activity.ViolationActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.RecommendGoods;
-import com.rrja.carja.service.FileService;
 
 import java.io.File;
-import java.io.IOException;
+import java.text.SimpleDateFormat;
 
-public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClickListener {
+public class RecommendAdapter extends RecyclerView.Adapter implements View.OnClickListener {
 
-    private static final String TAG = DiscountAdapter.class.getName();
+    private static final String TAG = RecommendAdapter.class.getName();
 
     private static final int TYPE_HEADER = 11;
     private static final int TYPE_ITEM = 12;
 
-    private Context mContext;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy年MM月dd日");
 
-    private OnDiscountItemClickListener itemClickListener;
+    private OnRecommendActionListener mActionListener;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -101,16 +94,21 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
     }
 
     private void bindItemHolder(DiscountHolder holder, int position) {
-        final RecommendGoods discount = CoreManager.getManager().getDiscounts().get(position - 1);
+        final RecommendGoods goods = CoreManager.getManager().getDiscounts().get(position - 1);
 
         DiscountHolder discountHolder = holder;
-        discountHolder.title.setText(discount.getName());
-        discountHolder.discountScope.setText(discount.getScope());
-        discountHolder.discountTime.setText(discount.getTime());
-        discountHolder.discountContent.setText(discount.getContent());
+        discountHolder.title.setText(goods.getName());
+        discountHolder.discountScope.setText(goods.getScope());
+
+        long startTime = goods.getStartTime();
+        long endTime = goods.getEndTime();
+        String time = dateFormat.format(startTime) + " 至\n " + dateFormat.format(endTime);
+
+        discountHolder.discountTime.setText(time);
+        discountHolder.discountContent.setText(goods.getContent());
 
         // TODO later
-        String picUrl = discount.getImgUrl();
+        String picUrl = goods.getImgUrl();
         if (!TextUtils.isEmpty(picUrl)) {
 
             String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1);
@@ -120,19 +118,14 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
                 try {
                     discountHolder.pic.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
                 } catch (Exception e) {
-                    try {
-                        discountHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
+                    e.printStackTrace();
                     Log.e(TAG, e.getMessage(), e);
                 }
 
             } else {
-                Intent intent = new Intent(mContext, FileService.class);
-                intent.setAction(FileService.ACTION_IMG_DISCOUNT);
-                intent.putExtra("discount_info", discount);
-                mContext.startService(intent);
+                if (mActionListener != null) {
+                    mActionListener.onRequestRecommendPic(goods);
+                }
             }
 
         }
@@ -140,81 +133,74 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (itemClickListener != null) {
-                    itemClickListener.onItemClick(discount);
+                if (mActionListener != null) {
+                    mActionListener.onItemClick(goods);
                 }
             }
         });
-
-        try {
-            discountHolder.pic.setImageBitmap(BitmapFactory.decodeStream(mContext.getAssets().open("juyouhui-img.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
-    public long getItemId(int position) {
-        return position - 1;
-    }
+         public long getItemId(int position) {
+             return position - 1;
+         }
 
     @Override
-    public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_HEADER;
-        } else {
-            return TYPE_ITEM;
-        }
-    }
+         public int getItemViewType(int position) {
+             if (position == 0) {
+                 return TYPE_HEADER;
+             } else {
+                 return TYPE_ITEM;
+             }
+         }
 
     @Override
-    public int getItemCount() {
-        return CoreManager.getManager().getDiscounts().size() + 1;
-    }
+         public int getItemCount() {
+             return CoreManager.getManager().getDiscounts().size() + 1;
+         }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.ll_home_maintenance:
-                Intent intent = new Intent(mContext, HomeMaintenanceActivity.class);
-                mContext.startActivity(intent);
-                break;
-            case R.id.ll_on_dore_wash:
-                Intent onDoreWash = new Intent(mContext, OnDoreWashActivity.class);
-                mContext.startActivity(onDoreWash);
-                break;
-            case R.id.ll_store_reservation:
-                Intent maintenance = new Intent(mContext, StoreReservationActivity.class);
-                mContext.startActivity(maintenance);
-                break;
-            case R.id.ll_violation:
-                Intent violation = new Intent(mContext, ViolationActivity.class);
-                mContext.startActivity(violation);
-                break;
-        }
-    }
+         public void onClick(View v) {
+             if (mActionListener != null) {
+                 switch (v.getId()){
+                     case R.id.ll_home_maintenance:
+                         mActionListener.onHomeMaintenanceClick();
+                         break;
+                     case R.id.ll_on_dore_wash:
+                         mActionListener.onOnDoreWashClick();
+                         break;
+                     case R.id.ll_store_reservation:
+                         mActionListener.onStoreReservationClick();
+                         break;
+                     case R.id.ll_violation:
+                         mActionListener.onViolationClicked();
+                         break;
+                 }
+             }
+
+         }
 
 
     private class DiscountHolder extends RecyclerView.ViewHolder {
-        TextView title;
-        TextView discountScope;
-        TextView discountTime;
-        TextView discountContent;
-        ImageView pic;
+                  TextView title;
+                  TextView discountScope;
+                  TextView discountTime;
+                  TextView discountContent;
+                  ImageView pic;
 
-        public DiscountHolder(View itemView) {
-            super(itemView);
+                  public DiscountHolder(View itemView) {
+                      super(itemView);
 
-            title = (TextView) itemView.findViewById(R.id.txt_item_discount_title);
-            discountScope = (TextView) itemView.findViewById(R.id.txt_item_discount_scope_content);
-            discountTime = (TextView) itemView.findViewById(R.id.txt_item_discount_time_content);
-            discountContent = (TextView) itemView.findViewById(R.id.txt_item_discount_detial_content);
-            pic = (ImageView) itemView.findViewById(R.id.img_item_discount);
-        }
-    }
+                      title = (TextView) itemView.findViewById(R.id.txt_item_discount_title);
+                      discountScope = (TextView) itemView.findViewById(R.id.txt_item_discount_scope_content);
+                      discountTime = (TextView) itemView.findViewById(R.id.txt_item_discount_time_content);
+                      discountContent = (TextView) itemView.findViewById(R.id.txt_item_discount_detial_content);
+                      pic = (ImageView) itemView.findViewById(R.id.img_item_discount);
+                  }
+              }
 
-    public void setItemClickListener(OnDiscountItemClickListener listener) {
-        this.itemClickListener = listener;
+    public void setRecommendActionListener(OnRecommendActionListener listener) {
+        this.mActionListener = listener;
     }
 
     private class DiscountHeaderHolder extends RecyclerView.ViewHolder {
@@ -235,17 +221,12 @@ public class DiscountAdapter extends RecyclerView.Adapter implements View.OnClic
         }
     }
 
-    private class DiscountClickListener  {
-
-        RecommendGoods mInfo;
-
-        DiscountClickListener(Context context, RecommendGoods info) {
-            this.mInfo = info;
-        }
-
-    }
-
-    public interface OnDiscountItemClickListener {
+    public interface OnRecommendActionListener {
         public void onItemClick(RecommendGoods info);
+        public void onHomeMaintenanceClick();
+        public void onOnDoreWashClick();
+        public void onStoreReservationClick();
+        public void onViolationClicked();
+        public void onRequestRecommendPic(RecommendGoods recommendGoods);
     }
 }

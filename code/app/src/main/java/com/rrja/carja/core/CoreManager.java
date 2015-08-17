@@ -49,63 +49,6 @@ public class CoreManager {
     private Region customRegion;
     private UserInfo currUser;
 
-    // demo
-    static {
-
-        for (int i = 0; i < 10; i++) {
-            RecommendGoods discount1 = new RecommendGoods();
-            discount1.setName("爱温无水冷却液");
-            discount1.setScope("厦门各直营店");
-            discount1.setTime("2015年5月至\n2015年7月");
-            discount1.setMobileNo("123456789");
-            discount1.setContent("商品8折优惠，门店更换免收服务费");
-            discount1.setDetial("商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费");
-
-            discountList.add(discount1);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            CarStore store = new CarStore();
-            store.setStoreName("日日建安滨北店");
-            store.setArea("厦门");
-            store.setTel("0592-1234567");
-            store.setOpenTime("8:00~18:00");
-            store.setPayType("现金，刷卡，支付宝");
-            store.setAddress("思明区金尚路禹州花园三期");
-            store.setDesc("汽车维修、汽车美容、汽车装潢、汽车保险、汽车钣喷、汽车精品、24小时救援站等一站式服务的综合性的汽车服务连锁企业");
-
-            stores.add(store);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            CouponGoods coupons = new CouponGoods();
-            coupons.setName("爱温无水冷却液");
-            coupons.setAddress("厦门各直营店");
-            coupons.setTime("2015年5月至\n2015年7月");
-            coupons.setTelNumber("123456789");
-            coupons.setContent("商品8折优惠，门店更换免收服务费");
-            coupons.setDetal("商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费" +
-                    "商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费商品8折优惠，门店更换免收服务费");
-
-            couponsList.add(coupons);
-        }
-
-        for (int i = 0; i < 10; i++) {
-            Forum forum = new Forum();
-            forums.add(forum);
-        }
-
-    }
-
 
     // company info
     public void initCompanyInfo(final Context context) {

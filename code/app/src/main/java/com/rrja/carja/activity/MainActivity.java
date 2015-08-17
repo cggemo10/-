@@ -30,6 +30,7 @@ import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.UserBinder;
+import com.rrja.carja.utils.DialogHelper;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -84,7 +85,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         LinearLayout lllocation = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
         lllocation.setOnClickListener(this);
 
-
+        //DialogHelper.getHelper().init(this);
         CoreManager.getManager().initCompanyInfo(this);
 
         if (userService == null) {
@@ -196,29 +197,6 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         llDiscount.setOnClickListener(this);
 
         imgMenuHome.setImageLevel(1);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return false;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
