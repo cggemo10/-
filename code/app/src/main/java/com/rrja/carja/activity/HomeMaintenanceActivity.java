@@ -1,11 +1,17 @@
 package com.rrja.carja.activity;
 
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.rrja.carja.R;
 
 public class HomeMaintenanceActivity extends BaseActivity {
+
+    private RecyclerView recyclerView;
+    private AppCompatButton btnAdd;
+    private AppCompatButton btnCommitOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
