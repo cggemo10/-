@@ -21,6 +21,7 @@ import com.rrja.carja.adapter.CouponsAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.service.FileService;
 
 
 public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemClickListener{
@@ -100,6 +101,14 @@ public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemCl
         Intent intent = new Intent(getActivity(), CouponsDetalActivity.class);
         intent.putExtra("coupons", goods);
         getActivity().startActivity(intent);
+    }
+
+    @Override
+    public void onRequestCouponsImg(CouponGoods goods) {
+        Intent intent = new Intent(getActivity(), FileService.class);
+        intent.setAction(FileService.ACTION_IMG_COUPONS);
+        intent.putExtra("coupons_goods", goods);
+        getActivity().startService(intent);
     }
 
 

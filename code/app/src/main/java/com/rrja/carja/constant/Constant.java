@@ -4,9 +4,6 @@ import android.os.Environment;
 
 import java.io.File;
 
-/**
- * Created by Administrator on 2015/6/26.
- */
 public class Constant {
 
     public static final String SP_CONSTANT_TIME = "constant_data";
@@ -53,6 +50,8 @@ public class Constant {
 
     public static final String ACTION_DATA_GET_RECOMMEND = "rrja.data.goods.RECOMMEND";
     public static final String ACTION_DATA_GET_COUPONS_GOODS = "rrja.data.goods.COUPONS";
+
+    public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
 
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";

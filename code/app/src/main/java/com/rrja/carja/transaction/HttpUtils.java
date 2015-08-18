@@ -210,7 +210,7 @@ public class HttpUtils {
 
     public static JSONObject getCouponsGoods(int page) {
         int number = 15;
-        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?count=", number, "&page=", page);
+        String url = String.format("%s%s%s%s%d%s%d", BASE_URL, SERVICE_GOODS, INTERFACE_GOOD_COUPONS, "?number=", number, "&page=", page);
         return Network.doGet(url);
     }
 

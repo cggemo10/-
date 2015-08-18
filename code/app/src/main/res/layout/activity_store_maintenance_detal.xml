@@ -175,7 +175,7 @@
 
     <android.support.v7.widget.AppCompatButton
         android:backgroundTint="@color/c_style_red"
-        android:id="@+id/btn_commit_store_reservation"
+        android:id="@+id/btn_gain_coupons"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textSize="16sp"

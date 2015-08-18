@@ -201,7 +201,7 @@ public class CouponGoods implements Parcelable {
         goods.setPrice(json.getInt("price"));
         goods.setStartTime(json.getLong("start"));
         goods.setEndTime(json.getLong("end"));
-        goods.setPicUrl(json.getString("image"));
+        goods.setPicUrl(json.getString("img"));
         goods.setTelNumber(json.getString("mobile"));
         goods.setScope(json.getString("scope"));
         goods.setServiceId(json.getLong("serviceId") + "");

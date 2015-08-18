@@ -69,7 +69,7 @@ public class StoreReservationDetalActivity extends BaseActivity implements View.
         txtStoreOpenTime = (TextView) findViewById(R.id.txt_store_opentime_detal_content);
         txtStorePayType = (TextView) findViewById(R.id.txt_store_paytype_content);
         txtStoreService = (TextView) findViewById(R.id.txt_store_service_content);
-        btnCommit = (Button) findViewById(R.id.btn_commit_store_reservation);
+        btnCommit = (Button) findViewById(R.id.btn_gain_coupons);
 
         txtStoreName.setText(store.getStoreName());
 

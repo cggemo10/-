@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
             if (userService == null) {
                 Intent intent = new Intent(MainActivity.this, DataCenterService.class);
-                intent.setAction(Constant.ACTION_DATA_GET_RECOMMEND);
+                intent.setAction(Constant.ACTION_DATA_GET_COUPONS_GOODS);
                 intent.putExtra("page",page);
                 startService(intent);
             } else {

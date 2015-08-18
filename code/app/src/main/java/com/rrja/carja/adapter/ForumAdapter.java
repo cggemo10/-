@@ -48,7 +48,7 @@ public class ForumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             headerHolder.txtMaster.setOnClickListener(ForumAdapter.this);
 //            headerHolder.txtAll.
         } else {
-            Forum discount = CoreManager.getManager().getForums().get(position);
+//            Forum discount = CoreManager.getManager().getForums().get(position - 1);
 //        viewHolder.title.setText(discount.());
 //        viewHolder.discountScope.setText(discount.getScope());
 //        viewHolder.discountTime.setText(discount.getTime());

@@ -15,7 +15,6 @@ import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class RecommendDetialActivity extends BaseActivity {
@@ -71,7 +70,7 @@ public class RecommendDetialActivity extends BaseActivity {
 //        }
         // TODO if show title
 
-        discountScop = (TextView) findViewById(R.id.txt_item_discount_scope_content);
+        discountScop = (TextView) findViewById(R.id.txt_item_coupons_scope_content);
         discountScop.setText(currDiscount.getScope());
 
         discountTime = (TextView) findViewById(R.id.txt_item_discount_time_content);
@@ -106,7 +105,7 @@ public class RecommendDetialActivity extends BaseActivity {
             } else {
                 Intent intent = new Intent(this, FileService.class);
                 intent.setAction(FileService.ACTION_IMG_DISCOUNT);
-                intent.putExtra("discount_info", currDiscount);
+                intent.putExtra("recommend_info", currDiscount);
                 startService(intent);
             }
 

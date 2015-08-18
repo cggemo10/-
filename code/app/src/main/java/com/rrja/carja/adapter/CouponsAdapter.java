@@ -19,6 +19,8 @@ import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.service.FileService;
 
+import org.apache.http.conn.ssl.PrivateKeyDetails;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -77,10 +79,10 @@ public class CouponsAdapter extends RecyclerView.Adapter {
                 }
 
             } else {
-                Intent intent = new Intent(holder.itemView.getContext(), FileService.class);
-                intent.setAction(FileService.ACTION_IMG_COUPONS);
-                intent.putExtra("coupons", coupon);
-                holder.itemView.getContext().startService(intent);
+
+                if (itemClickListener != null) {
+                    itemClickListener.onRequestCouponsImg(coupon);
+                }
             }
         }
 
@@ -93,23 +95,17 @@ public class CouponsAdapter extends RecyclerView.Adapter {
             }
         });
 
-        // for example
-        try {
-            couponsHolder.pic.setImageBitmap(BitmapFactory.decodeStream(holder.itemView.getContext().getAssets().open("juyouhui-img.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
-         public long getItemId(int position) {
-             return position;
-         }
+              public long getItemId(int position) {
+                  return position;
+              }
 
     @Override
-         public int getItemCount() {
-             return   CoreManager.getManager().getCoupons().size();
-         }
+              public int getItemCount() {
+                  return   CoreManager.getManager().getCoupons().size();
+              }
 
     public void setItemClickListener(OnItemClickListener listener) {
         this.itemClickListener = listener;
@@ -136,5 +132,6 @@ public class CouponsAdapter extends RecyclerView.Adapter {
 
     public interface OnItemClickListener {
         public void onCouponsGoodsClick(CouponGoods goods);
+        public void onRequestCouponsImg(CouponGoods goods);
     }
 }

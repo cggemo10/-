@@ -192,7 +192,7 @@ public class RecommendAdapter extends RecyclerView.Adapter implements View.OnCli
                       super(itemView);
 
                       title = (TextView) itemView.findViewById(R.id.txt_item_discount_title);
-                      discountScope = (TextView) itemView.findViewById(R.id.txt_item_discount_scope_content);
+                      discountScope = (TextView) itemView.findViewById(R.id.txt_item_coupons_scope_content);
                       discountTime = (TextView) itemView.findViewById(R.id.txt_item_discount_time_content);
                       discountContent = (TextView) itemView.findViewById(R.id.txt_item_discount_detial_content);
                       pic = (ImageView) itemView.findViewById(R.id.img_item_discount);

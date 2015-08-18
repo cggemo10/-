@@ -75,7 +75,7 @@ public class FileService extends Service implements Handler.Callback {
         if (ACTION_IMG_COUPONS.equals(action)) {
 
             Bundle extras = intent.getExtras();
-            CouponGoods coupons = extras.getParcelable("coupons");
+            CouponGoods coupons = extras.getParcelable("coupons_goods");
             if (coupons != null && !TextUtils.isEmpty(coupons.getCouponId()) && !loadingCouponsMap.containsKey(coupons.getCouponId())) {
                 loadingCouponsMap.put(coupons.getCouponId(), coupons);
 
@@ -91,7 +91,7 @@ public class FileService extends Service implements Handler.Callback {
             if (discountInfo != null && !TextUtils.isEmpty(discountInfo.getProductId()) && !loadingDiscountMap.containsKey(discountInfo.getProductId())) {
                 loadingDiscountMap.put(discountInfo.getProductId(), discountInfo);
 
-                DiscountImgTask task = new DiscountImgTask(discountInfo);
+                RecommendImgTask task = new RecommendImgTask(discountInfo);
                 executor.execute(task);
             }
 
@@ -256,40 +256,40 @@ public class FileService extends Service implements Handler.Callback {
         }
     }
 
-    private class DiscountImgTask implements Runnable {
+    private class RecommendImgTask implements Runnable {
 
-                  RecommendGoods mDiscountInfo;
+                       RecommendGoods mDiscountInfo;
 
-                  DiscountImgTask(RecommendGoods info) {
-                      this.mDiscountInfo = info;
-                  }
+                       RecommendImgTask(RecommendGoods info) {
+                           this.mDiscountInfo = info;
+                       }
 
-                  @Override
-                  public void run() {
+                       @Override
+                       public void run() {
 
-                      Message msg = mHandler.obtainMessage(WHAT_DISCOUNT);
-                      msg.obj = mDiscountInfo.getProductId();
-                      if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                          msg.arg1 = MSG_DOWNLOAD_FAILED;
-                      } else {
-                          String path = Environment.getExternalStorageDirectory().getPath() +
-                                  File.separatorChar + Constant.DIR_BASE + File.separator +
-                                  Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_RECOMMEND + File.separator;
+                           Message msg = mHandler.obtainMessage(WHAT_DISCOUNT);
+                           msg.obj = mDiscountInfo.getProductId();
+                           if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                               msg.arg1 = MSG_DOWNLOAD_FAILED;
+                           } else {
+                               String path = Environment.getExternalStorageDirectory().getPath() +
+                                       File.separatorChar + Constant.DIR_BASE + File.separator +
+                                       Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_RECOMMEND + File.separator;
 
-                          String url = mDiscountInfo.getImgUrl();
+                               String url = mDiscountInfo.getImgUrl();
 
-                          boolean result = HttpUtils.getPicture(url, path);
+                               boolean result = HttpUtils.getPicture(url, path);
 
-                          if (result) {
-                              msg.arg1 = MSG_DOWNLOAD_SUCC;
-                          } else {
-                              msg.arg1 = MSG_DOWNLOAD_FAILED;
-                          }
-                      }
-                      msg.sendToTarget();
+                               if (result) {
+                                   msg.arg1 = MSG_DOWNLOAD_SUCC;
+                               } else {
+                                   msg.arg1 = MSG_DOWNLOAD_FAILED;
+                               }
+                           }
+                           msg.sendToTarget();
 
-                  }
-              }
+                       }
+                   }
 
     private void sendBroadCast(String action) {
         Intent intent = new Intent(action);
