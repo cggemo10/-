@@ -197,8 +197,8 @@ public class UserBinder extends Binder {
                         if (info != null || info.size() > 0) {
                             if (finalPage == 1) {
                                 CoreManager.getManager().getDiscounts().clear();
-                                CoreManager.getManager().getDiscounts().addAll(info);
                             }
+                            CoreManager.getManager().getDiscounts().addAll(info);
                             // TODO save auth
                             Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA);
                             intent.putExtra("size", info.size());
@@ -257,8 +257,8 @@ public class UserBinder extends Binder {
                         if (info != null || info.size() > 0) {
                             if (finalPage == 1) {
                                 CoreManager.getManager().getCoupons().clear();
-                                CoreManager.getManager().getCoupons().addAll(info);
                             }
+                            CoreManager.getManager().getCoupons().addAll(info);
                             // TODO save auth
                             Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA);
                             intent.putExtra("size", info.size());

@@ -215,6 +215,7 @@ public class HttpUtils {
     }
 
     /*
+        保养下服务
         101 保养
         102 维修
         103 美容
@@ -227,7 +228,7 @@ public class HttpUtils {
     }
 
     /*
-        二级服务下商品列表
+        保养服务下商品列表
      */
     public static JSONObject getGoodList(String serviceId, int page) {
 

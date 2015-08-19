@@ -1,30 +1,24 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment">
 
-    <android.support.v7.widget.AppCompatButton
-        android:layout_alignParentBottom="true"
-        android:id="@+id/btn_commit_order"
+    <include
+        android:id="@+id/titlebar"
+        layout="@layout/view_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
-        android:backgroundTint="@color/c_style_red"
-        android:padding="10dp"
-        android:text="@string/str_commit"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"/>
+        android:layout_height="wrap_content" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_main_maintenance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@id/titlebar"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp" />
 
-</RelativeLayout>
+</LinearLayout>

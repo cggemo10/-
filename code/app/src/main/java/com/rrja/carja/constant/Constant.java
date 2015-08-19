@@ -48,6 +48,12 @@ public class Constant {
     public static final String ACTION_BROADCAST_GET_COUPONS_DATA = "rrja.broadcast.get.COUPONS_DATA";
     public static final String ACTION_BROADCAST_GET_COUPONS_DATA_ERR = "rrja.broadcast.get.COUPONS_DATA_ERR";
 
+    public static final String ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA = "rrja.broadcast.MAINTENANCE_SERVICE_DATA";
+    public static final String ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR = "rrja.broadcast.MAINTENANCE_SERVICE_DATA_ERR";
+
+    public static final String ACTION_BROADCAST_MAINTENANCE_GOODS_DATA = "rrja.broadcast.MAINTENANCE_GOODS_DATA";
+    public static final String ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR = "rrja.broadcast.MAINTENANCE_GOODS_DATA_ERR";
+
     public static final String ACTION_DATA_GET_RECOMMEND = "rrja.data.goods.RECOMMEND";
     public static final String ACTION_DATA_GET_COUPONS_GOODS = "rrja.data.goods.COUPONS";
 

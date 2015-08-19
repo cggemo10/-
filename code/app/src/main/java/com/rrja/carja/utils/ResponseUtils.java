@@ -8,6 +8,8 @@ import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Region;
+import com.rrja.carja.model.maintenance.MaintenanceGoods;
+import com.rrja.carja.model.maintenance.MaintenanceService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -171,6 +173,52 @@ public class ResponseUtils {
         }
 
         return carModelList;
+    }
+
+    public static List<MaintenanceService> parseMaintenanceService (JSONArray jsonArray) throws JSONException {
+
+        if (jsonArray == null || jsonArray.length() == 0) {
+            return null;
+        }
+
+        List<MaintenanceService> serviceList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            JSONObject serviceJson = jsonArray.getJSONObject(i);
+            MaintenanceService service = MaintenanceService.parse(serviceJson);
+            if (service != null) {
+                serviceList.add(service);
+            } else {
+                return null;
+            }
+        }
+
+        return serviceList;
+    }
+
+    public static List<MaintenanceGoods> parseMaintenanceGood (JSONArray jsonArray) throws JSONException {
+
+        if (jsonArray == null || jsonArray.length() == 0) {
+            return null;
+        }
+
+        List<MaintenanceGoods> goodsList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+
+            JSONObject goodsJson = jsonArray.getJSONObject(i);
+            MaintenanceGoods goods = MaintenanceGoods.parse(goodsJson);
+            if (goods != null) {
+                goodsList.add(goods);
+            } else {
+                return null;
+            }
+
+        }
+
+        return goodsList;
+
     }
 
 }

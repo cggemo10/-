@@ -21,6 +21,8 @@ import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.model.maintenance.MaintenanceGoods;
+import com.rrja.carja.model.maintenance.MaintenanceService;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -167,6 +169,52 @@ public class CoreManager {
     public UserInfo getCurrUser() {
         return currUser;
     }
+
+    //----------------------------------------------------------------------------------------------
+    private HashMap<String, List<MaintenanceService>> maintenanceServiceMap = new HashMap<>();
+    public List<MaintenanceService> getMaintenanceService(String serviceId) {
+        if (maintenanceServiceMap.containsKey(serviceId)) {
+            return maintenanceServiceMap.get(serviceId);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void addMaintenanceService(String serviceId, List<MaintenanceService> serviceList) {
+        if (serviceList == null || serviceList.size() == 0) {
+            return;
+        }
+        if (maintenanceServiceMap.containsKey(serviceId)) {
+            List<MaintenanceService> services = maintenanceServiceMap.get(serviceId);
+            services.addAll(serviceList);
+        } else {
+            maintenanceServiceMap.put(serviceId, serviceList);
+        }
+    }
+
+    private HashMap<String, List<MaintenanceGoods>> maintenanceGoodsMap = new HashMap<>();
+
+    public List<MaintenanceGoods> getMaintenanceGoods(String serviceId) {
+        if (maintenanceGoodsMap.containsKey(serviceId)) {
+            return maintenanceGoodsMap.get(serviceId);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    public void addMaintenanceGoods(String serviceId, List<MaintenanceGoods> goodsList) {
+        if (goodsList == null || goodsList.size() == 0) {
+            return;
+        }
+
+        if (maintenanceGoodsMap.containsKey(serviceId)) {
+            List<MaintenanceGoods> goodses = maintenanceGoodsMap.get(serviceId);
+            goodses.addAll(goodsList);
+        } else {
+            maintenanceGoodsMap.put(serviceId, goodsList);
+        }
+    }
+
 
 
     //----------------------------------------------------------------------------------------------

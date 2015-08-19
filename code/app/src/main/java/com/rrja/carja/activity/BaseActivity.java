@@ -1,6 +1,7 @@
 package com.rrja.carja.activity;
 
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -11,7 +12,7 @@ import com.rrja.carja.R;
 /**
  * Created by chongge on 15/5/27.
  */
-public class BaseActivity extends ActionBarActivity {
+public class BaseActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     TextView toolbarTitle;
