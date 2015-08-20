@@ -7,6 +7,9 @@ import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.UserInfo;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +23,8 @@ public class MaintenanceOrder {
     private List<TagableGoods> service1 = new ArrayList<>();
     private List<TagableGoods> service2 = new ArrayList<>();
     private List<TagableGoods> service3 = new ArrayList<>();
+
+    private String orderId;
 
     public UserInfo getUserInfo() {
         return userInfo;
@@ -35,6 +40,14 @@ public class MaintenanceOrder {
 
     public void setmCarInfo(CarInfo mCarInfo) {
         this.mCarInfo = mCarInfo;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public void addGoods(String serviceId, TagableGoods goods) {
@@ -61,7 +74,7 @@ public class MaintenanceOrder {
 
         if (service1.size() != 0) {
             TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getMaintenanceService());
+            service.setService(CoreManager.getManager().getOrderMaintenanceService());
             list.add(service);
 
             list.addAll(service1);
@@ -69,7 +82,7 @@ public class MaintenanceOrder {
 
         if (service2.size() != 0) {
             TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getRepairService());
+            service.setService(CoreManager.getManager().getOrderRepairService());
             list.add(service);
 
             list.addAll(service2);
@@ -77,7 +90,7 @@ public class MaintenanceOrder {
 
         if (service3.size() != 0) {
             TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getCosmetologyService());
+            service.setService(CoreManager.getManager().getOrderCosmetologyService());
             list.add(service);
 
             list.addAll(service3);
@@ -85,4 +98,5 @@ public class MaintenanceOrder {
 
         return list;
     }
+
 }

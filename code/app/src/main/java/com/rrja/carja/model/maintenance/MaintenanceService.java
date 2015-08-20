@@ -5,9 +5,7 @@ import org.json.JSONObject;
 
 import java.util.List;
 
-/**
- * Created by chongge on 15/7/5.
- */
+
 public class MaintenanceService {
 
     private String parentId;

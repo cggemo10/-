@@ -13,6 +13,7 @@ public class MaintenanceGoods {
     private int discountPrice;
     private int price;
     private String name;
+    private String id;
 
     public String getContent() {
         return content;
@@ -54,12 +55,21 @@ public class MaintenanceGoods {
         this.price = price;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public static MaintenanceGoods parse(JSONObject goodsJson) throws JSONException{
 
         MaintenanceGoods goods = new MaintenanceGoods();
         goods.setContent(goodsJson.getString("content"));
         goods.setDiscountPrice(goodsJson.getInt("discountPrice"));
         goods.setPrice(goodsJson.getInt("price"));
+        goods.setId(goodsJson.getString("id"));
         return goods;
     }
 }

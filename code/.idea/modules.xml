@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/code.iml" filepath="$PROJECT_DIR$/code.iml" />
+      <module fileurl="file://$PROJECT_DIR$/httpclient_expand/httpclient_expand.iml" filepath="$PROJECT_DIR$/httpclient_expand/httpclient_expand.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pulltorefreshview/pulltorefreshview.iml" filepath="$PROJECT_DIR$/pulltorefreshview/pulltorefreshview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stickysideheaderrecycle/stickysideheaderrecycle.iml" filepath="$PROJECT_DIR$/stickysideheaderrecycle/stickysideheaderrecycle.iml" />
     </modules>
   </component>
 </project>
-

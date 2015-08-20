@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
@@ -15,9 +16,13 @@ import com.rrja.carja.utils.ResponseUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MaintenanceBinder extends Binder {
+
+    private static List<String> taskTag = new ArrayList<>();
 
     private static String TAG = "rrja.MaintenanceBinder";
 
@@ -33,26 +38,42 @@ public class MaintenanceBinder extends Binder {
         103 √¿»›
      */
     public void getService(final String serviceId) {
+
+        if (!"101".equals(serviceId) && !"102".equals(serviceId) && !"103".equals(serviceId)
+                && !"104".equals(serviceId)) {
+
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
+            intent.putExtra("description", "Õ¯¬Á“Ï≥££¨«Î…‘∫Û‘Ÿ ‘°£");
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        if (taskTag.contains(serviceId) ) {
+            return;
+        }
+
+        taskTag.add(serviceId);
+
         Runnable task = new Runnable() {
             @Override
             public void run() {
-
-                if (!"101".equals(serviceId) && !"102".equals(serviceId) && !"103".equals(serviceId)
-                        && !"104".equals(serviceId)) {
-
-                    Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
-                    intent.putExtra("description", "Õ¯¬Á“Ï≥££¨«Î…‘∫Û‘Ÿ ‘°£");
-                    mContext.sendBroadcast(intent);
-                    return;
-                }
 
                 JSONObject serviceJs = HttpUtils.getServiceList(serviceId);
                 try {
                     int code = serviceJs.getInt("code");
                     if (code == 0) {
-//                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
-//                        intent.putExtra("data", serviceJs.toString());
-//                        mContext.sendBroadcast(intent);
+                        List<MaintenanceService> serviceList = ResponseUtils.parseMaintenanceService(serviceJs.getJSONArray("data"));
+
+                        if (serviceList != null && serviceList.size() > 0) {
+
+                            CoreManager.getManager().addMaintenanceService(serviceId, serviceList);
+
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
+                            intent.putExtra("serviceId", serviceId);
+                            mContext.sendBroadcast(intent);
+
+                            return;
+                        }
                         return;
                     } else {
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
@@ -91,6 +112,12 @@ public class MaintenanceBinder extends Binder {
             return;
         }
 
+        if (taskTag.contains(serviceId) ) {
+            return;
+        }
+
+        taskTag.add(serviceId);
+
         Runnable task = new Runnable() {
             @Override
             public void run() {
@@ -101,15 +128,15 @@ public class MaintenanceBinder extends Binder {
                     if (code == 0) {
                         List<MaintenanceService> serviceList = ResponseUtils.parseMaintenanceService(serviceJs.getJSONArray("data"));
                         if (serviceList != null && serviceList.size() > 0) {
-                            List<MaintenanceService> maintenanceService = CoreManager.getManager().getMaintenanceService(serviceId);
-                            if (maintenanceService != null) {
-                                CoreManager.getManager().addMaintenanceService(serviceId, serviceList);
-                            }
+
+                            CoreManager.getManager().addMaintenanceService(serviceId, serviceList);
+
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
+                            intent.putExtra("serviceId", serviceId);
+                            mContext.sendBroadcast(intent);
+
+                            return;
                         }
-//                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
-//                        intent.putExtra("data", serviceJs.toString());
-//                        mContext.sendBroadcast(intent);
-                        return;
                     } else {
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
                         String errMsg = null;
@@ -137,7 +164,7 @@ public class MaintenanceBinder extends Binder {
         mContext.execute(task);
     }
 
-    public void getServiceGoods(final String serviceId, int page) {
+    public void getServiceGoods(final String serviceId, final int page) {
 
         if (TextUtils.isEmpty(serviceId)) {
             Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
@@ -147,23 +174,31 @@ public class MaintenanceBinder extends Binder {
             return;
         }
 
+        if (taskTag.contains(serviceId) ) {
+            return;
+        }
+
+        taskTag.add(serviceId);
+
         Runnable task = new Runnable() {
             @Override
             public void run() {
 
-                JSONObject serviceJs = HttpUtils.getServiceList(serviceId);
+                JSONObject goodJs = HttpUtils.getGoodList(serviceId, page);
                 try {
-                    int code = serviceJs.getInt("code");
+                    int code = goodJs.getInt("code");
                     if (code == 0) {
-//                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA);
-//                        intent.putExtra("data", serviceJs.toString());
-//                        mContext.sendBroadcast(intent);
+
+                        List<MaintenanceGoods> goodses = ResponseUtils.parseMaintenanceGood(goodJs.getJSONArray("data"));
+                        if (goodses != null && goodses.size() > 0) {
+                            CoreManager.getManager().addMaintenanceGoods(serviceId + "_" + page, goodses);
+                        }
                         return;
                     } else {
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
                         String errMsg = null;
-                        if (serviceJs.has("description")) {
-                            errMsg = serviceJs.getString("description");
+                        if (goodJs.has("description")) {
+                            errMsg = goodJs.getString("description");
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {

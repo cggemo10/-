@@ -223,13 +223,13 @@ public class UserBinder extends Binder {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-
-                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
-                    String errMsg = mContext.getString(R.string.str_err_net);
-                    intent.putExtra("description", errMsg);
-                    intent.putExtra("page", finalPage);
-                    mContext.sendBroadcast(intent);
                 }
+
+                Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
+                String errMsg = mContext.getString(R.string.str_err_net);
+                intent.putExtra("description", errMsg);
+                intent.putExtra("page", finalPage);
+                mContext.sendBroadcast(intent);
             }
         };
 
@@ -283,13 +283,13 @@ public class UserBinder extends Binder {
 
                 } catch (Exception e) {
                     e.printStackTrace();
-
-                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR);
-                    String errMsg = mContext.getString(R.string.str_err_net);
-                    intent.putExtra("description", errMsg);
-                    intent.putExtra("page", finalPage);
-                    mContext.sendBroadcast(intent);
                 }
+
+                Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_COUPONS_DATA_ERR);
+                String errMsg = mContext.getString(R.string.str_err_net);
+                intent.putExtra("description", errMsg);
+                intent.putExtra("page", finalPage);
+                mContext.sendBroadcast(intent);
             }
         };
 

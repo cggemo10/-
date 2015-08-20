@@ -30,9 +30,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by Administrator on 2015/6/6.
- */
+
 public class CoreManager {
 
     private static final String TAG = "rrja.CoreManager";
@@ -194,27 +192,40 @@ public class CoreManager {
 
     private HashMap<String, List<MaintenanceGoods>> maintenanceGoodsMap = new HashMap<>();
 
-    public List<MaintenanceGoods> getMaintenanceGoods(String serviceId) {
-        if (maintenanceGoodsMap.containsKey(serviceId)) {
-            return maintenanceGoodsMap.get(serviceId);
+    //goodKey  serviceId_page
+    public List<MaintenanceGoods> getMaintenanceGoods(String goodsKey) {
+        if (maintenanceGoodsMap.containsKey(goodsKey)) {
+            return maintenanceGoodsMap.get(goodsKey);
         } else {
             return new ArrayList<>();
         }
     }
 
-    public void addMaintenanceGoods(String serviceId, List<MaintenanceGoods> goodsList) {
+    //goodKey  serviceId_page
+    public void addMaintenanceGoods(String goodsKey, List<MaintenanceGoods> goodsList) {
         if (goodsList == null || goodsList.size() == 0) {
             return;
         }
 
-        if (maintenanceGoodsMap.containsKey(serviceId)) {
-            List<MaintenanceGoods> goodses = maintenanceGoodsMap.get(serviceId);
+        if (maintenanceGoodsMap.containsKey(goodsKey)) {
+            List<MaintenanceGoods> goodses = maintenanceGoodsMap.get(goodsKey);
             goodses.addAll(goodsList);
         } else {
-            maintenanceGoodsMap.put(serviceId, goodsList);
+            maintenanceGoodsMap.put(goodsKey, goodsList);
         }
     }
 
+    public MaintenanceService getOrderCosmetologyService() {
+        return null;
+    }
+
+    public MaintenanceService getOrderRepairService() {
+        return null;
+    }
+
+    public MaintenanceService getOrderMaintenanceService() {
+        return null;
+    }
 
 
     //----------------------------------------------------------------------------------------------
