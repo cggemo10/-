@@ -18,7 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.adapter.MaintenanceAdapter;
+import com.rrja.carja.model.TagableElement;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MaintenanceMainFragment extends BaseElementFragment implements View.OnClickListener {
@@ -45,7 +50,6 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -129,6 +133,13 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     public interface OnFragmentInteractionListener {
 
+    }
+
+    public List<TagableElement> getOrderContent() {
+        if (getActivity() != null) {
+            return ((HomeMaintenanceActivity) getActivity()).getOrderContent();
+        }
+        return new ArrayList<>();
     }
 
 }

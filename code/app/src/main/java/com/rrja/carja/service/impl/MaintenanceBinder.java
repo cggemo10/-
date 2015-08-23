@@ -33,17 +33,17 @@ public class MaintenanceBinder extends Binder {
     }
 
     /*
-        101 ±£Ñø
-        102 Î¬ĞŞ
-        103 ÃÀÈİ
-     */
+                                      101 ä¿å…»
+                                      102 ç»´ä¿®
+                                      103 ç¾å®¹
+                                   */
     public void getService(final String serviceId) {
 
         if (!"101".equals(serviceId) && !"102".equals(serviceId) && !"103".equals(serviceId)
                 && !"104".equals(serviceId)) {
 
             Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
-            intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+            intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
             mContext.sendBroadcast(intent);
             return;
         }
@@ -83,7 +83,7 @@ public class MaintenanceBinder extends Binder {
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£";
+                            errMsg = "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -94,7 +94,7 @@ public class MaintenanceBinder extends Binder {
                 }
 
                 Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
-                intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+                intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
                 mContext.sendBroadcast(intent);
             }
         };
@@ -106,7 +106,7 @@ public class MaintenanceBinder extends Binder {
 
         if (TextUtils.isEmpty(serviceId)) {
             Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
-            intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+            intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
             mContext.sendBroadcast(intent);
 
             return;
@@ -145,7 +145,7 @@ public class MaintenanceBinder extends Binder {
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£";
+                            errMsg = "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -156,7 +156,7 @@ public class MaintenanceBinder extends Binder {
                 }
 
                 Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
-                intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+                intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
                 mContext.sendBroadcast(intent);
             }
         };
@@ -168,7 +168,7 @@ public class MaintenanceBinder extends Binder {
 
         if (TextUtils.isEmpty(serviceId)) {
             Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
-            intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+            intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
             mContext.sendBroadcast(intent);
 
             return;
@@ -202,7 +202,7 @@ public class MaintenanceBinder extends Binder {
                         }
 
                         if (TextUtils.isEmpty(errMsg)) {
-                            errMsg = "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£";
+                            errMsg = "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚";
                         }
                         intent.putExtra("description", errMsg);
                         mContext.sendBroadcast(intent);
@@ -213,7 +213,7 @@ public class MaintenanceBinder extends Binder {
                 }
 
                 Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
-                intent.putExtra("description", "ÍøÂçÒì³££¬ÇëÉÔºóÔÙÊÔ¡£");
+                intent.putExtra("description", "ç½‘ç»œå¼‚å¸¸ï¼Œè¯·ç¨åå†è¯•ã€‚");
                 mContext.sendBroadcast(intent);
             }
         };

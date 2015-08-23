@@ -6,10 +6,10 @@
     tools:context="com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment">
 
     <include
-        android:id="@+id/titlebar"
-        layout="@layout/view_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+             android:id="@+id/titlebar"
+             layout="@layout/view_toolbar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/view_my_car"

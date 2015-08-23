@@ -1,5 +1,6 @@
 package com.rrja.carja.model.maintenance;
 
+import android.text.TextUtils;
 import android.widget.ListView;
 
 import com.rrja.carja.core.CoreManager;
@@ -11,7 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MaintenanceOrder {
 
@@ -20,9 +24,7 @@ public class MaintenanceOrder {
 
     private UserInfo userInfo;
     private CarInfo mCarInfo;
-    private List<TagableGoods> service1 = new ArrayList<>();
-    private List<TagableGoods> service2 = new ArrayList<>();
-    private List<TagableGoods> service3 = new ArrayList<>();
+    private HashMap<String, TagableService> orderContent = new HashMap<>();
 
     private String orderId;
 
@@ -50,53 +52,45 @@ public class MaintenanceOrder {
         this.orderId = orderId;
     }
 
-    public void addGoods(String serviceId, TagableGoods goods) {
+    public void addGoods(String serviceId, MaintenanceService service, TagableGoods goods) {
 
-        if (goods == null) {
+        if (TextUtils.isEmpty(serviceId) || goods == null) {
             return;
         }
 
-        if ("101".equals(serviceId)) {
-            service1.add(goods);
-        }
+        if (orderContent.containsKey(serviceId) && orderContent.get(serviceId) != null) {
 
-        if ("102".equals(serviceId)) {
-            service2.add(goods);
-        }
-
-        if ("103".equals(serviceId)) {
-            service3.add(goods);
+            TagableService tagableService = orderContent.get(serviceId);
+            tagableService.addTagableGood(goods);
+            return;
+        } else if (service != null){
+            TagableService tagableService = new TagableService();
+            tagableService.setService(service);
+            tagableService.addTagableGood(goods);
+            orderContent.put(serviceId, tagableService);
         }
     }
 
     public List listOrderInfo() {
-        ArrayList<TagableElement> list = new ArrayList<>();
 
-        if (service1.size() != 0) {
-            TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getOrderMaintenanceService());
-            list.add(service);
-
-            list.addAll(service1);
+        if (orderContent.size() == 0) {
+            return new ArrayList();
         }
 
-        if (service2.size() != 0) {
-            TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getOrderRepairService());
-            list.add(service);
+        ArrayList<TagableElement> infoList = new ArrayList<>();
 
-            list.addAll(service2);
+        Set<String> keySet = orderContent.keySet();
+        String[] keyArray = (String[]) keySet.toArray();
+        for (int i = 0; i < keyArray.length; i++) {
+            String key = keyArray[i];
+            TagableService service = orderContent.get(key);
+            if (service.getGoodList().size() != 0) {
+                infoList.add(service);
+                infoList.addAll(service.getGoodList());
+            }
         }
 
-        if (service3.size() != 0) {
-            TagableService service = new TagableService();
-            service.setService(CoreManager.getManager().getOrderCosmetologyService());
-            list.add(service);
-
-            list.addAll(service3);
-        }
-
-        return list;
+        return infoList;
     }
 
 }

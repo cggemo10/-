@@ -1,0 +1,77 @@
+<LinearLayout
+    android:id="@+id/LinearLayout1"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/c_bg_base"
+    android:orientation="vertical">
+
+     <include
+         android:id="@+id/titlebar"
+         layout="@layout/view_toolbar"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"/>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="50dp"
+         android:orientation="horizontal"
+         android:paddingLeft="30dp"
+         android:paddingRight="30dp">
+
+         <TextView
+             android:id="@+id/txt_maintenance_tag1"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_weight="1"
+             android:gravity="center"
+             android:text="保养"
+             android:textColor="@android:color/primary_text_light"
+             android:textSize="14sp"/>
+
+         <TextView
+             android:id="@+id/txt_maintenance_tag2"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_weight="1"
+             android:gravity="center"
+             android:text="维修"
+             android:textColor="@android:color/primary_text_light"
+             android:textSize="14sp"/>
+
+         <TextView
+             android:id="@+id/txt_maintenance_tag3"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:layout_weight="1"
+             android:gravity="center"
+             android:text="美容"
+             android:textColor="@android:color/primary_text_light"
+             android:textSize="14sp"/>
+
+
+     </LinearLayout>
+
+     <LinearLayout
+         android:layout_width="match_parent"
+         android:layout_height="2dp"
+         android:paddingLeft="30dp"
+         android:paddingRight="30dp"
+         android:orientation="vertical">
+
+         <TextView
+             android:id="@+id/tv_tag_line"
+             android:layout_width="50dp"
+             android:layout_height="match_parent"
+             android:background="@color/c_style_red"/>
+
+     </LinearLayout>
+
+     <android.support.v4.view.ViewPager
+         android:id="@+id/vp_maintenance"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+     </android.support.v4.view.ViewPager>
+
+
+ </LinearLayout>
