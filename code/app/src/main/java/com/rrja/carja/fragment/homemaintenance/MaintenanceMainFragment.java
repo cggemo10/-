@@ -21,6 +21,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.adapter.MaintenanceAdapter;
 import com.rrja.carja.model.TagableElement;
+import com.rrja.carja.model.maintenance.MaintenanceOrder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     private MaintenanceAdapter maintanceAdapter;
 
-    private OnFragmentInteractionListener mListener;
+    private OnMaintenancdMainFragmentionListener mListener;
 
 
     public static MaintenanceMainFragment newInstance() {
@@ -86,6 +87,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
         toolbar.setTitle(R.string.title_activity_maintenance);
 
+        maintanceAdapter = new MaintenanceAdapter();
 
         recyclerMaintenance = (RecyclerView) view.findViewById(R.id.recycler_main_maintenance);
         recyclerMaintenance.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -131,15 +133,15 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     }
 
 
-    public interface OnFragmentInteractionListener {
+    public interface OnMaintenancdMainFragmentionListener {
 
     }
 
-    public List<TagableElement> getOrderContent() {
+    public MaintenanceOrder getOrderContent() {
         if (getActivity() != null) {
-            return ((HomeMaintenanceActivity) getActivity()).getOrderContent();
+            return ((HomeMaintenanceActivity) getActivity()).getmOrder();
         }
-        return new ArrayList<>();
+        return new MaintenanceOrder();
     }
 
 }

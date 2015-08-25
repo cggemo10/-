@@ -1,20 +1,14 @@
 package com.rrja.carja.model.maintenance;
 
 import android.text.TextUtils;
-import android.widget.ListView;
 
-import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.UserInfo;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 public class MaintenanceOrder {
@@ -52,7 +46,7 @@ public class MaintenanceOrder {
         this.orderId = orderId;
     }
 
-    public void addGoods(String serviceId, MaintenanceService service, TagableGoods goods) {
+    public void addGoods(String serviceId, MaintenanceService service, TagableSubService goods) {
 
         if (TextUtils.isEmpty(serviceId) || goods == null) {
             return;
@@ -84,13 +78,30 @@ public class MaintenanceOrder {
         for (int i = 0; i < keyArray.length; i++) {
             String key = keyArray[i];
             TagableService service = orderContent.get(key);
-            if (service.getGoodList().size() != 0) {
+            if (service.getSubServiceList().size() != 0) {
                 infoList.add(service);
-                infoList.addAll(service.getGoodList());
+                infoList.addAll(service.getSubServiceList());
             }
         }
 
         return infoList;
+    }
+
+    public int calculateTotalFee() {
+        int serviceFee = 0;
+        if (orderContent.size() != 0) {
+            Set<String> keySet = orderContent.keySet();
+            for (String key : keySet) {
+                TagableService service = orderContent.get(key);
+                serviceFee += service.calculateServiceFee();
+            }
+        }
+
+        // TODO add Coupons fees
+
+        int goodsFee = 0;
+
+        return serviceFee + goodsFee;
     }
 
 }

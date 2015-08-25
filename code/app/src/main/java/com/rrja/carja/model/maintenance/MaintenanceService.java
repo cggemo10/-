@@ -13,7 +13,7 @@ public class MaintenanceService {
     private String id;
     private String name;
     private String type;
-    private double amount;
+    private int amount;
 
     public String getParentId() {
         return parentId;
@@ -55,11 +55,11 @@ public class MaintenanceService {
         this.type = type;
     }
 
-    public double getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

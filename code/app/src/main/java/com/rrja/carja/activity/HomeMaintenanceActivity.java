@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 
 import com.rrja.carja.R;
+import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
+import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceSubServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceTagServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.TagMaintenanceFragment;
@@ -31,6 +36,7 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
     private AppCompatButton btnCommitOrder;
 
     Fragment currFragment;
+    private FragmentManager fm;
 
     private ArrayList<Fragment> tagFragmentList = new ArrayList<>();
 
@@ -47,6 +53,41 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
 
         initTags();
 
+        fm = getSupportFragmentManager();
+
+        mOrder = new MaintenanceOrder();
+        mOrder.setUserInfo(CoreManager.getManager().getCurrUser());
+        CoreManager.getManager().getUserCars();
+        MaintenanceMainFragment fragment = MaintenanceMainFragment.newInstance();
+        switchFragment(fragment, false);
+    }
+
+    private void switchFragment(BaseElementFragment fragment, boolean addToStack) {
+
+        if (fragment == null) {
+            return;
+        }
+
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.fl_maintenance_content, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!fm.popBackStackImmediate()) {
+                finish();
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public MaintenanceOrder getmOrder() {
+        return mOrder;
     }
 
     // -----------------------------------------------------------------------------------------
@@ -60,12 +101,6 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
         tagFragmentList.add(tagCosmetology);
 
         maintenancePagerAdapter = new MaintenancePagerAdapter(getSupportFragmentManager());
-    }
-
-    public List<TagableElement> getOrderContent() {
-
-        return mOrder.listOrderInfo();
-
     }
 
     public MaintenancePagerAdapter getPagerAdapter() {
@@ -133,6 +168,11 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
 
         @Override
         public void onSubServiceClicked(MaintenanceService service) {
+
+        }
+
+        @Override
+        public void requestSubService(String serviceId) {
 
         }
     }
