@@ -9,6 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
 @DatabaseTable(tableName = "car_info")
 public class CarInfo implements Parcelable{
 
+
     @DatabaseField(id = true)
     private String id;
     @DatabaseField

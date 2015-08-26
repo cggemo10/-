@@ -28,6 +28,8 @@
     <string name="str_violation_choise_city">选择城市</string>
     <string name="str_licese_plate_number">车牌号码</string>
     <string name="hint_licese_plate_number">填写车牌号码</string>
+    <string name="hint_frame_last_6">请填写车架号码后6位</string>
+    <string name="hint_engine_number">请填写引擎号</string>
     <string name="str_frame_number">车架号码</string>
     <string name="str_engine_number">发动机号</string>
     <string name="str_last_four_number">（后四位）</string>

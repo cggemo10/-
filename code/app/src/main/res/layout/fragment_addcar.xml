@@ -21,7 +21,6 @@
             android:textColor="@android:color/secondary_text_light" />
 
         <EditText
-            android:editable="false"
             android:id="@+id/txt_lable_car_series_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -30,6 +29,7 @@
             android:layout_marginRight="15dp"
             android:layout_toRightOf="@id/txt_lable_car_series"
             android:drawableRight="@drawable/icon_go"
+            android:editable="false"
             android:text="@string/title_car_series"
             android:textColor="@android:color/darker_gray" />
 
@@ -65,25 +65,94 @@
 
         <EditText
             android:id="@+id/txt_car_munber"
-            android:inputType="text"
-            android:maxLength="5"
-            android:digits="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
+            android:digits="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
             android:drawableRight="@drawable/icon_go"
             android:hint="@string/hint_licese_plate_number"
+            android:inputType="text"
+            android:maxLength="5"
+            android:textColor="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/txt_lable_car_frame_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/str_frame_number"
+            android:textColor="@android:color/secondary_text_light" />
+
+        <EditText
+            android:id="@+id/ed_car_frame_munber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:digits="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            android:layout_marginRight="15dp"
+            android:hint="@string/hint_frame_last_6"
+            android:inputType="text"
+            android:textColor="@android:color/darker_gray" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@android:color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_gravity="center_vertical"
+            android:id="@+id/txt_lable_car_engine_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:text="@string/str_engine_number"
+            android:textColor="@android:color/secondary_text_light" />
+
+        <EditText
+            android:id="@+id/ed_car_engine_munber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:digits="1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="@string/hint_engine_number"
+            android:inputType="text"
             android:textColor="@android:color/darker_gray" />
 
     </LinearLayout>
 
     <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_save_car"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:id="@+id/btn_save_car"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp"
         android:gravity="center"
         android:text="@string/str_btn_save"
         android:textSize="16sp" />
@@ -94,6 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
         android:text="@string/str_btn_delete_car"
         android:textColor="@android:color/white"

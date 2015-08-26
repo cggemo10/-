@@ -192,8 +192,17 @@ public class MaintenanceBinder extends Binder {
                         List<MaintenanceGoods> goodses = ResponseUtils.parseMaintenanceGood(goodJs.getJSONArray("data"));
                         if (goodses != null && goodses.size() > 0) {
                             CoreManager.getManager().addMaintenanceGoods(serviceId + "_" + page, goodses);
+
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA);
+                            intent.putExtra("serviceId",serviceId);
+                            mContext.sendBroadcast(intent);
+                            return;
                         }
-                        return;
+
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
+                        intent.putExtra("description", "网络异常，请稍后再试。");
+                        mContext.sendBroadcast(intent);
+
                     } else {
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_MAINTENANCE_GOODS_DATA_ERR);
                         String errMsg = null;

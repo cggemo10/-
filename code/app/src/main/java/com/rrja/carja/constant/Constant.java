@@ -24,7 +24,7 @@ public class Constant {
     public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
     public static final String ACTION_CAR_SERVICE = "rrja.request.car.service";
     public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
-    public static final String ACTION_PRODUCT_SERVICE = "rrja.request.product.service";
+    public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
 
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS = "rrja.broadcast.download.COUPONS_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT = "rrja.broadcast.download.DISCOUNT_IMG";
@@ -56,6 +56,9 @@ public class Constant {
 
     public static final String ACTION_DATA_GET_RECOMMEND = "rrja.data.goods.RECOMMEND";
     public static final String ACTION_DATA_GET_COUPONS_GOODS = "rrja.data.goods.COUPONS";
+
+    public static final String ACTION_BROADCAST_GET_USER_CARS = "rrja.data.USER_CAR";
+    public static final String ACTION_BROADCAST_GET_USER_CARS_ERR = "rrja.data.USER_CAR_ERR";
 
     public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
 

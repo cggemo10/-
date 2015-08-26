@@ -49,7 +49,7 @@ public class TagableSubService implements TagableElement {
     }
 
     public int getServiceAmount() {
-        if (subService != null && TextUtils.isEmpty(subService.getName()) && "·şÎñ·Ñ".equals(subService.getName())) {
+        if (subService != null && TextUtils.isEmpty(subService.getName()) && "æœåŠ¡è´¹".equals(subService.getName())) {
             return subService.getAmount();
         } else {
             return 0;

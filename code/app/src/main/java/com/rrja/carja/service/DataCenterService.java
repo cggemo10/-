@@ -16,6 +16,7 @@ import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.service.impl.CarBinder;
 import com.rrja.carja.service.impl.ForumBinder;
+import com.rrja.carja.service.impl.MaintenanceBinder;
 import com.rrja.carja.service.impl.ProductBinder;
 import com.rrja.carja.service.impl.UserBinder;
 import com.rrja.carja.transaction.HttpUtils;
@@ -119,8 +120,8 @@ public class DataCenterService extends Service implements Handler.Callback {
         if (Constant.ACTION_FORUM_SERVICE.equals(action)) {
             return new ForumBinder(this);
         }
-        if (Constant.ACTION_PRODUCT_SERVICE.equals(action)) {
-            return new ProductBinder(this);
+        if (Constant.ACTION_MAINTENANCE_SERVICE.equals(action)) {
+            return new MaintenanceBinder(this);
         }
 
         throw new UnsupportedOperationException("Not yet implemented");
@@ -141,6 +142,16 @@ public class DataCenterService extends Service implements Handler.Callback {
         }
     }
 
+    public void requestUserCars() {
+
+        if (CoreManager.getManager().getCurrUser() == null) {
+            return;
+        }
+
+        CoreManager.getManager().clearUserCars();
+
+        userBinder.getUserCars();
+    }
 
     private void loadCityData() {
 

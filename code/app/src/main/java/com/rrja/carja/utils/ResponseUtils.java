@@ -3,6 +3,7 @@ package com.rrja.carja.utils;
 import android.util.Log;
 
 import com.rrja.carja.model.CarBrand;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CouponGoods;
@@ -18,9 +19,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Administrator on 2015/7/23.
- */
+
 public class ResponseUtils {
 
     public static List<RecommendGoods> parseDiscountList(JSONArray discountArray) throws JSONException {
@@ -88,7 +87,7 @@ public class ResponseUtils {
                 try {
                     JSONArray cityArray = proviceJson.getJSONArray("citys");
                     if (cityArray.length() != 0) {
-                        List cityList = parseAllCity(cityArray);
+                        List<Region> cityList = parseAllCity(cityArray);
                         if (cityList != null) {
                             regions.addAll(cityList);
                         } else {
@@ -144,7 +143,7 @@ public class ResponseUtils {
 
             JSONObject seriesJson = carSeriesJson.getJSONObject(i);
             CarSeries carSeries = CarSeries.parse(seriesJson);
-            if (carSeriesList != null) {
+            if (carSeries != null) {
                 carSeriesList.add(carSeries);
             } else {
                 return null;
@@ -165,7 +164,7 @@ public class ResponseUtils {
 
             JSONObject modelJson = carModelJson.getJSONObject(i);
             CarModel carModel = CarModel.parse(modelJson);
-            if (carModelList != null) {
+            if (carModel != null) {
                 carModelList.add(carModel);
             } else {
                 return null;
@@ -219,6 +218,19 @@ public class ResponseUtils {
 
         return goodsList;
 
+    }
+
+    public static List<CarInfo> parseCarInfo(JSONArray jsonArray) throws JSONException {
+
+        if (jsonArray == null) {
+            return null;
+        }
+
+        if (jsonArray.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        return null;
     }
 
 }

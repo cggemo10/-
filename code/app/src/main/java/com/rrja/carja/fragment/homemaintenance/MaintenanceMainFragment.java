@@ -99,12 +99,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = ((HomeMaintenanceActivity)activity).getMaintenanceMainListener();
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CarStore;
@@ -46,6 +47,8 @@ public class CoreManager {
     private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
     private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
 
+    private static List<CarInfo> userCars = new ArrayList<>();
+
     private Region customRegion;
     private UserInfo currUser;
 
@@ -76,6 +79,20 @@ public class CoreManager {
 
     public void setCurrUser(UserInfo currUser) {
         this.currUser = currUser;
+    }
+
+    public void setUserCars(List<CarInfo> cars) {
+
+        if (cars == null || cars.size() == 0) {
+            return;
+        }
+
+        userCars.clear();
+        userCars.addAll(cars);
+    }
+
+    public void clearUserCars() {
+        userCars.clear();
     }
 
     public void setCostumerRegion(Region region) {
@@ -166,6 +183,10 @@ public class CoreManager {
 
     public UserInfo getCurrUser() {
         return currUser;
+    }
+
+    public List<CarInfo> getUserCars() {
+        return userCars;
     }
 
     //----------------------------------------------------------------------------------------------

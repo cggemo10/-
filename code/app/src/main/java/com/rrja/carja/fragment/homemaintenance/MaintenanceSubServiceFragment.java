@@ -5,75 +5,78 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
- import android.app.Fragment;
- import android.support.v7.widget.LinearLayoutManager;
- import android.support.v7.widget.RecyclerView;
- import android.view.LayoutInflater;
- import android.view.View;
- import android.view.ViewGroup;
- import android.widget.TextView;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
- import com.rrja.carja.R;
- import com.rrja.carja.activity.HomeMaintenanceActivity;
+import com.rrja.carja.R;
+import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
- import com.rrja.carja.model.maintenance.MaintenanceService;
+import com.rrja.carja.model.maintenance.MaintenanceService;
 
-public class MaintenanceSubServiceFragment extends Fragment {
+import java.util.List;
 
-     private SubServiceActionListener mListener;
-     private MaintenanceService maintService;
-     private SubServiceAdapter adapter;
-     private RecyclerView recyclerSub;
+public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
-     public static MaintenanceSubServiceFragment newInstance() {
-         MaintenanceSubServiceFragment fragment = new MaintenanceSubServiceFragment();
-         return fragment;
-     }
+    private SubServiceActionListener mListener;
+    private MaintenanceService maintService;
+    private SubServiceAdapter adapter;
+    private RecyclerView recyclerSub;
 
-     public MaintenanceSubServiceFragment() {
-         // Required empty public constructor
-     }
+    public static MaintenanceSubServiceFragment newInstance() {
+        MaintenanceSubServiceFragment fragment = new MaintenanceSubServiceFragment();
+        return fragment;
+    }
 
-     @Override
-     public void onCreate(Bundle savedInstanceState) {
-         super.onCreate(savedInstanceState);
-     }
+    public MaintenanceSubServiceFragment() {
+        // Required empty public constructor
+    }
 
-     @Override
-     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                              Bundle savedInstanceState) {
-         View view = inflater.inflate(R.layout.fragment_maintenance_sub, container, false);
-         initView(view);
-         return view;
-     }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
-     private void initView(View view) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_maintenance_sub, container, false);
+        initView(view);
+        return view;
+    }
 
-
-         recyclerSub = (RecyclerView) view.findViewById(R.id.recycler_maintenance_subservice);
-         recyclerSub.setLayoutManager(new LinearLayoutManager(getActivity()));
-         adapter = new SubServiceAdapter();
-         recyclerSub.setAdapter(adapter);
-     }
+    private void initView(View view) {
 
 
-     @Override
-     public void onAttach(Activity activity) {
-         super.onAttach(activity);
-         mListener = ((HomeMaintenanceActivity) activity).getSubServiceListener();
-     }
+        recyclerSub = (RecyclerView) view.findViewById(R.id.recycler_maintenance_subservice);
+        recyclerSub.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new SubServiceAdapter();
+        recyclerSub.setAdapter(adapter);
+    }
 
-     @Override
-     public void onStart() {
-         super.onStart();
-         registReceiver();
-         if (CoreManager.getManager().getMaintenanceService(maintService.getId()) == null ||
-                 CoreManager.getManager().getMaintenanceService(maintService.getId()).size() == 0) {
 
-         }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        mListener = ((HomeMaintenanceActivity) activity).getSubServiceListener();
+    }
 
-     }
+    @Override
+    public void onStart() {
+        super.onStart();
+        registReceiver();
+        if (CoreManager.getManager().getMaintenanceService(maintService.getId()) == null ||
+                CoreManager.getManager().getMaintenanceService(maintService.getId()).size() == 0) {
+
+        }
+
+    }
 
     private void registReceiver() {
 
@@ -83,79 +86,105 @@ public class MaintenanceSubServiceFragment extends Fragment {
 
     }
 
+    public void setService(MaintenanceService service) {
+        this.maintService = service;
+    }
+
     @Override
-     public void onStop() {
+    public void onStop() {
         unregistReceiver();
-         super.onStop();
-     }
+        super.onStop();
+    }
 
     @Override
-     public void onDetach() {
-         super.onDetach();
-         mListener = null;
-     }
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
 
-     public MaintenanceService getMaintService() {
-         return maintService;
-     }
+    public MaintenanceService getMaintService() {
+        return maintService;
+    }
 
-     public void setMaintService(MaintenanceService maintService) {
-         this.maintService = maintService;
-     }
+    public void setMaintService(MaintenanceService maintService) {
+        this.maintService = maintService;
+    }
 
-     public interface SubServiceActionListener {
-         public void onSubServiceClicked(MaintenanceService service);
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return false;
+    }
 
-         public void requestSubService(String serviceId);
-     }
+    public interface SubServiceActionListener {
 
-     private class SubServiceAdapter extends RecyclerView.Adapter {
+        public void onSubServiceClicked(MaintenanceService service, MaintenanceService feeService);
 
-         @Override
-         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pagerv_maintenance, null);
-             return new ServiceTV(view);
-         }
+        public void requestSubService(String serviceId);
+    }
 
-         @Override
-         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-             final MaintenanceService maintenanceService = CoreManager.getManager().getMaintenanceService(maintService.getId()).get(position);
+    private class SubServiceAdapter extends RecyclerView.Adapter {
 
-             final ServiceTV tv = (ServiceTV) holder;
-             tv.bindData(maintenanceService.getName());
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pagerv_maintenance, null);
+            return new ServiceTV(view);
+        }
 
-             tv.itemView.setOnClickListener(new View.OnClickListener() {
-                 @Override
-                 public void onClick(View v) {
-                     // TODO lock ui
-                     tv.txt.setBackgroundColor(getResources().getColor(R.color.c_style_red));
-                     notifyItemChanged(position);
-                     if (mListener != null) {
-                         mListener.onSubServiceClicked(maintenanceService);
-                     }
-                 }
-             });
-         }
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+            final MaintenanceService maintenanceService = CoreManager.getManager().getMaintenanceService(maintService.getId()).get(position);
 
-         @Override
-         public int getItemCount() {
-             return CoreManager.getManager().getMaintenanceService(maintService.getId()).size();
-         }
-     }
+            final ServiceTV tv = (ServiceTV) holder;
+            tv.bindData(maintenanceService.getName());
 
-     private class ServiceTV extends RecyclerView.ViewHolder {
+            tv.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // TODO lock ui
+                    tv.txt.setBackgroundColor(getResources().getColor(R.color.c_style_red));
+                    notifyItemChanged(position);
 
-         TextView txt;
+                    MaintenanceService feeService = adapter.getFeeService();
+                    if (mListener != null) {
+                        mListener.onSubServiceClicked(maintenanceService, feeService);
+                    }
+                }
+            });
+        }
 
-         public ServiceTV(View itemView) {
-             super(itemView);
-             txt = (TextView) itemView.findViewById(R.id.txt_item_maintenance_ele);
-         }
+        @Override
+        public int getItemCount() {
+            return CoreManager.getManager().getMaintenanceService(maintService.getId()).size();
+        }
 
-         public void bindData(String serviceName) {
-             txt.setText(serviceName);
-         }
-     }
+        private MaintenanceService getFeeService() {
+            if (CoreManager.getManager().getMaintenanceService(maintService.getId()) != null &&
+                    CoreManager.getManager().getMaintenanceService(maintService.getId()).size() != 0) {
+                List<MaintenanceService> serviceList = CoreManager.getManager().getMaintenanceService(maintService.getId());
+                for (MaintenanceService maintSe: serviceList) {
+                    if ("·þÎñ·Ñ".equals(maintSe.getName())) {
+                        return maintSe;
+                    }
+                }
+            }
+
+            return null;
+        }
+    }
+
+    private class ServiceTV extends RecyclerView.ViewHolder {
+
+        TextView txt;
+
+        public ServiceTV(View itemView) {
+            super(itemView);
+            txt = (TextView) itemView.findViewById(R.id.txt_item_maintenance_ele);
+        }
+
+        public void bindData(String serviceName) {
+            txt.setText(serviceName);
+        }
+    }
 
     private class SubServiceReceiver extends BroadcastReceiver {
 
@@ -168,9 +197,11 @@ public class MaintenanceSubServiceFragment extends Fragment {
                 }
             }
             if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR.equals(action)) {
-                if (intent.getExtras() != null || !intent.getExtras().containsKey(maintService.getId()) )
+                if (intent.getExtras() != null || !intent.getExtras().containsKey(maintService.getId())) {
+
+                }
             }
         }
     }
 
- }
+}

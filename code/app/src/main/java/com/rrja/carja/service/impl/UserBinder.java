@@ -8,6 +8,7 @@ import android.util.Log;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.UserInfo;
@@ -95,6 +96,14 @@ public class UserBinder extends Binder {
                             // TODO save auth
                             Intent intent = new Intent(Constant.ACTION_LOGIN_BY_AUTH);
                             mContext.sendBroadcast(intent);
+
+                            mContext.getHandler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mContext.requestUserCars();
+                                }
+                            });
+
                             return;
                         }
                     } else {
@@ -146,6 +155,15 @@ public class UserBinder extends Binder {
                             // TODO save auth
                             Intent intent = new Intent(Constant.ACTION_LOGIN_BY_PHONE);
                             mContext.sendBroadcast(intent);
+
+
+                            mContext.getHandler().post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mContext.requestUserCars();
+                                }
+                            });
+
                             return;
                         }
 
@@ -290,6 +308,52 @@ public class UserBinder extends Binder {
                 intent.putExtra("description", errMsg);
                 intent.putExtra("page", finalPage);
                 mContext.sendBroadcast(intent);
+            }
+        };
+
+        mContext.execute(task);
+    }
+
+    public void getUserCars() {
+
+        if (CoreManager.getManager().getCurrUser() == null) {
+
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+            intent.putExtra("usercars","usercars");
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    JSONObject userCarJs = HttpUtils.getPrivateCarList(CoreManager.getManager().getCurrUser());
+                    int code = userCarJs.getInt("code");
+                    if (code == 0) {
+
+                        List<CarInfo> carInfoList = ResponseUtils.parseCarInfo(userCarJs.getJSONArray("data"));
+                        if (carInfoList == null) {
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+                            intent.putExtra("usercars","usercars");
+                            mContext.sendBroadcast(intent);
+                            return;
+                        }
+                        CoreManager.getManager().clearUserCars();
+                        CoreManager.getManager().setUserCars(carInfoList);
+
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_USER_CARS);
+                        intent.putExtra("usercars", "usercars");
+                        mContext.sendBroadcast(intent);
+                        return;
+                    } else {
+
+                    }
+                } catch (Exception e) {
+
+                }
             }
         };
 
