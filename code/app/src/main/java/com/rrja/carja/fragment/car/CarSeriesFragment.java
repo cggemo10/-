@@ -105,6 +105,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
             getActivity().unregisterReceiver(receiver);
             receiver = null;
         }
+        DialogHelper.getHelper().dismissWatting();
         super.onStop();
     }
 

@@ -207,7 +207,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         return;
                     }
 
-                    if (!TextUtils.equals(localVerify, scuCode)) {
+                    if (!TextUtils.equals(localVerify.toLowerCase(), scuCode.toLowerCase())) {
                         Toast.makeText(this, "验证码不正确，请重新输入。", Toast.LENGTH_LONG).show();
                         refreshVerifyCode();
                         return;

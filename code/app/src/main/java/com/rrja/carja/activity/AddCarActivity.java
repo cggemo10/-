@@ -1,7 +1,10 @@
 package com.rrja.carja.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -51,6 +54,8 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
     private CarBinder carService;
 
+    private AddCarReceiver mReceiver;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,12 +102,34 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_CAR_SERVICE);
         bindService(intent, conn, BIND_AUTO_CREATE);
+        registeReceiver();
     }
+
+
 
     @Override
     protected void onDestroy() {
         unbindService(conn);
+        unRegistReceiver();
         super.onDestroy();
+    }
+
+    private void registeReceiver() {
+        if (mReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_ADD_CAR);
+            filter.addAction(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
+
+            mReceiver = new AddCarReceiver();
+            registerReceiver(mReceiver, filter);
+        }
+    }
+
+    private void unRegistReceiver() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
     }
 
     private void switchFragment(Fragment addCarFragment) {
@@ -143,7 +170,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         }
 
         @Override
-        public void onCommit(String carNumber) {
+        public void onCommit() {
             UserInfo info = CoreManager.getManager().getCurrUser();
             if (info == null) {
                 Intent intent = new Intent(AddCarActivity.this, LoginActivity.class);
@@ -151,9 +178,7 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
                 return;
             }
 
-            if (!TextUtils.isEmpty(carNumber)) {
-                carService.addCarForUser(CoreManager.getManager().getCurrUser(), carInfo, carNumber);
-            }
+            carService.addCarForUser(CoreManager.getManager().getCurrUser(), carInfo);
         }
     }
 
@@ -282,5 +307,27 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
 
     public ModelInteraction getModelInteraction() {
         return new ModelInteraction();
+    }
+
+    private class AddCarReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if(Constant.ACTION_BROADCAST_ADD_CAR_ERR.equals(action)) {
+                String errmsg = intent.getStringExtra("description");
+                Toast.makeText(context, errmsg, Toast.LENGTH_LONG).show();
+                return;
+            }
+            if (Constant.ACTION_BROADCAST_ADD_CAR.equals(action)) {
+                Toast.makeText(context, "添加成功", Toast.LENGTH_LONG).show();
+                DialogHelper.getHelper().showWaitting();
+                Intent refreshIntent = new Intent(context, DataCenterService.class);
+                refreshIntent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
+                startService(refreshIntent);
+            }
+
+        }
     }
 }

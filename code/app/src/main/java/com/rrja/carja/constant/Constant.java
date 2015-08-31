@@ -42,6 +42,9 @@ public class Constant {
     public static final String ACTION_BROADCAST_GET_CAR_MODEL = "rrja.broadcast.get.CAR_MODEL";
     public static final String ACTION_BROADCAST_GET_CAR_MODEL_ERR = "rrja.broadcast.get.CAR_MODEL_ERR";
 
+    public static final String ACTION_BROADCAST_ADD_CAR = "rrja.broadcast.add.CAR";
+    public static final String ACTION_BROADCAST_ADD_CAR_ERR = "rrja.broadcast.add.CAR_ERR";
+
     public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA = "rrja.broadcast.get.RECOMMEND_DATA";
     public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR = "rrja.broadcast.get.RECOMMEND_DATA_ERR";
 
@@ -61,6 +64,8 @@ public class Constant {
     public static final String ACTION_BROADCAST_GET_USER_CARS_ERR = "rrja.data.USER_CAR_ERR";
 
     public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
+
+    public static final String ACTION_REQUEST_REFRESH_USER_CAR = "rrja.action.REFRESH_USERCAR";
 
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";

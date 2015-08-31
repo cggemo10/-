@@ -158,11 +158,12 @@ public class UserInfo implements Parcelable {
         UserInfo info = new UserInfo();
 
         info.setAuthToken(userJson.getString("authToken"));
+        info.setAvatarPath(userJson.getString("avatar"));
         info.setId(userJson.getInt("id") + "");
-        info.setTel(userJson.getString("natTel"));
-        info.setLevel(userJson.getString("level"));
-        info.setUserType(userJson.getString("userType"));
-        info.setUserStoreId(userJson.getInt("userStoreId"));
+        info.setTel(userJson.getString("nattel"));
+//        info.setLevel(userJson.getString("level"));
+//        info.setUserType(userJson.getString("userType"));
+//        info.setUserStoreId(userJson.getInt("userStoreId"));
 
         return info;
 

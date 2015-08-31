@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -20,6 +19,8 @@ import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 
+import android.content.IntentFilter;
+
 import java.util.List;
 
 public class MaintenanceSubServiceFragment extends BaseElementFragment {
@@ -28,6 +29,8 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
     private MaintenanceService maintService;
     private SubServiceAdapter adapter;
     private RecyclerView recyclerSub;
+
+    private SubServiceReceiver mReceiver;
 
     public static MaintenanceSubServiceFragment newInstance() {
         MaintenanceSubServiceFragment fragment = new MaintenanceSubServiceFragment();
@@ -80,10 +83,21 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
     private void registReceiver() {
 
+        if (mReceiver == null) {
+
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
+            filter.addAction(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
+
+            mReceiver = new SubServiceReceiver();
+            getActivity().registerReceiver(mReceiver, filter);
+        }
     }
 
     private void unregistReceiver() {
-
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
     }
 
     public void setService(MaintenanceService service) {
@@ -161,8 +175,8 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
             if (CoreManager.getManager().getMaintenanceService(maintService.getId()) != null &&
                     CoreManager.getManager().getMaintenanceService(maintService.getId()).size() != 0) {
                 List<MaintenanceService> serviceList = CoreManager.getManager().getMaintenanceService(maintService.getId());
-                for (MaintenanceService maintSe: serviceList) {
-                    if ("·þÎñ·Ñ".equals(maintSe.getName())) {
+                for (MaintenanceService maintSe : serviceList) {
+                    if ("ï¿½ï¿½ï¿½ï¿½ï¿½".equals(maintSe.getName())) {
                         return maintSe;
                     }
                 }
@@ -186,6 +200,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
         }
     }
 
+
     private class SubServiceReceiver extends BroadcastReceiver {
 
         @Override
@@ -198,7 +213,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
             }
             if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR.equals(action)) {
                 if (intent.getExtras() != null || !intent.getExtras().containsKey(maintService.getId())) {
-
+                    // TODO
                 }
             }
         }

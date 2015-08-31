@@ -1,5 +1,7 @@
 package com.rrja.carja.transaction;
 
+import android.view.TextureView;
+
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
@@ -99,24 +101,32 @@ public class HttpUtils {
     }
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
-        String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum()).replace(" ", "%2b");
-        String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
-        String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
+        try {
+            String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(),"utf-8").replace(" ", "%2b");
+            String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
+            String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
+            String brandName = TextUtils.isEmpty(carInfo.getCarBrand().getName()) ? "" : URLEncoder.encode(carInfo.getCarBrand().getName(), "utf-8").replace(" ", "%2b");
+            String modelName = TextUtils.isEmpty(carInfo.getSeries().getSeriesName()) ? "" : URLEncoder.encode(carInfo.getCarModel().getTypeName(), "utf-8").replace(" ", "%2b");
+            String seriesName = TextUtils.isEmpty(carInfo.getSeries().getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeries().getSeriesName(), "utf-8").replace(" ", "%2b");
+            String cityId = CoreManager.getManager().getCostumerRegion() == null ?
+                    "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
 
-        String cityId = CoreManager.getManager().getCostumerRegion() == null ?
-                "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
+            String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR + "?nattel=" + userInfo.getTel() +
+                    "&authToken=" + userInfo.getAuthToken() +
+                    "&carBrandId=" + carInfo.getCarBrand().getId() +
+                    "&carBrandName=" + brandName +
+                    "&carSeriesId=" + carInfo.getSeries().getId() +
+                    "&carSeriesName=" + seriesName +
+                    "&carModelId=" + carInfo.getCarModel().getId() +
+                    "&carModelName=" + modelName +
+                    "&plateNumber=" + palteNum + "&engineno=" + engineNo +
+                    "&frameno=" + frameNo + "&citycode=" + cityId;
+            return Network.doGet(url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new JSONObject();
+        }
 
-        String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR + "?nattel=" + userInfo.getTel() +
-                "&authToken=" + userInfo.getAuthToken() +
-                "&carBrandId=" + carInfo.getCarBrand().getId() +
-                "&carBrandName=" + carInfo.getCarBrand().getName() +
-                "&carSeriesId=" + carInfo.getSeries().getId() +
-                "&carSeriesName=" + carInfo.getSeries().getSeriesName() +
-                "&carModelId=" + carInfo.getCarModel().getId() +
-                "&carModelName=" + carInfo.getCarModel().getSeriesName() +
-                "&palteNumber=" + palteNum + "&engineno=" + engineNo +
-                "&frameno=" + frameNo + "&citycode=" + cityId;
-        return Network.doGet(url);
     }
 
 

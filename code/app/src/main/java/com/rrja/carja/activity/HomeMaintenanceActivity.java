@@ -1,8 +1,11 @@
 package com.rrja.carja.activity;
 
 import android.app.ActionBar;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
@@ -30,11 +34,14 @@ import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.model.maintenance.TagableSubService;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.MaintenanceBinder;
+import com.rrja.carja.utils.DialogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeMaintenanceActivity extends AppCompatActivity {
+
+    private static final int ACTION_REQUEST_ADDCAR = 11;
 
     private MaintenanceOrder mOrder;
 
@@ -46,6 +53,7 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
     private MaintenancePagerAdapter maintenancePagerAdapter;
 
     private MaintenanceBinder mBinder;
+    private MaintenanceReceiver mReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +73,9 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
         List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
         if (carInfos != null && carInfos.size() != 0) {
             mOrder.setmCarInfo(carInfos.get(0));
+        } else {
+            Intent intent = new Intent(this, AddCarActivity.class);
+            startActivityForResult(intent, ACTION_REQUEST_ADDCAR);
         }
         MaintenanceMainFragment fragment = MaintenanceMainFragment.newInstance();
         switchFragment(fragment, false);
@@ -72,6 +83,23 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_MAINTENANCE_SERVICE);
         bindService(intent, conn, BIND_AUTO_CREATE);
+
+        DialogHelper.getHelper().init(this);
+
+        registeReceiver();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ACTION_REQUEST_ADDCAR && resultCode == RESULT_OK) {
+            DialogHelper.getHelper().init(this);
+            DialogHelper.getHelper().showWaitting();
+
+            Intent intent = new Intent(this, DataCenterService.class);
+            intent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
+            startService(intent);
+        }
     }
 
     @Override
@@ -79,7 +107,26 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
         if (mBinder != null) {
             unbindService(conn);
         }
+        unregistReceiver();
         super.onDestroy();
+    }
+
+    private void registeReceiver() {
+        if (mReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+
+            mReceiver = new MaintenanceReceiver();
+            registerReceiver(mReceiver, filter);
+        }
+    }
+
+    private void unregistReceiver() {
+        if (mReceiver != null) {
+            unregisterReceiver(mReceiver);
+            mReceiver = null;
+        }
     }
 
     private void switchFragment(BaseElementFragment fragment, boolean addToStack) {
@@ -245,7 +292,7 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
 
         @Override
         public void onGoodsCommit(TagableSubService tagableSubService) {
-            mOrder.addGoods();
+//            mOrder.addGoods();
         }
 
         @Override
@@ -260,6 +307,27 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
         public void refreshGoods() {
 
 //            CoreManager.getManager().
+        }
+    }
+
+    private class MaintenanceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            DialogHelper.getHelper().dismissWatting();
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS.equals(action)) {
+
+                List<CarInfo> userCars = CoreManager.getManager().getUserCars();
+                if (userCars.size() != 0) {
+
+                }
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
+                Toast.makeText(context, "获取车辆信息失败，请稍后再试！", Toast.LENGTH_LONG).show();
+            }
         }
     }
 }

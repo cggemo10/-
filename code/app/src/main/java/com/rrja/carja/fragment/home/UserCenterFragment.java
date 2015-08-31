@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -300,6 +301,13 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
+
+                SharedPreferences sp = context.getSharedPreferences("authsp", Context.MODE_PRIVATE);
+                SharedPreferences.Editor edit = sp.edit();
+                edit.putString("auth", intent.getStringExtra("auth"));
+                edit.putString("tel", intent.getStringExtra("tel"));
+                edit.commit();
+
                 mHandler.sendEmptyMessage(0);
             }
 

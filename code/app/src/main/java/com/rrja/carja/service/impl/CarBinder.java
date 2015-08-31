@@ -141,9 +141,9 @@ public class CarBinder extends Binder {
 
     }
 
-    public void addCarForUser(final UserInfo userInfo, final CarInfo carInfo, final String carNum) {
+    public void addCarForUser(final UserInfo userInfo, final CarInfo carInfo) {
 
-        if (userInfo == null || carInfo == null || carInfo.isDataEmpty() || TextUtils.isEmpty(carNum)) {
+        if (userInfo == null || carInfo == null || carInfo.isDataEmpty()) {
             // TODO
             return;
         }
@@ -153,7 +153,29 @@ public class CarBinder extends Binder {
             @Override
             public void run() {
 
-                HttpUtils.addPrivateCar(userInfo, carInfo);
+                JSONObject addResult = HttpUtils.addPrivateCar(userInfo, carInfo);
+                try {
+                    int code = addResult.getInt("code");
+                    if (code == 0) {
+
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_ADD_CAR);
+                        intent.putExtra("description", "OK");
+                        mContext.sendBroadcast(intent);
+
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
+                        if (addResult.has("description")) {
+                            intent.putExtra("description", addResult.getString("description"));
+                        } else {
+                            intent.putExtra("description", "网络异常，请稍后再试。");
+                        }
+                        mContext.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
+                    intent.putExtra("description", "网络异常，请稍后再试。");
+                    mContext.sendBroadcast(intent);
+                }
             }
         };
 

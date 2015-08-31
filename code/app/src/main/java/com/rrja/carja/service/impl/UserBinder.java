@@ -95,6 +95,8 @@ public class UserBinder extends Binder {
                             CoreManager.getManager().setCurrUser(info);
                             // TODO save auth
                             Intent intent = new Intent(Constant.ACTION_LOGIN_BY_AUTH);
+                            intent.putExtra("auth", info.getAuthToken());
+                            intent.putExtra("tel", info.getTel());
                             mContext.sendBroadcast(intent);
 
                             mContext.getHandler().post(new Runnable() {

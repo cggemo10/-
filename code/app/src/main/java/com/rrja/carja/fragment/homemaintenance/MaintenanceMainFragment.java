@@ -85,7 +85,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
             }
         });
 
-        toolbar.setTitle(R.string.title_activity_maintenance);
+        toolbar.setTitle(R.string.str_main_on_door);
 
         maintanceAdapter = new MaintenanceAdapter();
 

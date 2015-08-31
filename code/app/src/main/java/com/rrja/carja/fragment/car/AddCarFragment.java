@@ -133,6 +133,9 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                     return;
                 }
 
+                String carNum = prefix1 + prefix2 + txtCarNum.getText().toString();
+                carInfo.setPlatNum(carNum);
+
                 if (!TextUtils.isEmpty(edEngine.getText().toString())) {
                     carInfo.setEngineNo(edEngine.getText().toString());
                 }
@@ -141,9 +144,9 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                     carInfo.setFrameNo6(edFrame.getText().toString());
                 }
 
-                String carNum = prefix1 + prefix2 + txtCarNum.getText().toString();
+
                 if (mListener != null) {
-                    mListener.onCommit(carNum);
+                    mListener.onCommit();
                 }
                 break;
             case R.id.btn_del_car:
@@ -157,7 +160,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
 
         public void onBrandClicked();
         public void onPrefixClicked();
-        public void onCommit(String carNumber);
+        public void onCommit();
     }
 
 }
