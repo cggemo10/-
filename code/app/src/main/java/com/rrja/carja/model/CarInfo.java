@@ -2,32 +2,34 @@ package com.rrja.carja.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 @DatabaseTable(tableName = "car_info")
-public class CarInfo implements Parcelable{
+public class CarInfo implements Parcelable {
 
 
-    @DatabaseField(id = true)
-    private String id;
-    @DatabaseField
+    private String id = "0";
+    private String carImg;
+
     private String frameNo6;
-    @DatabaseField
-    private String buyTime;
-    @DatabaseField
     private String engineNo;
-    @DatabaseField
-    private String phoneNo;
-    @DatabaseField
-    private CarSeries series;
-    @DatabaseField
-    private CarBrand carBrand;
-    @DatabaseField
-    private CarModel carModel;
-    @DatabaseField
     private String platNum;
+
+    private String seriesId;
+    private String seriesName;
+
+    private String brandId;
+    private String brandName;
+
+    private String modelId;
+    private String modelName;
+
 
     public String getId() {
         return id;
@@ -45,14 +47,6 @@ public class CarInfo implements Parcelable{
         this.frameNo6 = frameNo6;
     }
 
-    public String getBuyTime() {
-        return buyTime;
-    }
-
-    public void setBuyTime(String buyTime) {
-        this.buyTime = buyTime;
-    }
-
     public String getEngineNo() {
         return engineNo;
     }
@@ -61,44 +55,68 @@ public class CarInfo implements Parcelable{
         this.engineNo = engineNo;
     }
 
-    public String getPhoneNo() {
-        return phoneNo;
+    public void setSeriesName(String name) {
+        this.seriesName = name;
     }
 
-    public void setPhoneNo(String phoneNo) {
-        this.phoneNo = phoneNo;
+    public void setSeriesId(String id) {
+        this.seriesId = id;
     }
 
-    public CarSeries getSeries() {
-        return series;
+    public void setCarBrandName(String name) {
+        this.brandName = name;
     }
 
-    public void setSeries(CarSeries seriesID) {
-        this.series = seriesID;
+    public void setCarBrandId(String id) {
+        this.brandId = id;
     }
 
-    public CarBrand getCarBrand() {
-        return carBrand;
+    public void setModelName(String name) {
+        this.modelName = name;
     }
 
-    public void setCarBrand(CarBrand carBrandID) {
-        this.carBrand = carBrandID;
-    }
-
-    public CarModel getCarModel() {
-        return carModel;
-    }
-
-    public void setCarModel(CarModel carModelID) {
-        this.carModel = carModelID;
+    public void setModelId(String id) {
+        this.modelId = id;
     }
 
     public void setPlatNum(String platNum) {
         this.platNum = platNum;
     }
 
+    public String getSeriesId() {
+        return seriesId;
+    }
+
+    public String getSeriesName() {
+        return seriesName;
+    }
+
+    public String getBrandId() {
+        return brandId;
+    }
+
+    public String getBrandName() {
+        return brandName;
+    }
+
+    public String getModelId() {
+        return modelId;
+    }
+
+    public String getModelName() {
+        return modelName;
+    }
+
     public String getPlatNum() {
         return this.platNum;
+    }
+
+    public String getCarImg() {
+        return carImg;
+    }
+
+    public void setCarImg(String carImg) {
+        this.carImg = carImg;
     }
 
     @Override
@@ -110,13 +128,16 @@ public class CarInfo implements Parcelable{
     public void writeToParcel(Parcel dest, int flags) {
 
         dest.writeString(id + "");
+        dest.writeString(carImg);
         dest.writeString(frameNo6);
-        dest.writeString(buyTime);
+
         dest.writeString(engineNo);
-        dest.writeString(phoneNo);
-        dest.writeParcelable(series, flags);
-        dest.writeParcelable(carBrand, flags);
-        dest.writeParcelable(carModel, flags);
+        dest.writeString(seriesName);
+        dest.writeString(seriesId);
+        dest.writeString(brandName);
+        dest.writeString(brandId);
+        dest.writeString(modelName);
+        dest.writeString(modelId);
         dest.writeString(platNum);
 
     }
@@ -125,17 +146,18 @@ public class CarInfo implements Parcelable{
         @Override
         public CarInfo createFromParcel(Parcel source) {
             CarInfo info = new CarInfo();
-            String id = source.readString();
-            if (!"null".equals(id)) {
-                info.setId(id);
-            }
+
+            info.setId(source.readString());
+            info.setCarImg(source.readString());
             info.setFrameNo6(source.readString());
-            info.setBuyTime(source.readString());
+
             info.setEngineNo(source.readString());
-            info.setPhoneNo(source.readString());
-            info.setSeries((CarSeries) source.readParcelable(CarSeries.class.getClassLoader()));
-            info.setCarBrand((CarBrand) source.readParcelable(CarBrand.class.getClassLoader()));
-            info.setCarModel((CarModel) source.readParcelable(CarModel.class.getClassLoader()));
+            info.setSeriesName(source.readString());
+            info.setSeriesId(source.readString());
+            info.setCarBrandName(source.readString());
+            info.setCarBrandId(source.readString());
+            info.setModelName(source.readString());
+            info.setModelId(source.readString());
             info.setPlatNum(source.readString());
             return info;
         }
@@ -147,6 +169,30 @@ public class CarInfo implements Parcelable{
     };
 
     public boolean isDataEmpty() {
-        return carBrand == null || series == null || carModel == null;
+        return TextUtils.isEmpty(brandId) || TextUtils.isEmpty(seriesId) || TextUtils.isEmpty(modelId);
+    }
+
+    public static CarInfo parse(JSONObject js) throws JSONException {
+        if (js == null || js.length() == 0) {
+            return null;
+        }
+
+        CarInfo info = new CarInfo();
+        info.setId(js.getInt("id") + "");
+        info.setCarImg(js.getString("carImage"));
+        info.setPlatNum(js.getString("plateNumber"));
+        info.setEngineNo(js.getString("engineNumber"));
+        info.setFrameNo6(js.getString("frameNumber"));
+
+        info.setCarBrandId(js.getInt("carBrandId") + "");
+        info.setCarBrandName(js.getString("carBrandName"));
+
+        info.setModelId(js.getInt("carModelId") + "");
+        info.setModelName(js.getString("carModelName"));
+
+        info.setSeriesId(js.getInt("carSeriesId") + "");
+        info.setSeriesName(js.getString("carSeriesName"));
+
+        return info;
     }
 }

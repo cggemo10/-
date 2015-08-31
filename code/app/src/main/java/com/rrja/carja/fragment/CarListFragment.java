@@ -1,15 +1,32 @@
 package com.rrja.carja.fragment;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.zip.Inflater;
 
 
 public class CarListFragment extends Fragment {
@@ -17,6 +34,10 @@ public class CarListFragment extends Fragment {
 
     private AddCarInteractionListener mListener;
 
+    private RecyclerView mRecycler;
+    private PrivateCarAdapter mAdapter;
+
+    private UserCarReceiver mReceiver;
 
     public static CarListFragment newInstance(String param1, String param2) {
         CarListFragment fragment = new CarListFragment();
@@ -35,11 +56,17 @@ public class CarListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_car_list, container, false);
+        View view = inflater.inflate(R.layout.fragment_car_list, container, false);
+        initView(view);
+        return view;
     }
 
-
+    private void initView(View view) {
+        mRecycler = (RecyclerView) view.findViewById(R.id.recycler_my_car);
+        mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mAdapter = new PrivateCarAdapter();
+        mRecycler.setAdapter(mAdapter);
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -53,13 +80,123 @@ public class CarListFragment extends Fragment {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        registReceiver();
+    }
+
+    private void registReceiver() {
+        if (mReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+
+            mReceiver = new UserCarReceiver();
+            getActivity().registerReceiver(mReceiver, filter);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        unregistReceiver();
+        super.onStop();
+    }
+
+    private void unregistReceiver() {
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+        }
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+    public void onRequestCarLogo(CarInfo carInfo) {
+
+    }
+
     public interface AddCarInteractionListener {
         public void onFragmentInteraction(CarInfo car);
+    }
+
+    private class PrivateCarAdapter extends RecyclerView.Adapter {
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_car_choise, null);
+            CarVH vh = new CarVH(view);
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            CarInfo carInfo = CoreManager.getManager().getUserCars().get(position);
+            CarVH vh = (CarVH) holder;
+            vh.bindData(carInfo);
+        }
+
+        @Override
+        public int getItemCount() {
+            return CoreManager.getManager().getUserCars().size();
+        }
+    }
+
+    private class CarVH extends RecyclerView.ViewHolder {
+
+        private ImageView imgLogo;
+        private TextView txtCarPlat;
+        private TextView txtDetal;
+
+        public CarVH(View itemView) {
+            super(itemView);
+
+            imgLogo = (ImageView) itemView.findViewById(R.id.img_car_ic);
+            txtCarPlat = (TextView) itemView.findViewById(R.id.txt_car_platnm);
+            txtDetal = (TextView) itemView.findViewById(R.id.txt_car_detial);
+        }
+
+        public void bindData(CarInfo carInfo) {
+
+            String picUrl = carInfo.getCarImg();
+            try {
+                if (!TextUtils.isEmpty(picUrl)) {
+
+                    String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1);
+
+                    File img = new File(Constant.getCarImageCacheDir(), fileName);
+                    if (img.exists()) {
+                        imgLogo.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
+                    } else {
+                        onRequestCarLogo(carInfo);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            txtCarPlat.setText(carInfo.getPlatNum());
+            txtDetal.setText(carInfo.getSeriesName() + " " + carInfo.getModelName());
+        }
+    }
+
+    private class UserCarReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS.equals(action)) {
+
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
+
+            }
+        }
     }
 
 }

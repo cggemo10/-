@@ -73,6 +73,7 @@ public class Constant {
     public static final String DIR_COUPONS = "coupons";
     public static final String DIR_FORUM = "forum";
     public static final String DIR_STORE = "store";
+    public static final String DIR_CAR_LOGO = "carLogo";
 
     public static final String ACTION_LOGIN_AFTER_HOMEMAINTENANCE = "rrja.login_HOMEMAINTENANCE";
     public static final String ACTION_LOGIN_AFTER_ONDOREWASH = "rrja.login_ONDOREWASH";
@@ -117,6 +118,17 @@ public class Constant {
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + DIR_BASE + File.separator + DIR_IMG_CACHE +
                     File.separator + DIR_FORUM + File.separator;
+        }
+
+        return path;
+    }
+
+    public static String getCarImageCacheDir() {
+        String path = "";
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + DIR_BASE + File.separator + DIR_IMG_CACHE +
+                    File.separator + DIR_CAR_LOGO + File.separator;
         }
 
         return path;

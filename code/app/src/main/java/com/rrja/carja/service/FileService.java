@@ -13,6 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.rrja.carja.constant.Constant;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
@@ -26,6 +27,7 @@ import java.util.concurrent.Executors;
 
 public class FileService extends Service implements Handler.Callback {
 
+    public static final String ACTION_IMG_CAR_LOGO = "rrja.carlogo.img";
     public static final String ACTION_IMG_COUPONS = "rrja.coupons.img";
     public static final String ACTION_IMG_DISCOUNT = "rrja.discount.img";
     public static final String ACTION_IMG_FORUM = "rrja.forum.img";
@@ -36,6 +38,7 @@ public class FileService extends Service implements Handler.Callback {
     private static final int WHAT_DISCOUNT = 11;
     private static final int WHAT_FORUM = 12;
     private static final int WHAT_STORE = 13;
+    private static final int WHAT_CARINFO = 14;
 
     private static final int MSG_DOWNLOAD_SUCC = 21;
     private static final int MSG_DOWNLOAD_FAILED = 22;
@@ -46,6 +49,7 @@ public class FileService extends Service implements Handler.Callback {
     HashMap<String, CouponGoods> loadingCouponsMap;
     HashMap<String, RecommendGoods> loadingDiscountMap;
     HashMap<String, CarStore> loadingStoreMap;
+    HashMap<String, CarInfo> loadingCarMap;
 
     private RecycleBoradcastReceiver recycleReceiver;
 
@@ -60,9 +64,11 @@ public class FileService extends Service implements Handler.Callback {
 
         mHandler = new Handler(this);
 
+
         loadingCouponsMap = new HashMap<>();
         loadingDiscountMap = new HashMap<>();
         loadingStoreMap = new HashMap<>();
+        loadingCarMap = new HashMap<>();
 
         registRecycleReceiver();
     }
@@ -116,6 +122,17 @@ public class FileService extends Service implements Handler.Callback {
                 executor.execute(task);
             }
 
+        }
+
+        if (ACTION_IMG_CAR_LOGO.equals(action)) {
+            Bundle extras = intent.getExtras();
+            CarInfo carInfo = extras.getParcelable("car");
+            if (carInfo != null && !TextUtils.isEmpty(carInfo.getId()) && !loadingCarMap.containsKey(carInfo.getId())) {
+                loadingCarMap.put(carInfo.getId(), carInfo);
+
+                CarImgTask task = new CarImgTask(carInfo);
+                executor.execute(task);
+            }
         }
 
         if (ACTION_APP_CLOSE.equals(action)) {
@@ -172,6 +189,13 @@ public class FileService extends Service implements Handler.Callback {
                 }
                 loadingStoreMap.remove(storeKey);
                 break;
+            case WHAT_CARINFO:
+                String carKey = (String) msg.obj;
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
+                }
+                loadingStoreMap.remove(carKey);
+
         }
         return false;
     }
@@ -290,6 +314,42 @@ public class FileService extends Service implements Handler.Callback {
 
                        }
                    }
+
+    private class CarImgTask implements Runnable {
+
+        CarInfo carInfo;
+
+        CarImgTask(CarInfo info) {
+            this.carInfo = info;
+        }
+
+        @Override
+        public void run() {
+
+            Message msg = mHandler.obtainMessage(WHAT_CARINFO);
+            msg.obj = carInfo.getId();
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
+            } else {
+                String path = Environment.getExternalStorageDirectory().getPath() +
+                        File.separatorChar + Constant.DIR_BASE + File.separator +
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_CAR_LOGO + File.separator;
+
+                String url = carInfo.getCarImg();
+
+                boolean result = HttpUtils.getPicture(url, path);
+
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
+            }
+            msg.sendToTarget();
+
+        }
+    }
+
 
     private void sendBroadCast(String action) {
         Intent intent = new Intent(action);

@@ -94,8 +94,8 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
         super.onStart();
         AddCarActivity mActivity = (AddCarActivity)getActivity();
         CarInfo carInfo = mActivity.getCarInfo();
-        if (carInfo.getSeries() != null && carInfo.getCarBrand() != null && carInfo.getCarModel() != null) {
-            String seriesInfo = carInfo.getCarBrand().getName() + " " + carInfo.getCarModel().getSeriesName();
+        if (!TextUtils.isEmpty(carInfo.getSeriesId()) && !TextUtils.isEmpty(carInfo.getBrandId()) && !TextUtils.isEmpty(carInfo.getModelId())) {
+            String seriesInfo = carInfo.getBrandName() + " " + carInfo.getModelName();
             txtSeries.setText(seriesInfo);
         }
     }
@@ -124,7 +124,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
             case R.id.btn_save_car:
                 AddCarActivity mActivity = (AddCarActivity)getActivity();
                 CarInfo carInfo = mActivity.getCarInfo();
-                if (carInfo.getCarBrand() == null || carInfo.getSeries() ==null || carInfo.getCarModel() == null) {
+                if (TextUtils.isEmpty(carInfo.getBrandId()) || TextUtils.isEmpty(carInfo.getSeriesId()) || TextUtils.isEmpty(carInfo.getModelId())) {
                     Toast.makeText(getActivity(), "请选择您的车型。", Toast.LENGTH_LONG).show();
                     return;
                 }

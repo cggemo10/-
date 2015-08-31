@@ -105,19 +105,19 @@ public class HttpUtils {
             String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(),"utf-8").replace(" ", "%2b");
             String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
             String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
-            String brandName = TextUtils.isEmpty(carInfo.getCarBrand().getName()) ? "" : URLEncoder.encode(carInfo.getCarBrand().getName(), "utf-8").replace(" ", "%2b");
-            String modelName = TextUtils.isEmpty(carInfo.getSeries().getSeriesName()) ? "" : URLEncoder.encode(carInfo.getCarModel().getTypeName(), "utf-8").replace(" ", "%2b");
-            String seriesName = TextUtils.isEmpty(carInfo.getSeries().getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeries().getSeriesName(), "utf-8").replace(" ", "%2b");
+            String brandName = TextUtils.isEmpty(carInfo.getBrandName()) ? "" : URLEncoder.encode(carInfo.getBrandName(), "utf-8").replace(" ", "%2b");
+            String modelName = TextUtils.isEmpty(carInfo.getModelName()) ? "" : URLEncoder.encode(carInfo.getModelName(), "utf-8").replace(" ", "%2b");
+            String seriesName = TextUtils.isEmpty(carInfo.getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeriesName(), "utf-8").replace(" ", "%2b");
             String cityId = CoreManager.getManager().getCostumerRegion() == null ?
                     "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
 
             String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR + "?nattel=" + userInfo.getTel() +
                     "&authToken=" + userInfo.getAuthToken() +
-                    "&carBrandId=" + carInfo.getCarBrand().getId() +
+                    "&carBrandId=" + carInfo.getBrandId() +
                     "&carBrandName=" + brandName +
-                    "&carSeriesId=" + carInfo.getSeries().getId() +
+                    "&carSeriesId=" + carInfo.getSeriesId() +
                     "&carSeriesName=" + seriesName +
-                    "&carModelId=" + carInfo.getCarModel().getId() +
+                    "&carModelId=" + carInfo.getModelId() +
                     "&carModelName=" + modelName +
                     "&plateNumber=" + palteNum + "&engineno=" + engineNo +
                     "&frameno=" + frameNo + "&citycode=" + cityId;

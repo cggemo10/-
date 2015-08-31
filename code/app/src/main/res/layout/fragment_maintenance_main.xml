@@ -13,7 +13,7 @@
 
     <include
         android:id="@+id/view_my_car"
-        layout="@layout/view_car_choise"
+        layout="@layout/item_car_choise"
         android:layout_width="match_parent"
         android:layout_height="80dp" />
 

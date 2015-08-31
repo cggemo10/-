@@ -242,7 +242,9 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onSeriesSelected(CarSeries series) {
 
-            carInfo.setSeries(series);
+            carInfo.setSeriesName(series.getSeriesName());
+            carInfo.setSeriesId(series.getId());
+
             List<CarModel> modelList = CoreManager.getManager().getCarModelsBySeriesId(series.getId());
             modelFragment.setSeriesId(series.getId());
             modelFragment.setModelData(modelList);
@@ -265,7 +267,9 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onBrandSelected(CarBrand brand) {
 
-            carInfo.setCarBrand(brand);
+            carInfo.setCarBrandId(brand.getId());
+            carInfo.setCarBrandName(brand.getName());
+
             List<CarSeries> seriesList = CoreManager.getManager().getCarSeriesByBrandId(brand.getId());
             seriesFragment.setSeriesData(seriesList);
             seriesFragment.setBrandId(brand.getId());
@@ -283,7 +287,8 @@ public class AddCarActivity extends BaseActivity implements View.OnClickListener
         @Override
         public void onModelSelected(CarModel model) {
 
-            carInfo.setCarModel(model);
+            carInfo.setModelName(model.getTypeName());
+            carInfo.setModelId(model.getId());
 
             for(int i = 0; i < fragmentManager.getBackStackEntryCount() - 1; ++i) {
                 fragmentManager.popBackStack();
