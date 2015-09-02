@@ -6,13 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +18,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.BaseActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
+import com.rrja.carja.service.DataCenterService;
+import com.rrja.carja.service.FileService;
+import com.rrja.carja.utils.DialogHelper;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.zip.Inflater;
 
 
 public class CarListFragment extends Fragment {
@@ -45,7 +45,6 @@ public class CarListFragment extends Fragment {
     }
 
     public CarListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -82,6 +81,14 @@ public class CarListFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        getActivity().setTitle(R.string.str_txt_setting_mycar);
+        if (CoreManager.getManager().getUserCars() == null || CoreManager.getManager().getUserCars().size() == 0) {
+            Intent intent = new Intent(getActivity(), DataCenterService.class);
+            intent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
+            getActivity().startService(intent);
+
+            DialogHelper.getHelper().showWaitting();
+        }
         registReceiver();
     }
 
@@ -115,11 +122,14 @@ public class CarListFragment extends Fragment {
     }
 
     public void onRequestCarLogo(CarInfo carInfo) {
-
+        Intent intent = new Intent(getActivity(), FileService.class);
+        intent.setAction(FileService.ACTION_IMG_CAR_LOGO);
+        intent.putExtra("car", carInfo);
+        getActivity().startService(intent);
     }
 
     public interface AddCarInteractionListener {
-        public void onFragmentInteraction(CarInfo car);
+        public void onCarSelected(CarInfo car);
     }
 
     private class PrivateCarAdapter extends RecyclerView.Adapter {
@@ -134,9 +144,18 @@ public class CarListFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            CarInfo carInfo = CoreManager.getManager().getUserCars().get(position);
+            final CarInfo carInfo = CoreManager.getManager().getUserCars().get(position);
             CarVH vh = (CarVH) holder;
             vh.bindData(carInfo);
+
+            vh.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onCarSelected(carInfo);
+                    }
+                }
+            });
         }
 
         @Override
@@ -188,13 +207,15 @@ public class CarListFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            DialogHelper.getHelper().dismissWatting();
+
             String action = intent.getAction();
             if (Constant.ACTION_BROADCAST_GET_USER_CARS.equals(action)) {
-
+                mAdapter.notifyDataSetChanged();
             }
 
             if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
-
+                mAdapter.notifyDataSetChanged();
             }
         }
     }

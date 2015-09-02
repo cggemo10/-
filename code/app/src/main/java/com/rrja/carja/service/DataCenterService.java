@@ -80,6 +80,10 @@ public class DataCenterService extends Service implements Handler.Callback {
                 int page = intent.getIntExtra("page", 0);
                 userBinder.getCouponsGoods(page);
             }
+
+            if (Constant.ACTION_REQUEST_REFRESH_USER_CAR.equals(action)) {
+                userBinder.getUserCars();
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);

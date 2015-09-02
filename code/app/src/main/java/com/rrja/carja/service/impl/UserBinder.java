@@ -351,10 +351,22 @@ public class UserBinder extends Binder {
                         mContext.sendBroadcast(intent);
                         return;
                     } else {
-
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+                        String errMg = null;
+                        if (userCarJs.has("description")) {
+                            errMg = userCarJs.getString("description");
+                        } else {
+                            errMg = mContext.getString(R.string.str_err_net);
+                        }
+                        intent.putExtra("description", errMg);
+                        mContext.sendBroadcast(intent);
                     }
                 } catch (Exception e) {
-
+                    e.printStackTrace();
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+                    String errMg = mContext.getString(R.string.str_err_net);
+                    intent.putExtra("description", errMg);
+                    mContext.sendBroadcast(intent);
                 }
             }
         };

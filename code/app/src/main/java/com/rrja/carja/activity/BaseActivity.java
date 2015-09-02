@@ -1,5 +1,6 @@
 package com.rrja.carja.activity;
 
+import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.utils.DialogHelper;
 
 /**
  * Created by chongge on 15/5/27.
@@ -43,5 +45,11 @@ public class BaseActivity extends AppCompatActivity {
         if (toolbarTitle != null) {
             toolbarTitle.setText(title);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        DialogHelper.getHelper().init(this);
     }
 }

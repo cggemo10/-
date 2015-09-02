@@ -39,7 +39,7 @@ import com.rrja.carja.utils.DialogHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeMaintenanceActivity extends AppCompatActivity {
+public class HomeMaintenanceActivity extends BaseActivity {
 
     private static final int ACTION_REQUEST_ADDCAR = 11;
 
@@ -58,10 +58,7 @@ public class HomeMaintenanceActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.hide();
-        }
+
         setContentView(R.layout.activity_home_maintenance);
 
         initTags();
