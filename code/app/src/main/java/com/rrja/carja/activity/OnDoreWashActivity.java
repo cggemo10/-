@@ -34,7 +34,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(this, AddCarActivity.class);
+        Intent intent = new Intent(this, CarInfoActivity.class);
         startActivity(intent);
     }
 }

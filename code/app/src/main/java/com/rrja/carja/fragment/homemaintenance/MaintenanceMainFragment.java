@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.adapter.MaintenanceAdapter;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 
@@ -63,30 +64,6 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     private void initView(View view) {
 
-        View t = view.findViewById(R.id.titlebar);
-
-        toolbar = (Toolbar) t;
-        llloc = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
-        txtLoc = (TextView) llloc.findViewById(R.id.txt_location);
-        if (txtLoc != null) {
-            txtLoc.setVisibility(View.GONE);
-        }
-        toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
-
-        ImageView imgAdd = (ImageView) llloc.findViewById(R.id.img_loc);
-        imgAdd.setImageResource(R.drawable.icon_add);
-        imgAdd.setOnClickListener(this);
-
-        toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getActivity().finish();
-            }
-        });
-
-        toolbar.setTitle(R.string.str_main_on_door);
-
         maintanceAdapter = new MaintenanceAdapter();
 
         recyclerMaintenance = (RecyclerView) view.findViewById(R.id.recycler_main_maintenance);
@@ -100,6 +77,16 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mListener = ((HomeMaintenanceActivity)activity).getMaintenanceMainListener();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle(R.string.str_main_on_door);
+        MaintenanceOrder order = ((HomeMaintenanceActivity) getActivity()).getOrderInfo();
+        if (order != null) {
+            maintanceAdapter.setOrder(order);
+        }
     }
 
     @Override

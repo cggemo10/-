@@ -56,7 +56,6 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
     private void initView(View view) {
 
-
         recyclerSub = (RecyclerView) view.findViewById(R.id.recycler_maintenance_subservice);
         recyclerSub.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new SubServiceAdapter();

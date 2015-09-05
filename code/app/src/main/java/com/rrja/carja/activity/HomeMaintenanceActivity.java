@@ -1,6 +1,5 @@
 package com.rrja.carja.activity;
 
-import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -14,13 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.car.CarListFragment;
 import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceGoodsFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
@@ -29,6 +28,7 @@ import com.rrja.carja.fragment.homemaintenance.MaintenanceTagServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.TagMaintenanceFragment;
 import com.rrja.carja.fragment.homemaintenance.TagServiceActionListener;
 import com.rrja.carja.model.CarInfo;
+import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.model.maintenance.TagableSubService;
@@ -41,7 +41,7 @@ import java.util.List;
 
 public class HomeMaintenanceActivity extends BaseActivity {
 
-    private static final int ACTION_REQUEST_ADDCAR = 11;
+    private static final int ACTION_REQUEST_CAR = 11;
 
     private MaintenanceOrder mOrder;
 
@@ -67,15 +67,6 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         mOrder = new MaintenanceOrder();
         mOrder.setUserInfo(CoreManager.getManager().getCurrUser());
-        List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
-        if (carInfos != null && carInfos.size() != 0) {
-            mOrder.setmCarInfo(carInfos.get(0));
-        } else {
-            Intent intent = new Intent(this, AddCarActivity.class);
-            startActivityForResult(intent, ACTION_REQUEST_ADDCAR);
-        }
-        MaintenanceMainFragment fragment = MaintenanceMainFragment.newInstance();
-        switchFragment(fragment, false);
 
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_MAINTENANCE_SERVICE);
@@ -84,12 +75,24 @@ public class HomeMaintenanceActivity extends BaseActivity {
         DialogHelper.getHelper().init(this);
 
         registeReceiver();
+
+        MaintenanceMainFragment fragment = MaintenanceMainFragment.newInstance();
+        switchFragment(fragment, false);
+
+        List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
+        if (carInfos != null && carInfos.size() == 1) {
+            mOrder.setmCarInfo(carInfos.get(0));
+        } else {
+            Intent intentCarInfo = new Intent(this, CarInfoActivity.class);
+            startActivityForResult(intentCarInfo,ACTION_REQUEST_CAR);
+        }
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ACTION_REQUEST_ADDCAR && resultCode == RESULT_OK) {
+        if (requestCode == ACTION_REQUEST_CAR && resultCode == RESULT_OK) {
             DialogHelper.getHelper().init(this);
             DialogHelper.getHelper().showWaitting();
 
@@ -131,11 +134,35 @@ public class HomeMaintenanceActivity extends BaseActivity {
         if (fragment == null) {
             return;
         }
-
+        currFragment = fragment;
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.replace(R.id.fl_maintenance_content, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void setCarInfo(CarInfo carInfo) {
+        if (mOrder != null) {
+            mOrder.setmCarInfo(carInfo);
+        }
+    }
+
+
+    public void addOrderGoods(MaintenanceService service, MaintenanceService subService,
+                              MaintenanceService feeService, MaintenanceGoods goods) {
+        if (subService != null && feeService != null && service != null && goods != null && mOrder != null) {
+            TagableSubService tagService = new TagableSubService();
+            tagService.setSubService(subService);
+            tagService.setGoods(goods);
+
+            service.setAmount(feeService.getAmount());
+
+            mOrder.addGoods(service.getId(), service, tagService);
+        }
+    }
+
+    public MaintenanceOrder getOrderInfo() {
+        return mOrder;
     }
 
     @Override

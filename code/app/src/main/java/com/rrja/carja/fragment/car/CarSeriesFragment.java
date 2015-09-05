@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.AddCarActivity;
+import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.adapter.CarSeriesAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -74,7 +74,7 @@ public class CarSeriesFragment extends Fragment implements CarSeriesAdapter.OnSe
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((AddCarActivity)activity).getSeriesInteraction();
+        mListener = ((CarInfoActivity)activity).getSeriesInteraction();
     }
 
     @Override

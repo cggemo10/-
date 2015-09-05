@@ -5,29 +5,7 @@
     android:paddingLeft="15dp"
     android:paddingRight="15dp"
     android:orientation="vertical"
-    tools:context="com.rrja.carja.fragment.CarListFragment">
-
-    <LinearLayout
-        android:id="@+id/ll_violate_my_car"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:showDividers="middle">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="20dp"
-            android:text="我的爱车"
-            android:textColor="@android:color/darker_gray" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@android:color/darker_gray" />
-
-    </LinearLayout>
+    tools:context="com.rrja.carja.fragment.car.CarListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:layout_marginTop="10dp"

@@ -18,7 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.AddCarActivity;
+import com.rrja.carja.activity.CarInfoActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -113,7 +113,7 @@ public class CarNumberPrefixPickerFragment extends Fragment implements View.OnCl
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((AddCarActivity)activity).getPrefixFragmentInteraction();
+        mListener = ((CarInfoActivity)activity).getPrefixFragmentInteraction();
     }
 
     @Override

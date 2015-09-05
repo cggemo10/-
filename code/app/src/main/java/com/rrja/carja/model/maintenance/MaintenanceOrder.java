@@ -46,21 +46,21 @@ public class MaintenanceOrder {
         this.orderId = orderId;
     }
 
-    public void addGoods(String serviceId, MaintenanceService service, TagableSubService goods) {
+    public void addGoods(String serviceId, MaintenanceService service, TagableSubService subService) {
 
-        if (TextUtils.isEmpty(serviceId) || goods == null) {
+        if (TextUtils.isEmpty(serviceId) || subService == null) {
             return;
         }
 
         if (orderContent.containsKey(serviceId) && orderContent.get(serviceId) != null) {
 
             TagableService tagableService = orderContent.get(serviceId);
-            tagableService.addTagableGood(goods);
+            tagableService.addTagableGood(subService);
             return;
         } else if (service != null){
             TagableService tagableService = new TagableService();
             tagableService.setService(service);
-            tagableService.addTagableGood(goods);
+            tagableService.addTagableGood(subService);
             orderContent.put(serviceId, tagableService);
         }
     }
@@ -71,17 +71,14 @@ public class MaintenanceOrder {
             return new ArrayList();
         }
 
-        ArrayList<TagableElement> infoList = new ArrayList<>();
+        ArrayList<TagableService> infoList = new ArrayList<>();
 
         Set<String> keySet = orderContent.keySet();
         String[] keyArray = (String[]) keySet.toArray();
         for (int i = 0; i < keyArray.length; i++) {
             String key = keyArray[i];
             TagableService service = orderContent.get(key);
-            if (service.getSubServiceList().size() != 0) {
-                infoList.add(service);
-                infoList.addAll(service.getSubServiceList());
-            }
+            infoList.add(service);
         }
 
         return infoList;

@@ -230,7 +230,17 @@ public class ResponseUtils {
             return new ArrayList<>();
         }
 
-        return null;
+        ArrayList<CarInfo> carList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject carJson = jsonArray.getJSONObject(i);
+            CarInfo car = CarInfo.parse(carJson);
+            if (car != null) {
+                carList.add(car);
+            }
+        }
+
+        return carList;
     }
 
 }

@@ -1,4 +1,4 @@
-package com.rrja.carja.fragment;
+package com.rrja.carja.fragment.car;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -6,11 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,9 +19,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.BaseActivity;
+import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.adapter.decoration.CarBrandDecoration;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
@@ -29,17 +32,17 @@ import com.rrja.carja.utils.DialogHelper;
 import java.io.File;
 
 
-public class CarListFragment extends Fragment {
+public class CarListFragment extends BaseElementFragment {
 
 
-    private AddCarInteractionListener mListener;
+    private CarListInteractionListener mListener;
 
     private RecyclerView mRecycler;
     private PrivateCarAdapter mAdapter;
 
     private UserCarReceiver mReceiver;
 
-    public static CarListFragment newInstance(String param1, String param2) {
+    public static CarListFragment newInstance() {
         CarListFragment fragment = new CarListFragment();
         return fragment;
     }
@@ -65,17 +68,13 @@ public class CarListFragment extends Fragment {
         mRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
         mAdapter = new PrivateCarAdapter();
         mRecycler.setAdapter(mAdapter);
+        mRecycler.addItemDecoration(new CarBrandDecoration(getActivity(),CarBrandDecoration.VERTICAL_LIST));
     }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (AddCarInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+        mListener = ((CarInfoActivity) activity).getCarListListener();
     }
 
     @Override
@@ -128,7 +127,12 @@ public class CarListFragment extends Fragment {
         getActivity().startService(intent);
     }
 
-    public interface AddCarInteractionListener {
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        return false;
+    }
+
+    public interface CarListInteractionListener {
         public void onCarSelected(CarInfo car);
     }
 

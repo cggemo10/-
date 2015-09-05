@@ -28,7 +28,7 @@ public class TagableSubService implements TagableElement {
         return subService;
     }
 
-    public void setSubServiceId(MaintenanceService subService) {
+    public void setSubService(MaintenanceService subService) {
         this.subService = subService;
     }
 

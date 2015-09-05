@@ -5,24 +5,10 @@
     android:orientation="vertical"
     tools:context="com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment">
 
-    <include
-             android:id="@+id/titlebar"
-             layout="@layout/view_toolbar"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content" />
-
-    <include
-        android:id="@+id/view_my_car"
-        layout="@layout/item_car_choise"
-        android:layout_width="match_parent"
-        android:layout_height="80dp" />
-
-
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_main_maintenance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/view_my_car"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginTop="5dp" />

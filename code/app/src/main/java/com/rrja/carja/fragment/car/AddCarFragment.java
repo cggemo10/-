@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.AddCarActivity;
+import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarSeries;
 
@@ -58,7 +58,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View v) {
-        AddCarActivity mActivity = (AddCarActivity)getActivity();
+        CarInfoActivity mActivity = (CarInfoActivity)getActivity();
         txtSeries = (EditText) v.findViewById(R.id.txt_lable_car_series_content);
         txtSeries.setOnClickListener(this);
         txtCarNum = (EditText) v.findViewById(R.id.txt_car_munber);
@@ -86,13 +86,13 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((AddCarActivity)activity).getAddCarInteraction();
+        mListener = ((CarInfoActivity)activity).getAddCarInteraction();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        AddCarActivity mActivity = (AddCarActivity)getActivity();
+        CarInfoActivity mActivity = (CarInfoActivity)getActivity();
         CarInfo carInfo = mActivity.getCarInfo();
         if (!TextUtils.isEmpty(carInfo.getSeriesId()) && !TextUtils.isEmpty(carInfo.getBrandId()) && !TextUtils.isEmpty(carInfo.getModelId())) {
             String seriesInfo = carInfo.getBrandName() + " " + carInfo.getModelName();
@@ -122,7 +122,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_save_car:
-                AddCarActivity mActivity = (AddCarActivity)getActivity();
+                CarInfoActivity mActivity = (CarInfoActivity)getActivity();
                 CarInfo carInfo = mActivity.getCarInfo();
                 if (TextUtils.isEmpty(carInfo.getBrandId()) || TextUtils.isEmpty(carInfo.getSeriesId()) || TextUtils.isEmpty(carInfo.getModelId())) {
                     Toast.makeText(getActivity(), "请选择您的车型。", Toast.LENGTH_LONG).show();
