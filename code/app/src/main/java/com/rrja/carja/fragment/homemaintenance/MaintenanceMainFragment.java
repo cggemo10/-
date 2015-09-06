@@ -1,6 +1,10 @@
 package com.rrja.carja.fragment.homemaintenance;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,17 +22,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.adapter.MaintenanceAdapter;
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
+import com.rrja.carja.model.maintenance.TagableService;
+import com.rrja.carja.model.maintenance.TagableSubService;
+import com.rrja.carja.service.FileService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class MaintenanceMainFragment extends BaseElementFragment implements View.OnClickListener {
+public class MaintenanceMainFragment extends BaseElementFragment implements View.OnClickListener, MaintenanceAdapter.MaintenanceListener {
 
     private Toolbar toolbar;
     private TextView toolbarTitle;
@@ -39,6 +48,8 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     private MaintenanceAdapter maintanceAdapter;
 
     private OnMaintenancdMainFragmentionListener mListener;
+
+    private MaintenanceReceiver mReceiver;
 
 
     public static MaintenanceMainFragment newInstance() {
@@ -65,6 +76,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     private void initView(View view) {
 
         maintanceAdapter = new MaintenanceAdapter();
+        maintanceAdapter.setListener(this);
 
         recyclerMaintenance = (RecyclerView) view.findViewById(R.id.recycler_main_maintenance);
         recyclerMaintenance.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -82,10 +94,35 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     @Override
     public void onStart() {
         super.onStart();
+        registReceiver();
         getActivity().setTitle(R.string.str_main_on_door);
         MaintenanceOrder order = ((HomeMaintenanceActivity) getActivity()).getOrderInfo();
         if (order != null) {
             maintanceAdapter.setOrder(order);
+        }
+    }
+
+    @Override
+    public void onStop() {
+        unregistReceiver();
+        super.onStop();
+    }
+
+    private void registReceiver() {
+
+        if (mReceiver == null) {
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO);
+
+            mReceiver = new MaintenanceReceiver();
+            getActivity().registerReceiver(mReceiver, filter);
+        }
+    }
+
+    private void unregistReceiver() {
+        if (mReceiver != null) {
+            getActivity().unregisterReceiver(mReceiver);
+            mReceiver = null;
         }
     }
 
@@ -115,6 +152,8 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     }
 
 
+
+
     public interface OnMaintenancdMainFragmentionListener {
 
     }
@@ -124,6 +163,47 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
             return ((HomeMaintenanceActivity) getActivity()).getmOrder();
         }
         return new MaintenanceOrder();
+    }
+
+    private class MaintenanceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String action = intent.getAction();
+            if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO.equals(action)) {
+                maintanceAdapter.notifyItemChanged(0);
+            }
+        }
+    }
+
+    // ----------------------------------------------------------------------------------
+    @Override
+    public void onRequestCarLogo(CarInfo carInfo) {
+        Intent intent = new Intent(getActivity(), FileService.class);
+        intent.setAction(FileService.ACTION_IMG_CAR_LOGO);
+        intent.putExtra("car", carInfo);
+        getActivity().startService(intent);
+    }
+
+    @Override
+    public void onCarClicked() {
+        Intent intentCarInfo = new Intent(getActivity(), CarInfoActivity.class);
+        startActivityForResult(intentCarInfo, HomeMaintenanceActivity.ACTION_REQUEST_CAR);
+    }
+
+    @Override
+    public void onMaintenanceServiceDelete(TagableService service, int position) {
+        if (mListener != null) {
+            mListener.removeService(service);
+        }
+    }
+
+    @Override
+    public void onMaintenanceSubServiceDelete(TagableService service, TagableSubService subService, int position) {
+        if (mListener != null) {
+            mListener.removeSubService(service, subService);
+        }
     }
 
 }

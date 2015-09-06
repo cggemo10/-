@@ -56,16 +56,18 @@ public class MaintenanceOrder {
 
             TagableService tagableService = orderContent.get(serviceId);
             tagableService.addTagableGood(subService);
-            return;
-        } else if (service != null){
+
+        } else if (service != null) {
+
             TagableService tagableService = new TagableService();
             tagableService.setService(service);
             tagableService.addTagableGood(subService);
             orderContent.put(serviceId, tagableService);
+
         }
     }
 
-    public List listOrderInfo() {
+    public List<TagableService> listOrderInfo() {
 
         if (orderContent.size() == 0) {
             return new ArrayList();

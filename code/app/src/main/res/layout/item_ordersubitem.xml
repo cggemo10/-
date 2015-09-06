@@ -1,37 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:padding="5dp"
-    android:background="@android:color/white"
-    android:layout_height="wrap_content">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white"
+                android:padding="5dp">
 
     <TextView
-        android:text="aaaaa"
         android:id="@+id/txt_order_sub_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/c_style_red" />
+        android:text="aaaaa"
+        android:textColor="@color/c_style_red"/>
 
     <TextView
-        android:layout_marginLeft="10dp"
-        android:text="bbbb"
-        android:layout_below="@id/txt_order_sub_name"
         android:id="@+id/txt_order_goods_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/txt_order_sub_name"
+        android:layout_marginLeft="10dp"
         android:gravity="center"
-        android:textColor="@color/c_style_red" />
+        android:text="bbbb"
+        android:textColor="@color/c_style_red"/>
 
-    <TextView
-        android:layout_alignBottom="@id/txt_order_goods_name"
-        android:id="@+id/txt_order_goods_fee"
+    <LinearLayout
+        android:padding="5dp"
         android:layout_width="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/txt_order_goods_name"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:gravity="center_vertical"
-        android:text="￥5"
-        android:textColor="@color/c_style_red" />
+        android:layout_marginRight="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txt_order_goods_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:gravity="center_vertical"
+            android:text="￥5"
+            android:textColor="@color/c_style_red"/>
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/img_sub_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_del"/>
+
+
+    </LinearLayout>
+
 
 </RelativeLayout>

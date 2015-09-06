@@ -41,7 +41,7 @@ import java.util.List;
 
 public class HomeMaintenanceActivity extends BaseActivity {
 
-    private static final int ACTION_REQUEST_CAR = 11;
+    public static final int ACTION_REQUEST_CAR = 11;
 
     private MaintenanceOrder mOrder;
 

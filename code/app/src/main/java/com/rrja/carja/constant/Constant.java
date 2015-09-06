@@ -30,6 +30,7 @@ public class Constant {
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT = "rrja.broadcast.download.DISCOUNT_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_FORUM = "rrja.broadcast.download.FORUM_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_STORE = "rrja.broadcast.download.STORE_IMG";
+    public static final String ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO = "rrja.broadcast.download.CAR_LOGO";
 
     public static final String ACTION_BROADCAST_REFRESH_REGION = "rrja.boradcast.refresh.REGIONS";
     public static final String ACTION_BROADCAST_REFRESH_REGION_ERROR = "rrja.boradcast.refresh.REGIONS_ERROR";

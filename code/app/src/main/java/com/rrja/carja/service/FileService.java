@@ -192,7 +192,7 @@ public class FileService extends Service implements Handler.Callback {
             case WHAT_CARINFO:
                 String carKey = (String) msg.obj;
                 if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
-                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO);
                 }
                 loadingStoreMap.remove(carKey);
 
