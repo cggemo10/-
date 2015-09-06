@@ -32,6 +32,8 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
     private MaintenanceOrder orderInfo;
     private List<TagableService> serviceList;
 
+    private MaintenanceListener mListener;
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -81,6 +83,10 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
         this.orderInfo = order;
         this.serviceList = orderInfo.listOrderInfo();
         notifyDataSetChanged();
+    }
+
+    public void setListener(MaintenanceListener listener) {
+        this.mListener = listener;
     }
 
     private class OrderVH extends RecyclerView.ViewHolder {
@@ -147,8 +153,8 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
                         File img = new File(Constant.getCarImageCacheDir(), fileName);
                         if (img.exists()) {
                             imgLogo.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));
-                        } else {
-                            onRequestCarLogo(carInfo);
+                        } else if (mListener != null) {
+                            mListener.onRequestCarLogo(carInfo);
                         }
                     }
                 } catch (Exception e) {
@@ -159,5 +165,12 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
                 txtDetal.setText(carInfo.getSeriesName() + " " + carInfo.getModelName());
             }
         }
+    }
+
+    public interface MaintenanceListener {
+        void onRequestCarLogo(CarInfo carInfo);
+        void onCarClicked();
+        void onMaintenanceServiceClicked(TagableService service, int position);
+        void onMaintenanceServiceDelete(TagableService service, int position);
     }
 }

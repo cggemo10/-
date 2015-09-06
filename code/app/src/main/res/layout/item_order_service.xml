@@ -61,6 +61,7 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:textSize="18sp"
             android:gravity="center_vertical"
             android:text="￥5"
             android:layout_alignParentRight="true"
