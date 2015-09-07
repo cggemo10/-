@@ -2,6 +2,8 @@ package com.rrja.carja.model.maintenance;
 
 import android.text.TextUtils;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.UserInfo;
@@ -11,13 +13,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+@DatabaseTable
 public class MaintenanceOrder {
 
     public static final int TAG_ORDER_SERVICE = 23;
     public static final int TAG_ORDER_GOODS = 30;
 
+    @DatabaseField(id = true)
+    private String id;
+    @DatabaseField(unique = true)
+    private String orderID;
+    @DatabaseField
     private UserInfo userInfo;
+    @DatabaseField
     private CarInfo mCarInfo;
+    @DatabaseField
     private HashMap<String, TagableService> orderContent = new HashMap<>();
 
     private String orderId;

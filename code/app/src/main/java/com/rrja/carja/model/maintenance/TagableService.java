@@ -1,13 +1,19 @@
 package com.rrja.carja.model.maintenance;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
 
 import java.util.ArrayList;
 
+@DatabaseTable
 public class TagableService implements TagableElement {
 
+    @DatabaseField
     private MaintenanceService service;
+    @DatabaseField
     private ArrayList<TagableSubService> subServiceList = new ArrayList<>();
+    @DatabaseField
     private int serviceAmount;
 
     @Override
