@@ -54,6 +54,7 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_addcar,container, false);
         initView(v);
+
         return v;
     }
 

@@ -9,22 +9,14 @@ import org.json.JSONObject;
 /**
  * Created by chongge on 15/7/5.
  */
-@DatabaseTable
+
 public class MaintenanceGoods {
 
-    @DatabaseField(id = true)
     private String id;
-    @DatabaseField
-    private String goodsId;
-    @DatabaseField
     private String content;
-    @DatabaseField
     private String detail;
-    @DatabaseField
     private int discountPrice;
-    @DatabaseField
     private int price;
-    @DatabaseField
     private String name;
 
     public String getContent() {
@@ -75,13 +67,7 @@ public class MaintenanceGoods {
         this.id = id;
     }
 
-    public String getGoodsId() {
-        return goodsId;
-    }
 
-    public void setGoodsId(String goodsId) {
-        this.goodsId = goodsId;
-    }
 
     public static MaintenanceGoods parse(JSONObject goodsJson) throws JSONException{
 
@@ -89,7 +75,7 @@ public class MaintenanceGoods {
         goods.setContent(goodsJson.getString("content"));
         goods.setDiscountPrice(goodsJson.getInt("discountPrice"));
         goods.setPrice(goodsJson.getInt("price"));
-        goods.setGoodsId(goodsJson.getString("id"));
+        goods.setId(goodsJson.getString("id"));
         return goods;
     }
 }

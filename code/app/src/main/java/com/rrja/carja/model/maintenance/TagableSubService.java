@@ -8,14 +8,9 @@ import com.rrja.carja.model.TagableElement;
 
 import org.json.JSONObject;
 
-@DatabaseTable
 public class TagableSubService implements TagableElement {
-
-    @DatabaseField(id = true)
-    private String id;
-    @DatabaseField
+    
     private MaintenanceGoods goods;
-    @DatabaseField
     private MaintenanceService subService;
 
     @Override
