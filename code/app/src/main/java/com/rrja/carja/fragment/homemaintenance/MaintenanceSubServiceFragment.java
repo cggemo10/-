@@ -74,6 +74,8 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
         if (adapter == null) {
             adapter = new SubServiceAdapter();
             recyclerSub.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
         }
         registReceiver();
         getActivity().setTitle(maintService.getName());
@@ -147,7 +149,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_maintenance_multi_checkable, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_maintenance_multi_checkable, parent, false);
             return new ServiceTV(view);
         }
 
