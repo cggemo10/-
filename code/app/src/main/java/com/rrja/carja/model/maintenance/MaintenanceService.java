@@ -71,6 +71,8 @@ public class MaintenanceService {
         service.setLevel(serviceJson.getString("level"));
         service.setAmount(serviceJson.getInt("price"));
         service.setType(serviceJson.getString("type"));
+        service.setName(serviceJson.getString("name"));
+
         return service;
     }
 }

@@ -101,11 +101,25 @@ public class MaintenanceOrder {
             }
         }
 
-        // TODO add Coupons fees
+        return serviceFee;
+    }
 
-        int goodsFee = 0;
+    public void removeService(String serviceId) {
+        if (orderContent.containsKey(serviceId)) {
+            orderContent.remove(serviceId);
+        }
+    }
 
-        return serviceFee + goodsFee;
+    public void removeSubService(String serviceId, TagableSubService subService) {
+        if (!orderContent.containsKey(serviceId)) {
+            return;
+        }
+
+        TagableService tagableService = orderContent.get(serviceId);
+        tagableService.removeSubService(subService);
+        if (tagableService.getSubServiceList().size() == 0) {
+            removeService(serviceId);
+        }
     }
 
 }

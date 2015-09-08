@@ -96,6 +96,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         super.onStart();
         registReceiver();
         getActivity().setTitle(R.string.str_main_on_door);
+        ((HomeMaintenanceActivity)getActivity()).showAddIcon();
         MaintenanceOrder order = ((HomeMaintenanceActivity) getActivity()).getOrderInfo();
         if (order != null) {
             maintanceAdapter.setOrder(order);
@@ -151,11 +152,11 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         return false;
     }
 
-
-
-
     public interface OnMaintenancdMainFragmentionListener {
 
+        void removeService(MaintenanceMainFragment fragment, TagableService service);
+        void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
+        void onCarClicked();
     }
 
     public MaintenanceOrder getOrderContent() {
@@ -188,21 +189,24 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     @Override
     public void onCarClicked() {
-        Intent intentCarInfo = new Intent(getActivity(), CarInfoActivity.class);
-        startActivityForResult(intentCarInfo, HomeMaintenanceActivity.ACTION_REQUEST_CAR);
+        if (mListener != null) {
+            mListener.onCarClicked();
+        }
     }
 
     @Override
     public void onMaintenanceServiceDelete(TagableService service, int position) {
         if (mListener != null) {
-            mListener.removeService(service);
+            mListener.removeService(this, service);
+            maintanceAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onMaintenanceSubServiceDelete(TagableService service, TagableSubService subService, int position) {
         if (mListener != null) {
-            mListener.removeSubService(service, subService);
+            mListener.removeSubService(this, service, subService);
+            maintanceAdapter.notifyItemChanged(position);
         }
     }
 

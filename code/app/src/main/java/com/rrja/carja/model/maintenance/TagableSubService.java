@@ -66,4 +66,22 @@ public class TagableSubService implements TagableElement {
         }
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof TagableSubService) {
+            TagableSubService oService = (TagableSubService) o;
+            if (this.getSubServiceId() != null && oService.getSubServiceId() != null) {
+                if (this.getSubServiceId().equals(oService.getSubServiceId())) {
+                    return true;
+                }
+                return false;
+            } else {
+                if (this.getSubServiceId() == null && oService.getSubServiceId() == null) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

@@ -58,6 +58,15 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
             } else {
                 vh.bindData(orderInfo.getmCarInfo());
             }
+
+            vh.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                       mListener.onCarClicked();
+                    }
+                }
+            });
         } else {
 
             TagableService tagableService = serviceList.get(position - 1);

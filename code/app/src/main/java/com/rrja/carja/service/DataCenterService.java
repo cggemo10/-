@@ -17,7 +17,6 @@ import com.rrja.carja.model.Region;
 import com.rrja.carja.service.impl.CarBinder;
 import com.rrja.carja.service.impl.ForumBinder;
 import com.rrja.carja.service.impl.MaintenanceBinder;
-import com.rrja.carja.service.impl.ProductBinder;
 import com.rrja.carja.service.impl.UserBinder;
 import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;

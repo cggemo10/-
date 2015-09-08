@@ -51,11 +51,28 @@ public class TagableService implements TagableElement {
         if (subServiceList.size() != 0) {
             for (TagableSubService service : subServiceList) {
                 if ("服务费".equals(service.getServiceName())) {
-                    serviceAmount = service.getServiceAmount();
+                    serviceAmount += service.getServiceAmount();
+                } else {
+                    if (service.getGoods() != null) {
+                        serviceAmount += service.getGoods().getPrice();
+                    }
                 }
             }
         }
 
         return serviceAmount;
+    }
+
+    public void removeSubService(TagableSubService subService) {
+        if (subServiceList.contains(subService)) {
+            subServiceList.remove(subService);
+        }
+
+        if (subServiceList.size() == 1) {
+            TagableSubService mayFeeSubService = subServiceList.get(0);
+            if ("服务费".equals(mayFeeSubService.getServiceName())) {
+                subServiceList.remove(mayFeeSubService);
+            }
+        }
     }
 }
