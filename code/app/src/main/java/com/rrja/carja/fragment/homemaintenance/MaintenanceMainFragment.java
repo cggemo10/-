@@ -151,11 +151,9 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         return false;
     }
 
-
-
-
     public interface OnMaintenancdMainFragmentionListener {
-
+        void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
+        void removeService(MaintenanceMainFragment fragment, TagableService service);
     }
 
     public MaintenanceOrder getOrderContent() {
@@ -195,14 +193,16 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     @Override
     public void onMaintenanceServiceDelete(TagableService service, int position) {
         if (mListener != null) {
-            mListener.removeService(service);
+            mListener.removeService(this, service);
+            maintanceAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
     public void onMaintenanceSubServiceDelete(TagableService service, TagableSubService subService, int position) {
         if (mListener != null) {
-            mListener.removeSubService(service, subService);
+            mListener.removeSubService(this, service, subService);
+            maintanceAdapter.notifyItemChanged(position);
         }
     }
 

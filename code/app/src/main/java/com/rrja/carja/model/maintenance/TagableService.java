@@ -1,19 +1,17 @@
 package com.rrja.carja.model.maintenance;
 
+import android.graphics.Paint;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
 
 import java.util.ArrayList;
 
-@DatabaseTable
 public class TagableService implements TagableElement {
 
-    @DatabaseField
     private MaintenanceService service;
-    @DatabaseField
     private ArrayList<TagableSubService> subServiceList = new ArrayList<>();
-    @DatabaseField
     private int serviceAmount;
 
     @Override
@@ -38,6 +36,14 @@ public class TagableService implements TagableElement {
         if (subServiceList.contains(subService)) {
             subServiceList.remove(subService);
         }
+
+        if (subServiceList.size() == 1) {
+            TagableSubService mayFeeubService = subServiceList.get(0);
+            if ("服务费".equals(mayFeeubService.getServiceName())) {
+                subServiceList.remove(mayFeeubService);
+            }
+        }
+
     }
 
     public ArrayList<TagableSubService> getSubServiceList() {
@@ -51,7 +57,9 @@ public class TagableService implements TagableElement {
         if (subServiceList.size() != 0) {
             for (TagableSubService service : subServiceList) {
                 if ("服务费".equals(service.getServiceName())) {
-                    serviceAmount = service.getServiceAmount();
+                    serviceAmount += service.getServiceAmount();
+                } else {
+                    serviceAmount += service.getGoods().getPrice();
                 }
             }
         }

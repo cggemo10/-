@@ -31,6 +31,7 @@ import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
+import com.rrja.carja.model.maintenance.TagableService;
 import com.rrja.carja.model.maintenance.TagableSubService;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.MaintenanceBinder;
@@ -293,6 +294,15 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
     private class MaintenActionListener implements MaintenanceMainFragment.OnMaintenancdMainFragmentionListener {
 
+        @Override
+        public void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService) {
+            // TODO
+        }
+
+        @Override
+        public void removeService(MaintenanceMainFragment fragment,TagableService service) {
+            // TODO
+        }
     }
 
     private ServiceConnection conn = new ServiceConnection() {

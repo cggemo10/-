@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
-@DatabaseTable
 public class MaintenanceOrder {
 
     public static final int TAG_ORDER_SERVICE = 23;
@@ -106,6 +105,24 @@ public class MaintenanceOrder {
         int goodsFee = 0;
 
         return serviceFee + goodsFee;
+    }
+
+    public void removeService(String serviceId) {
+        if (orderContent.containsKey(serviceId)) {
+            orderContent.remove(serviceId);
+        }
+    }
+
+    public void removeSubService(String serviceId, TagableSubService subService) {
+        TagableService service = orderContent.get(serviceId);
+        if (service != null) {
+            service.removeTagableGood(subService);
+            if (service.getSubServiceList().size() == 0) {
+                removeService(serviceId);
+            }
+
+            calculateTotalFee();
+        }
     }
 
 }

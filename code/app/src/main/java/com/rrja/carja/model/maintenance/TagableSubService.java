@@ -9,7 +9,7 @@ import com.rrja.carja.model.TagableElement;
 import org.json.JSONObject;
 
 public class TagableSubService implements TagableElement {
-    
+
     private MaintenanceGoods goods;
     private MaintenanceService subService;
 
