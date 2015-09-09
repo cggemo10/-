@@ -58,8 +58,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
         recyclerSub = (RecyclerView) view.findViewById(R.id.recycler_maintenance_subservice);
         recyclerSub.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new SubServiceAdapter();
-        recyclerSub.setAdapter(adapter);
+
     }
 
 
@@ -72,10 +71,20 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (adapter == null) {
+            adapter = new SubServiceAdapter();
+            recyclerSub.setAdapter(adapter);
+        } else {
+            adapter.notifyDataSetChanged();
+        }
         registReceiver();
+        getActivity().setTitle(maintService.getName());
+        ((HomeMaintenanceActivity)getActivity()).dismissAddIcon();
         if (CoreManager.getManager().getMaintenanceService(maintService.getId()) == null ||
                 CoreManager.getManager().getMaintenanceService(maintService.getId()).size() == 0) {
-
+            if (mListener != null) {
+                mListener.requestSubService(maintService.getId());
+            }
         }
 
     }
@@ -96,6 +105,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
     private void unregistReceiver() {
         if (mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
+            mReceiver = null;
         }
     }
 
@@ -139,7 +149,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_pagerv_maintenance, null);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_maintenance_multi_checkable, parent, false);
             return new ServiceTV(view);
         }
 
@@ -175,7 +185,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
                     CoreManager.getManager().getMaintenanceService(maintService.getId()).size() != 0) {
                 List<MaintenanceService> serviceList = CoreManager.getManager().getMaintenanceService(maintService.getId());
                 for (MaintenanceService maintSe : serviceList) {
-                    if ("�����".equals(maintSe.getName())) {
+                    if ("服务费".equals(maintSe.getName())) {
                         return maintSe;
                     }
                 }
@@ -206,14 +216,11 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA.equals(action)) {
-                if (intent.getExtras() != null && intent.getExtras().containsKey(maintService.getId())) {
-                    adapter.notifyDataSetChanged();
-                }
+                adapter.notifyDataSetChanged();
             }
             if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR.equals(action)) {
-                if (intent.getExtras() != null || !intent.getExtras().containsKey(maintService.getId())) {
-                    // TODO
-                }
+                // TODO
+
             }
         }
     }

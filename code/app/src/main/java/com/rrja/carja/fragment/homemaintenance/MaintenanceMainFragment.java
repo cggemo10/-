@@ -96,6 +96,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         super.onStart();
         registReceiver();
         getActivity().setTitle(R.string.str_main_on_door);
+        ((HomeMaintenanceActivity)getActivity()).showAddIcon();
         MaintenanceOrder order = ((HomeMaintenanceActivity) getActivity()).getOrderInfo();
         if (order != null) {
             maintanceAdapter.setOrder(order);
@@ -152,8 +153,10 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     }
 
     public interface OnMaintenancdMainFragmentionListener {
-        void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
+
         void removeService(MaintenanceMainFragment fragment, TagableService service);
+        void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
+        void onCarClicked();
     }
 
     public MaintenanceOrder getOrderContent() {
@@ -186,8 +189,9 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     @Override
     public void onCarClicked() {
-        Intent intentCarInfo = new Intent(getActivity(), CarInfoActivity.class);
-        startActivityForResult(intentCarInfo, HomeMaintenanceActivity.ACTION_REQUEST_CAR);
+        if (mListener != null) {
+            mListener.onCarClicked();
+        }
     }
 
     @Override

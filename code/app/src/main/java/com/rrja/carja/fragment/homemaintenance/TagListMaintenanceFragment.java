@@ -13,6 +13,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
@@ -22,21 +25,21 @@ import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 
 
-public class TagMaintenanceFragment extends Fragment {
+public class TagListMaintenanceFragment extends Fragment {
 
     private String serviceTag = "101";
 
-    private RecyclerView maintenanceRv;
-    private TagAdapter tagAdapter;
+    private ListView maintenanceRv;
+    private TagListAdapter tagAdapter;
 
     private TagServiceActionListener mListener;
     private TagServiceReceiver mReceiver;
 
-    public TagMaintenanceFragment() {
+    public TagListMaintenanceFragment() {
     }
 
-    public static TagMaintenanceFragment newInstance(String serviceTag) {
-        TagMaintenanceFragment fragment = new TagMaintenanceFragment();
+    public static TagListMaintenanceFragment newInstance(String serviceTag) {
+        TagListMaintenanceFragment fragment = new TagListMaintenanceFragment();
         fragment.setServiceTag(serviceTag);
         return fragment;
     }
@@ -45,18 +48,25 @@ public class TagMaintenanceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.item_pagerv_maintenance, null);
+        View view = inflater.inflate(R.layout.item_pagerv_maintenance_list, null);
         initView(view);
         return view;
     }
 
     private void initView(View view) {
 
-        tagAdapter = new TagAdapter();
+        tagAdapter = new TagListAdapter();
 
-        maintenanceRv = (RecyclerView) view.findViewById(R.id.recycler_item_pv_maintenance);
-        maintenanceRv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        maintenanceRv = (ListView) view.findViewById(R.id.list_item_pv_maintenance);
         maintenanceRv.setAdapter(tagAdapter);
+        maintenanceRv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                view.setBackgroundColor(getResources().getColor(R.color.c_style_red));
+                MaintenanceService service = CoreManager.getManager().getMaintenanceService(serviceTag).get(position);
+                mListener.onServiceClicked(service);
+            }
+        });
     }
 
     @Override
@@ -73,11 +83,15 @@ public class TagMaintenanceFragment extends Fragment {
         ((HomeMaintenanceActivity)getActivity()).dismissAddIcon();
         if (CoreManager.getManager().getMaintenanceService(serviceTag).size() == 0) {
             mListener.requestService(serviceTag);
-        } else {
-            tagAdapter.notifyDataSetChanged();
         }
 
         registReceiver();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        tagAdapter.notifyDataSetChanged();
     }
 
     private void registReceiver() {
@@ -120,6 +134,46 @@ public class TagMaintenanceFragment extends Fragment {
         this.serviceTag = serviceTag;
     }
 
+    private class TagListAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return CoreManager.getManager().getMaintenanceService(serviceTag).size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return CoreManager.getManager().getMaintenanceService(serviceTag).get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ListHolder holder = null;
+            if (convertView == null) {
+                convertView = getActivity().getLayoutInflater().inflate(R.layout.item_maintenance_multi_checkable, null);
+                holder = new ListHolder();
+                holder.txt = (TextView) convertView.findViewById(R.id.txt_item_maintenance_ele);
+                convertView.setTag(holder);
+            } else {
+                holder = (ListHolder) convertView.getTag();
+            }
+
+            MaintenanceService service = CoreManager.getManager().getMaintenanceService(serviceTag).get(position);
+            holder.txt.setText(service.getName());
+            return convertView;
+        }
+
+        private class ListHolder {
+            TextView txt;
+        }
+    }
+
+    /*
     private class TagAdapter extends RecyclerView.Adapter {
 
              @Override
@@ -167,7 +221,7 @@ public class TagMaintenanceFragment extends Fragment {
                  textView.setText(serviceName);
              }
          }
-
+    */
     private class TagServiceReceiver extends BroadcastReceiver {
 
              @Override

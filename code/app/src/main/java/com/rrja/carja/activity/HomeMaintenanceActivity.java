@@ -14,6 +14,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
@@ -24,8 +27,8 @@ import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceGoodsFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceSubServiceFragment;
+import com.rrja.carja.fragment.homemaintenance.MaintenanceTagListServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceTagServiceFragment;
-import com.rrja.carja.fragment.homemaintenance.TagMaintenanceFragment;
 import com.rrja.carja.fragment.homemaintenance.TagServiceActionListener;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
@@ -37,7 +40,6 @@ import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.MaintenanceBinder;
 import com.rrja.carja.utils.DialogHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class HomeMaintenanceActivity extends BaseActivity {
@@ -49,12 +51,10 @@ public class HomeMaintenanceActivity extends BaseActivity {
     Fragment currFragment;
     private FragmentManager fm;
 
-    private ArrayList<Fragment> tagFragmentList = new ArrayList<>();
-
-    private MaintenancePagerAdapter maintenancePagerAdapter;
-
     private MaintenanceBinder mBinder;
     private MaintenanceReceiver mReceiver;
+
+    private ImageView imgAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +62,29 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         setContentView(R.layout.activity_home_maintenance);
 
-        initTags();
+        if (llloc != null) {
+            imgAdd = (ImageView) llloc.findViewById(R.id.img_loc);
+            imgAdd.setImageResource(R.drawable.icon_add);
+            imgAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    MaintenanceTagListServiceFragment fragment = MaintenanceTagListServiceFragment.newInstance();
+                    switchFragment(fragment, true);
+                }
+            });
+
+            TextView txt = (TextView) llloc.findViewById(R.id.txt_location);
+            txt.setVisibility(View.GONE);
+        }
+
+
+        toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         fm = getSupportFragmentManager();
 
@@ -85,7 +107,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
             mOrder.setmCarInfo(carInfos.get(0));
         } else {
             Intent intentCarInfo = new Intent(this, CarInfoActivity.class);
-            startActivityForResult(intentCarInfo,ACTION_REQUEST_CAR);
+            startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
         }
 
     }
@@ -95,11 +117,9 @@ public class HomeMaintenanceActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == ACTION_REQUEST_CAR && resultCode == RESULT_OK) {
             DialogHelper.getHelper().init(this);
-            DialogHelper.getHelper().showWaitting();
 
-            Intent intent = new Intent(this, DataCenterService.class);
-            intent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
-            startService(intent);
+            CarInfo carInfo = data.getParcelableExtra("car");
+            mOrder.setmCarInfo(carInfo);
         }
     }
 
@@ -182,43 +202,6 @@ public class HomeMaintenanceActivity extends BaseActivity {
         return mOrder;
     }
 
-    // -----------------------------------------------------------------------------------------
-    private void initTags() {
-        Fragment tagMaintenance = TagMaintenanceFragment.newInstance("101");
-        Fragment tagRepair = TagMaintenanceFragment.newInstance("102");
-        Fragment tagCosmetology = TagMaintenanceFragment.newInstance("103");
-
-        tagFragmentList.add(tagMaintenance);
-        tagFragmentList.add(tagRepair);
-        tagFragmentList.add(tagCosmetology);
-
-        maintenancePagerAdapter = new MaintenancePagerAdapter(getSupportFragmentManager());
-    }
-
-    public MaintenancePagerAdapter getPagerAdapter() {
-        return maintenancePagerAdapter;
-    }
-
-
-    public class MaintenancePagerAdapter extends FragmentPagerAdapter {
-
-
-        public MaintenancePagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return tagFragmentList.get(position);
-        }
-
-
-        @Override
-        public int getCount() {
-            return tagFragmentList.size();
-        }
-    }
-
     //-------------------------------------------------------------------------------------
     public TagServiceActionListener getTagServiceListener() {
         return new TagServiceListener();
@@ -237,7 +220,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
         public void onServiceClicked(MaintenanceService service) {
             MaintenanceSubServiceFragment subServiceFm = MaintenanceSubServiceFragment.newInstance();
             subServiceFm.setService(service);
-            switchFragment(subServiceFm,true);
+            switchFragment(subServiceFm, true);
         }
     }
 
@@ -254,6 +237,29 @@ public class HomeMaintenanceActivity extends BaseActivity {
         }
     }
 
+    // -------------------------------------------------------------------------------
+    public MaintenanceTagListServiceFragment.MaintenanceTagActionListener getTagListActionListener() {
+        return new TagListActionListener();
+    }
+
+    private class TagListActionListener implements MaintenanceTagListServiceFragment.MaintenanceTagActionListener {
+
+
+        @Override
+        public void requestService(String serviceId) {
+            if (mBinder != null) {
+                mBinder.getService(serviceId);
+            }
+        }
+
+        @Override
+        public void onServiceClicked(MaintenanceService service) {
+            MaintenanceSubServiceFragment subServiceFm = MaintenanceSubServiceFragment.newInstance();
+            subServiceFm.setService(service);
+            switchFragment(subServiceFm, true);
+        }
+    }
+
     //---------------------------------------------------------------------------------
 
     public MaintenanceSubServiceFragment.SubServiceActionListener getSubServiceListener() {
@@ -265,6 +271,10 @@ public class HomeMaintenanceActivity extends BaseActivity {
         @Override
         public void onSubServiceClicked(MaintenanceService service, MaintenanceService feeService) {
             if (service == null) {
+                return;
+            }
+
+            if (service == feeService) {
                 return;
             }
 
@@ -295,13 +305,23 @@ public class HomeMaintenanceActivity extends BaseActivity {
     private class MaintenActionListener implements MaintenanceMainFragment.OnMaintenancdMainFragmentionListener {
 
         @Override
-        public void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService) {
-            // TODO
+        public void removeService(MaintenanceMainFragment fragment, TagableService service) {
+            String serviceId = service.getService().getId();
+            mOrder.removeService(serviceId);
         }
 
         @Override
-        public void removeService(MaintenanceMainFragment fragment,TagableService service) {
-            // TODO
+        public void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService) {
+
+            String serviceId = service.getService().getId();
+            mOrder.removeSubService(serviceId, subService);
+        }
+
+        @Override
+        public void onCarClicked() {
+            Intent intentCarInfo = new Intent(HomeMaintenanceActivity.this, CarInfoActivity.class);
+            startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
+
         }
     }
 
@@ -362,6 +382,18 @@ public class HomeMaintenanceActivity extends BaseActivity {
             if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
                 Toast.makeText(context, "获取车辆信息失败，请稍后再试！", Toast.LENGTH_LONG).show();
             }
+        }
+    }
+
+    public void showAddIcon() {
+        if (imgAdd != null) {
+            imgAdd.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void dismissAddIcon() {
+        if (imgAdd != null) {
+            imgAdd.setVisibility(View.GONE);
         }
     }
 }

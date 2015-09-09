@@ -100,11 +100,22 @@ public class MaintenanceOrder {
             }
         }
 
-        // TODO add Coupons fees
+        return serviceFee;
+    }
 
-        int goodsFee = 0;
 
-        return serviceFee + goodsFee;
+    public void removeSubService(String serviceId, TagableSubService subService) {
+        if (!orderContent.containsKey(serviceId)) {
+            return;
+        }
+
+        TagableService tagableService = orderContent.get(serviceId);
+        tagableService.removeSubService(subService);
+        if (tagableService.getSubServiceList().size() == 0) {
+            removeService(serviceId);
+        }
+
+        calculateTotalFee();
     }
 
     public void removeService(String serviceId) {
@@ -113,16 +124,5 @@ public class MaintenanceOrder {
         }
     }
 
-    public void removeSubService(String serviceId, TagableSubService subService) {
-        TagableService service = orderContent.get(serviceId);
-        if (service != null) {
-            service.removeTagableGood(subService);
-            if (service.getSubServiceList().size() == 0) {
-                removeService(serviceId);
-            }
-
-            calculateTotalFee();
-        }
-    }
 
 }
