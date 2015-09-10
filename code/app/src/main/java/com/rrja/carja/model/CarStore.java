@@ -6,6 +6,9 @@ import android.os.Parcelable;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by chongge on 15/6/27.
  */
@@ -123,25 +126,11 @@ public class CarStore implements Parcelable {
         this.lng = lng;
     }
 
-    /**
-     * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
-     *
-     * @return a bitmask indicating the set of special object types marshalled
-     * by the Parcelable.
-     */
     @Override
     public int describeContents() {
         return 0;
     }
 
-    /**
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest  The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     *              May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
@@ -182,4 +171,14 @@ public class CarStore implements Parcelable {
             return new CarStore[size];
         }
     };
+
+
+    public String cacluteDistance() {
+        return "--";
+    }
+
+    public static CarStore parse(JSONObject storeJs) throws JSONException {
+
+        return null;
+    }
 }

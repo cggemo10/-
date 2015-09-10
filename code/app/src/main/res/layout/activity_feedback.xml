@@ -2,6 +2,7 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/c_bg_base"
                 tools:context="com.jayangche.carja.activity.FeedbackActivity">
 
     <include
@@ -11,9 +12,13 @@
         android:layout_height="wrap_content"/>
 
     <EditText
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:id="@+id/ed_feedback_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/hint_feed_back_title"
         android:singleLine="true"
         android:layout_below="@id/titlebar"
         android:background="@android:color/white"
@@ -22,6 +27,8 @@
         android:paddingRight="@dimen/activity_horizontal_margin"/>
 
     <android.support.v7.widget.AppCompatButton
+        android:text="@string/str_commit"
+        android:layout_margin="@dimen/activity_vertical_margin"
         android:backgroundTint="@color/c_style_red"
         android:id="@+id/btn_feedback_commit"
         android:layout_width="match_parent"
@@ -29,6 +36,10 @@
         android:layout_alignParentBottom="true"/>
 
     <EditText
+        android:hint="@string/hint_feed_back_content"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
         android:id="@+id/ed_feedback_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

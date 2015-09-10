@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -255,6 +256,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.rl_setting_feedback:
+                Intent intent = new Intent(getActivity(), FeedbackActivity.class);
+                startActivity(intent);
                 break;
         }
     }
