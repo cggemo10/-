@@ -39,11 +39,8 @@ import java.util.List;
 
 public class MaintenanceMainFragment extends BaseElementFragment implements View.OnClickListener, MaintenanceAdapter.MaintenanceListener {
 
-    private Toolbar toolbar;
-    private TextView toolbarTitle;
-    private LinearLayout llloc;
-    private TextView txtLoc;
     private RecyclerView recyclerMaintenance;
+    private AppCompatButton btnCommit;
 
     private MaintenanceAdapter maintanceAdapter;
 
@@ -82,6 +79,8 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         recyclerMaintenance.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerMaintenance.setAdapter(maintanceAdapter);
 
+        btnCommit = (AppCompatButton) view.findViewById(R.id.btn_commit_order);
+        btnCommit.setOnClickListener(this);
     }
 
 
@@ -137,8 +136,10 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.img_loc) {
-            // TODO switch service choise
+        if (id == R.id.btn_commit_order) {
+            if (mListener != null) {
+                mListener.onOrderCommit();
+            }
         }
 
     }
@@ -157,6 +158,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         void removeService(MaintenanceMainFragment fragment, TagableService service);
         void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
         void onCarClicked();
+        void onOrderCommit();
     }
 
     public MaintenanceOrder getOrderContent() {

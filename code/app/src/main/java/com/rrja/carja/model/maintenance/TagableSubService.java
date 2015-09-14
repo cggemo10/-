@@ -1,5 +1,7 @@
 package com.rrja.carja.model.maintenance;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -8,7 +10,7 @@ import com.rrja.carja.model.TagableElement;
 
 import org.json.JSONObject;
 
-public class TagableSubService implements TagableElement {
+public class TagableSubService implements TagableElement, Parcelable {
 
     private MaintenanceGoods goods;
     private MaintenanceService subService;
@@ -26,7 +28,7 @@ public class TagableSubService implements TagableElement {
         this.goods = goods;
     }
 
-    public MaintenanceService getSubServiceId() {
+    public MaintenanceService getSubService() {
         return subService;
     }
 
@@ -50,15 +52,15 @@ public class TagableSubService implements TagableElement {
         }
     }
 
-    public int getServiceAmount() {
-        if (subService != null && TextUtils.isEmpty(subService.getName()) && "服务费".equals(subService.getName())) {
+    public double getServiceAmount() {
+        if (subService != null && !TextUtils.isEmpty(subService.getName()) && "服务费".equals(subService.getName())) {
             return subService.getAmount();
         } else {
             return 0;
         }
     }
 
-    public int calculateGoodsFee() {
+    public double calculateGoodsFee() {
         if (goods != null) {
             return goods.getPrice();
         } else {
@@ -71,17 +73,44 @@ public class TagableSubService implements TagableElement {
     public boolean equals(Object o) {
         if (o instanceof TagableSubService) {
             TagableSubService oService = (TagableSubService) o;
-            if (this.getSubServiceId() != null && oService.getSubServiceId() != null) {
-                if (this.getSubServiceId().equals(oService.getSubServiceId())) {
+            if (this.getSubService() != null && oService.getSubService() != null) {
+                if (this.getSubService().equals(oService.getSubService())) {
                     return true;
                 }
                 return false;
             } else {
-                if (this.getSubServiceId() == null && oService.getSubServiceId() == null) {
+                if (this.getSubService() == null && oService.getSubService() == null) {
                     return true;
                 }
             }
         }
         return false;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(subService,flags);
+        dest.writeParcelable(goods,flags);
+    }
+
+    public static Creator<TagableSubService> CREATOR = new Creator<TagableSubService>() {
+        @Override
+        public TagableSubService createFromParcel(Parcel source) {
+
+            TagableSubService tagableSubService = new TagableSubService();
+            tagableSubService.setSubService((MaintenanceService) source.readParcelable(MaintenanceService.class.getClassLoader()));
+            tagableSubService.setGoods((MaintenanceGoods) source.readParcelable(MaintenanceGoods.class.getClassLoader()));
+            return tagableSubService;
+        }
+
+        @Override
+        public TagableSubService[] newArray(int size) {
+            return new TagableSubService[size];
+        }
+    };
 }

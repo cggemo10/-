@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +21,6 @@ import android.widget.Toast;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.fragment.car.CarListFragment;
 import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceGoodsFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
@@ -56,6 +54,11 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
     private ImageView imgAdd;
 
+    private MaintenanceMainFragment mainFragment;
+    private MaintenanceTagListServiceFragment tagListMaintenanceFragment;
+    private MaintenanceSubServiceFragment subServiceFragment;
+    private MaintenanceGoodsFragment goodsFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +71,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
             imgAdd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MaintenanceTagListServiceFragment fragment = MaintenanceTagListServiceFragment.newInstance();
-                    switchFragment(fragment, true);
+                    switchFragment(tagListMaintenanceFragment, true);
                 }
             });
 
@@ -99,8 +101,12 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         registeReceiver();
 
-        MaintenanceMainFragment fragment = MaintenanceMainFragment.newInstance();
-        switchFragment(fragment, false);
+        mainFragment = MaintenanceMainFragment.newInstance();
+        tagListMaintenanceFragment = MaintenanceTagListServiceFragment.newInstance();
+        subServiceFragment = MaintenanceSubServiceFragment.newInstance();
+        goodsFragment = MaintenanceGoodsFragment.newInstance();
+
+        switchFragment(mainFragment, false);
 
         List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
         if (carInfos != null && carInfos.size() == 1) {
@@ -218,9 +224,9 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         @Override
         public void onServiceClicked(MaintenanceService service) {
-            MaintenanceSubServiceFragment subServiceFm = MaintenanceSubServiceFragment.newInstance();
-            subServiceFm.setService(service);
-            switchFragment(subServiceFm, true);
+
+            subServiceFragment.setService(service);
+            switchFragment(subServiceFragment, true);
         }
     }
 
@@ -254,9 +260,9 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         @Override
         public void onServiceClicked(MaintenanceService service) {
-            MaintenanceSubServiceFragment subServiceFm = MaintenanceSubServiceFragment.newInstance();
-            subServiceFm.setService(service);
-            switchFragment(subServiceFm, true);
+
+            subServiceFragment.setService(service);
+            switchFragment(subServiceFragment, true);
         }
     }
 
@@ -269,7 +275,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
     private class SubServiceListener implements MaintenanceSubServiceFragment.SubServiceActionListener {
 
         @Override
-        public void onSubServiceClicked(MaintenanceService service, MaintenanceService feeService) {
+        public void onSubServiceClicked(MaintenanceService service, MaintenanceService subService, MaintenanceService feeService) {
             if (service == null) {
                 return;
             }
@@ -282,10 +288,10 @@ public class HomeMaintenanceActivity extends BaseActivity {
                 // TODO
             }
 
-            MaintenanceGoodsFragment fragment = MaintenanceGoodsFragment.newInstance();
-            fragment.setSubService(service);
-            fragment.setFeeService(feeService);
-            switchFragment(fragment, true);
+            goodsFragment.setService(service);
+            goodsFragment.setSubService(subService);
+            goodsFragment.setFeeService(feeService);
+            switchFragment(goodsFragment, true);
         }
 
         @Override
@@ -323,6 +329,23 @@ public class HomeMaintenanceActivity extends BaseActivity {
             startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
 
         }
+
+        public void onOrderCommit() {
+
+            if (mOrder.getmCarInfo() == null) {
+                Toast.makeText(HomeMaintenanceActivity.this, getString(R.string.str_order_no_carinfo),Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if (mOrder.isOrderEmpty()) {
+                Toast.makeText(HomeMaintenanceActivity.this, getString(R.string.str_order_content_empty), Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            Intent intent = new Intent(HomeMaintenanceActivity.this, OrderActivity.class);
+            intent.putExtra("order", mOrder);
+            startActivity(intent);
+        }
     }
 
     private ServiceConnection conn = new ServiceConnection() {
@@ -345,8 +368,14 @@ public class HomeMaintenanceActivity extends BaseActivity {
     private class MaintenanceGoodsListener implements MaintenanceGoodsFragment.OnMaintenanceGoodsListener {
 
         @Override
-        public void onGoodsCommit(TagableSubService tagableSubService) {
-//            mOrder.addGoods();
+        public void onGoodsCommit(MaintenanceService service, TagableSubService tagableSubService, TagableSubService feeService) {
+            if (tagableSubService != null) {
+                mOrder.addGoods(service.getId(), service, tagableSubService);
+                mOrder.addGoods(service.getId(), service, feeService);
+            }
+
+            switchFragment(mainFragment, false);
+
         }
 
         @Override

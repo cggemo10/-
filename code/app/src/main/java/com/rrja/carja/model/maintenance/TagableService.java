@@ -1,6 +1,9 @@
 package com.rrja.carja.model.maintenance;
 
 import android.graphics.Paint;
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
@@ -8,11 +11,11 @@ import com.rrja.carja.model.TagableElement;
 
 import java.util.ArrayList;
 
-public class TagableService implements TagableElement {
+public class TagableService implements TagableElement, Parcelable {
 
     private MaintenanceService service;
     private ArrayList<TagableSubService> subServiceList = new ArrayList<>();
-    private int serviceAmount;
+    private double serviceAmount;
 
     @Override
     public int getTag() {
@@ -29,6 +32,16 @@ public class TagableService implements TagableElement {
     }
 
     public void addTagableGood(TagableSubService subService) {
+        TagableSubService duplicateService = null;
+
+        for (TagableSubService orignalService : subServiceList) {
+            if (subService.getSubService().getId().equals(orignalService.getSubService().getId())) {
+                duplicateService = orignalService;
+            }
+        }
+        if (duplicateService != null) {
+            subServiceList.remove(duplicateService);
+        }
         subServiceList.add(subService);
     }
 
@@ -50,7 +63,7 @@ public class TagableService implements TagableElement {
         return subServiceList;
     }
 
-    public int calculateServiceFee() {
+    public double calculateServiceFee() {
 
         serviceAmount = 0;
 
@@ -81,4 +94,38 @@ public class TagableService implements TagableElement {
             }
         }
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeParcelable(service,flags);
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("sub_service", subServiceList);
+        dest.writeBundle(bundle);
+        dest.writeDouble(serviceAmount);
+    }
+
+    public static Creator<TagableService> CREATOR = new Creator<TagableService>() {
+        @Override
+        public TagableService createFromParcel(Parcel source) {
+
+            TagableService tagableService = new TagableService();
+            tagableService.setService((MaintenanceService) source.readParcelable(MaintenanceService.class.getClassLoader()));
+            Bundle bundle = source.readBundle();
+            ArrayList<TagableSubService> sub_service = bundle.getParcelableArrayList("sub_service");
+            tagableService.subServiceList = new ArrayList<>();
+            tagableService.subServiceList.addAll(sub_service);
+            tagableService.serviceAmount = source.readDouble();
+            return tagableService;
+        }
+
+        @Override
+        public TagableService[] newArray(int size) {
+            return new TagableService[0];
+        }
+    };
 }

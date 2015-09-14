@@ -140,7 +140,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
     public interface SubServiceActionListener {
 
-        public void onSubServiceClicked(MaintenanceService service, MaintenanceService feeService);
+        public void onSubServiceClicked(MaintenanceService service, MaintenanceService subService, MaintenanceService feeService);
 
         public void requestSubService(String serviceId);
     }
@@ -155,11 +155,15 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-            final MaintenanceService maintenanceService = CoreManager.getManager().getMaintenanceService(maintService.getId()).get(position);
+            final MaintenanceService maintSubService = CoreManager.getManager().getMaintenanceService(maintService.getId()).get(position);
 
             final ServiceTV tv = (ServiceTV) holder;
-            tv.bindData(maintenanceService.getName());
+            tv.bindData(maintSubService.getName());
 
+            if ("服务费".equals(maintSubService.getName())) {
+                tv.txt.setBackgroundColor(getResources().getColor(R.color.c_style_red));
+                return;
+            }
             tv.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -169,7 +173,7 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
                     MaintenanceService feeService = adapter.getFeeService();
                     if (mListener != null) {
-                        mListener.onSubServiceClicked(maintenanceService, feeService);
+                        mListener.onSubServiceClicked(maintService, maintSubService, feeService);
                     }
                 }
             });

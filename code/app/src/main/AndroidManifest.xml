@@ -2,8 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rrja.carja" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,6 +13,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name" >
+
             <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,27 +23,24 @@
             -->
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.SplshActivity"
+            android:name=".activity.SplshActivity"
             android:label="@string/title_activity_splsh" >
-
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.UserCenterActivity"
+            android:name=".activity.UserCenterActivity"
             android:label="@string/title_activity_user_center" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.CarInfoActivity"
+            android:name=".activity.CarInfoActivity"
             android:label="@string/title_activity_car_info" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.FeedbackActivity"
+            android:name=".activity.FeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:parentActivityName=".activity.BaseActivity" >
             <meta-data
@@ -49,22 +48,22 @@
                 android:value="com.rrja.carja.activity.BaseActivity" />
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.HomeMaintenanceActivity"
+            android:name=".activity.HomeMaintenanceActivity"
             android:label="@string/title_home_maintenance" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.OnDoreWashActivity"
+            android:name=".activity.OnDoreWashActivity"
             android:label="@string/title_wash_car_door" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.StoreReservationActivity"
+            android:name=".activity.StoreReservationActivity"
             android:label="@string/title_store_reservation" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.StoreReservationDetalActivity"
+            android:name=".activity.StoreReservationDetalActivity"
             android:label="@string/title_store_detial" />
         <activity
-            android:name="com.rrja.carja.activity.ViolationActivity"
+            android:name=".activity.ViolationActivity"
             android:label="@string/title_violation_inquiry" >
         </activity>
         <activity
@@ -72,33 +71,37 @@
             android:label="@string/title_activity_discount" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.CityListActivity"
+            android:name=".activity.CityListActivity"
             android:label="@string/title_my_city" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.CouponsDetalActivity"
+            android:name=".activity.CouponsDetalActivity"
             android:label="@string/title_activity_coupons_detal" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.AddCarActivity"
+            android:name=".activity.AddCarActivity"
             android:label="@string/title_car_name" >
         </activity>
         <activity
-            android:name="com.rrja.carja.activity.LoginActivity"
+            android:name=".activity.LoginActivity"
             android:label="@string/title_login" >
         </activity>
 
         <service
-            android:name="com.rrja.carja.service.DataCenterService"
+            android:name=".service.DataCenterService"
             android:enabled="true"
             android:exported="true" >
         </service>
         <service
-            android:name="com.rrja.carja.service.FileService"
+            android:name=".service.FileService"
             android:enabled="true"
             android:exported="false" >
         </service>
 
+        <activity
+            android:name=".activity.OrderActivity"
+            android:label="@string/title_activity_order" >
+        </activity>
     </application>
 
 </manifest>

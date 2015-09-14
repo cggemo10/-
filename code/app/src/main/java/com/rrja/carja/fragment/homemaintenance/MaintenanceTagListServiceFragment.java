@@ -229,50 +229,65 @@ public class MaintenanceTagListServiceFragment extends BaseElementFragment imple
 //        pageList.add(tagMaintenance);
 //        pageList.add(tagRepair);
 //        pageList.add(tagCosmetology);
-
-        maintList = new ListView(getActivity());
-        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        maintList.setLayoutParams(params1);
-        maintAdapter = new ServiceAdapter("101");
-        maintList.setAdapter(maintAdapter);
-        maintList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (maintAdapter == null) {
+            maintAdapter = new ServiceAdapter("101");
+        }
+        if (maintList == null) {
+            maintList = new ListView(getActivity());
+            LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            maintList.setLayoutParams(params1);
+            maintList.setAdapter(maintAdapter);
+            maintList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                view.setBackgroundColor(getResources().getColor(R.color.c_style_red));
-                MaintenanceService service = CoreManager.getManager().getMaintenanceService("101").get(position);
-                mListener.onServiceClicked(service);
-            }
-        });
+                    MaintenanceService service = CoreManager.getManager().getMaintenanceService("101").get(position);
+                    mListener.onServiceClicked(service);
+                }
+            });
+        }
 
-        repareList = new ListView(getActivity());
-        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        repareList.setLayoutParams(params2);
-        repareAdapter = new ServiceAdapter("102");
-        repareList.setAdapter(repareAdapter);
-        repareList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (repareAdapter == null) {
+            repareAdapter = new ServiceAdapter("102");
+        }
+
+        if (repareList == null) {
+            repareList = new ListView(getActivity());
+            LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            repareList.setLayoutParams(params2);
+            repareList.setAdapter(repareAdapter);
+            repareList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                view.setBackgroundColor(getResources().getColor(R.color.c_style_red));
-                MaintenanceService service = CoreManager.getManager().getMaintenanceService("102").get(position);
-                mListener.onServiceClicked(service);
-            }
-        });
+                    MaintenanceService service = CoreManager.getManager().getMaintenanceService("102").get(position);
+                    mListener.onServiceClicked(service);
+                }
+            });
+        }
 
-        cosmetoList = new ListView(getActivity());
-        LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        cosmetoList.setLayoutParams(params3);
-        cosmetoAdapter = new ServiceAdapter("103");
-        cosmetoList.setAdapter(cosmetoAdapter);
-        cosmetoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (cosmetoAdapter == null) {
+            cosmetoAdapter = new ServiceAdapter("103");
+        }
+
+        if (cosmetoList == null) {
+            cosmetoList = new ListView(getActivity());
+            LinearLayout.LayoutParams params3 = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            cosmetoList.setLayoutParams(params3);
+            cosmetoList.setAdapter(cosmetoAdapter);
+            cosmetoList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //                view.setBackgroundColor(getResources().getColor(R.color.c_style_red));
-                MaintenanceService service = CoreManager.getManager().getMaintenanceService("103").get(position);
-                mListener.onServiceClicked(service);
-            }
-        });
+                    MaintenanceService service = CoreManager.getManager().getMaintenanceService("103").get(position);
+                    mListener.onServiceClicked(service);
+                }
+            });
+        }
 
-        adapter = new MaintenancePagerAdapter();
+        if (adapter == null) {
+            adapter = new MaintenancePagerAdapter();
+        }
     }
 
     public class MaintenancePagerAdapter extends PagerAdapter {

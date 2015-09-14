@@ -1,5 +1,8 @@
 package com.rrja.carja.model.maintenance;
 
+import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 
 import com.j256.ormlite.field.DatabaseField;
@@ -11,9 +14,10 @@ import com.rrja.carja.model.UserInfo;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
-public class MaintenanceOrder {
+public class MaintenanceOrder implements Parcelable{
 
     public static final int TAG_ORDER_SERVICE = 23;
     public static final int TAG_ORDER_GOODS = 30;
@@ -71,6 +75,10 @@ public class MaintenanceOrder {
         }
     }
 
+    public boolean isOrderEmpty() {
+        return orderContent.isEmpty();
+    }
+
     public List<TagableService> listOrderInfo() {
 
         if (orderContent.size() == 0) {
@@ -80,9 +88,9 @@ public class MaintenanceOrder {
         ArrayList<TagableService> infoList = new ArrayList<>();
 
         Set<String> keySet = orderContent.keySet();
-        String[] keyArray = (String[]) keySet.toArray();
+        Object[] keyArray = keySet.toArray();
         for (int i = 0; i < keyArray.length; i++) {
-            String key = keyArray[i];
+            String key = keyArray[i].toString();
             TagableService service = orderContent.get(key);
             infoList.add(service);
         }
@@ -124,5 +132,37 @@ public class MaintenanceOrder {
         }
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(id);
+        dest.writeParcelable(userInfo, flags);
+        dest.writeParcelable(mCarInfo, flags);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("map", orderContent);
+        dest.writeBundle(bundle);
+    }
+
+    public static Creator<MaintenanceOrder> CREATOR = new Creator<MaintenanceOrder>() {
+        @Override
+        public MaintenanceOrder createFromParcel(Parcel source) {
+            MaintenanceOrder order = new MaintenanceOrder();
+
+            order.id = source.readString();
+            order.setUserInfo((UserInfo) source.readParcelable(UserInfo.class.getClassLoader()));
+            order.setmCarInfo((CarInfo) source.readParcelable(CarInfo.class.getClassLoader()));
+            order.orderContent = (HashMap<String, TagableService>) source.readBundle().getSerializable("map");
+            return order;
+        }
+
+        @Override
+        public MaintenanceOrder[] newArray(int size) {
+            return new MaintenanceOrder[size];
+        }
+    };
 }

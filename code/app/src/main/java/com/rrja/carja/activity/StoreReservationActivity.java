@@ -55,5 +55,5 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
         startService(intent);
     }
 
-    
+
 }

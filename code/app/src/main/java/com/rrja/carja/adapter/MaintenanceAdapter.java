@@ -172,30 +172,38 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
             orderContent.removeAllViews();
             ArrayList<TagableSubService> subServiceList = service.getSubServiceList();
             for (final TagableSubService subService : subServiceList) {
-                View view = inflate.inflate(R.layout.item_ordersubitem, null);
-                TextView serviceName = (TextView) view.findViewById(R.id.txt_order_sub_name);
-                serviceName.setText(subService.getServiceName());
-                TextView goodsName = (TextView) view.findViewById(R.id.txt_order_goods_name);
-                goodsName.setText(subService.getGoods().getName());
-                TextView goodsFee = (TextView) view.findViewById(R.id.txt_order_goods_fee);
-                goodsFee.setText(subService.getGoods().getPrice());
+                if (subService.getGoods() != null) {
+                    View view = inflate.inflate(R.layout.item_ordersubitem, null);
+                    TextView serviceName = (TextView) view.findViewById(R.id.txt_order_sub_name);
+                    serviceName.setText(subService.getServiceName());
+                    TextView goodsName = (TextView) view.findViewById(R.id.txt_order_goods_name);
+                    goodsName.setText(subService.getGoods().getName());
+                    TextView goodsFee = (TextView) view.findViewById(R.id.txt_order_goods_fee);
+                    goodsFee.setText(subService.getGoods().getPrice() + "");
 
-                ImageView imgDel = (ImageView) view.findViewById(R.id.img_sub_del);
-                if (selected) {
-                    imgDel.setVisibility(View.VISIBLE);
-                    imgDel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (mListener != null) {
-                                mListener.onMaintenanceSubServiceDelete(service, subService, position);
+                    ImageView imgDel = (ImageView) view.findViewById(R.id.img_sub_del);
+                    if (selected) {
+                        imgDel.setVisibility(View.VISIBLE);
+                        imgDel.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (mListener != null) {
+                                    mListener.onMaintenanceSubServiceDelete(service, subService, position);
+                                }
                             }
-                        }
-                    });
+                        });
+                    } else {
+                        imgDel.setVisibility(View.GONE);
+                    }
+
+                    orderContent.addView(view);
                 } else {
-                    imgDel.setVisibility(View.GONE);
+                    if ("服务费".equals(subService.getServiceName())) {
+                        serviceFee.setText("￥" + subService.getServiceAmount());
+                    }
                 }
             }
-            serviceFee.setText("￥" + service.getService().getAmount());
+
             totalFee.setText("￥" + service.calculateServiceFee());
         }
     }
