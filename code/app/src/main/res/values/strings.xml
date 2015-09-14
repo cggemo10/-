@@ -167,9 +167,11 @@
     <string name="title_activity_order">确认订单</string>
     <string name="str_order_label_name">您的姓名</string>
     <string name="str_order_label_tel">联系电话</string>
+    <string name="str_order_label_plate_num">已选爱车</string>
     <string name="str_order_label_server_address">服务地点</string>
     <string name="str_order_label_server_time">预约时间</string>
-    <string name="str_order_label_need_picket">是否需要发票</string>
+    <string name="str_order_label_need_invoice">是否需要发票</string>
+    <string name="str_order_label_invoice_title">发票抬头</string>
     <string name="str_order_label_receiver">收件人</string>
     <string name="str_order_label_mail_address">邮件地址</string>
     <string name="str_order_label_mail_fee">邮寄费用</string>
@@ -177,9 +179,11 @@
     <string name="hint_order_your_tel">您的电话</string>
     <string name="hint_order_server_address">请填写服务地点</string>
     <string name="hint_order_server_time">请选择服务时间</string>
+    <string name="hint_order_invoice_title">请填写发票抬头</string>
     <string name="hint_order_mail_receiver">请填写收件人</string>
     <string name="hint_order_mail_address">请填写您的邮件地址</string>
     <string name="hint_order_mail_fee">到付</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="drawer_open">open</string>

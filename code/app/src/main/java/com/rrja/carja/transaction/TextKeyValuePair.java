@@ -8,7 +8,7 @@ public class TextKeyValuePair {
     private String name;
     private String value;
 
-    public void TextKeyValuePair(String name, String value) {
+    public TextKeyValuePair(String name, String value) {
         this.name = name;
         this.value = value;
     }

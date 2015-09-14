@@ -1,6 +1,7 @@
 package com.rrja.carja.transaction;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import org.apache.http.Consts;
 import org.apache.http.HttpEntity;
@@ -19,6 +20,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
 import org.apache.http.util.EntityUtilsHC4;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,7 +76,7 @@ public class Network {
 
         if (params != null && params.size() != 0) {
             for (int i = 0; i < params.size(); i++) {
-                builder.addTextBody(params.get(i).getName(),params.get(i).getValue(), ContentType.create("text/plain", Consts.UTF_8));
+                builder.addTextBody(params.get(i).getName(),params.get(i).getValue(), ContentType.create(HTTP.PLAIN_TEXT_TYPE, HTTP.UTF_8));
             }
         }
 
@@ -94,7 +97,8 @@ public class Network {
             }
         }
 
-        httpPost.setEntity(builder.build());
+        HttpEntity entity = builder.build();
+        httpPost.setEntity(entity);
 
         try {
             CloseableHttpResponse response = httpClient.execute(httpPost);

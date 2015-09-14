@@ -17,6 +17,7 @@ import com.rrja.carja.model.Region;
 import com.rrja.carja.service.impl.CarBinder;
 import com.rrja.carja.service.impl.ForumBinder;
 import com.rrja.carja.service.impl.MaintenanceBinder;
+import com.rrja.carja.service.impl.OrderBinder;
 import com.rrja.carja.service.impl.UserBinder;
 import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;
@@ -83,6 +84,7 @@ public class DataCenterService extends Service implements Handler.Callback {
             if (Constant.ACTION_REQUEST_REFRESH_USER_CAR.equals(action)) {
                 userBinder.getUserCars();
             }
+
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -125,6 +127,9 @@ public class DataCenterService extends Service implements Handler.Callback {
         }
         if (Constant.ACTION_MAINTENANCE_SERVICE.equals(action)) {
             return new MaintenanceBinder(this);
+        }
+        if (Constant.ACTION_ORDER_SERVICE.equals(action)) {
+            return new OrderBinder(this);
         }
 
         throw new UnsupportedOperationException("Not yet implemented");

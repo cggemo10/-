@@ -1,5 +1,6 @@
 package com.rrja.carja.transaction;
 
+import android.os.Parcelable;
 import android.view.TextureView;
 
 import com.rrja.carja.core.CoreManager;
@@ -10,6 +11,8 @@ import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by chongge on 15/7/8.
@@ -23,6 +26,7 @@ public class HttpUtils {
     private static final String SERVICE_CAR = "/car";
     private static final String SERVICE_GOODS = "/goods";
     private static final String SERVICE_SERVICE = "/service";
+    private static final String SERVICE_ORDER = "/order";
 //    http://120.25.201.50/api/car/getBrands?firstLetter=
 //    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
 //    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
@@ -51,6 +55,8 @@ public class HttpUtils {
     private static final String INTERFACE_GOOD_COUPONS = "/getDiscountGoodsList";
     private static final String INTERFACE_SERVICES = "/getServiceList";
     private static final String INTERFACE_SERVICE_GOODS = "/getGoodsList";
+
+    private static final String INTERFACE_ORDER = "/order";
 
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -251,8 +257,28 @@ public class HttpUtils {
 
     //-------------------------------------------------------------------------------------------------------------------
     // order interface
-    public static JSONObject commitOrder() {
-        return null;
+    public static JSONObject commitOrder(String nattel, String authToken, String contacts,
+                                         String phone, String plateNum, String serviceLocation,
+                                         String serviceDateTime, String isNeedInvoice, String invoiceTitle,
+                                         String receiver, String receiverAddr, String orderDetails) {
+
+        String url = BASE_URL + SERVICE_ORDER + INTERFACE_ORDER;
+
+        List<TextKeyValuePair> pairs = new ArrayList<>();
+        pairs.add(new TextKeyValuePair("nattel", nattel));
+        pairs.add(new TextKeyValuePair("authToken", authToken));
+        pairs.add(new TextKeyValuePair("contacts", contacts));
+        pairs.add(new TextKeyValuePair("phone", phone));
+        pairs.add(new TextKeyValuePair("plateNum", plateNum));
+        pairs.add(new TextKeyValuePair("serviceLocation", serviceLocation));
+        pairs.add(new TextKeyValuePair("serviceDateTime", serviceDateTime));
+        pairs.add(new TextKeyValuePair("isNeedInvoice", isNeedInvoice));
+        pairs.add(new TextKeyValuePair("invoiceTitle", invoiceTitle));
+        pairs.add(new TextKeyValuePair("receiver", receiver));
+        pairs.add(new TextKeyValuePair("receiverAddress", receiverAddr));
+        pairs.add(new TextKeyValuePair("orderDetails", orderDetails));
+
+        return Network.doPost(url, pairs, null);
     }
 
     public static JSONObject orderDetail() {

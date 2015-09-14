@@ -5,16 +5,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.CarInfo;
-import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.UserInfo;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class MaintenanceOrder implements Parcelable{
@@ -98,13 +97,13 @@ public class MaintenanceOrder implements Parcelable{
         return infoList;
     }
 
-    public int calculateTotalFee() {
-        int serviceFee = 0;
+    public double calculateTotalFee() {
+        double serviceFee = 0;
         if (orderContent.size() != 0) {
             Set<String> keySet = orderContent.keySet();
             for (String key : keySet) {
                 TagableService service = orderContent.get(key);
-                serviceFee += service.calculateServiceFee();
+                serviceFee += service.calculateServiceTotalFee();
             }
         }
 
@@ -143,9 +142,9 @@ public class MaintenanceOrder implements Parcelable{
         dest.writeString(id);
         dest.writeParcelable(userInfo, flags);
         dest.writeParcelable(mCarInfo, flags);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("map", orderContent);
-        dest.writeBundle(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.("map", orderContent);
+        dest.writeMap(orderContent);
     }
 
     public static Creator<MaintenanceOrder> CREATOR = new Creator<MaintenanceOrder>() {
@@ -156,7 +155,9 @@ public class MaintenanceOrder implements Parcelable{
             order.id = source.readString();
             order.setUserInfo((UserInfo) source.readParcelable(UserInfo.class.getClassLoader()));
             order.setmCarInfo((CarInfo) source.readParcelable(CarInfo.class.getClassLoader()));
-            order.orderContent = (HashMap<String, TagableService>) source.readBundle().getSerializable("map");
+//            Bundle bundle = source.readBundle()
+//            order.orderContent = (HashMap<String, TagableService>) source.readBundle().getSerializable("map");
+            order.orderContent = source.readHashMap(TagableService.class.getClassLoader());
             return order;
         }
 
@@ -165,4 +166,28 @@ public class MaintenanceOrder implements Parcelable{
             return new MaintenanceOrder[size];
         }
     };
+
+    public String getCommitContent() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userId", userInfo.getId());
+            json.put("carId", mCarInfo.getId());
+            double totalFee = calculateTotalFee();
+            json.put("totlaAmount", totalFee);
+
+            JSONArray array = new JSONArray();
+            Object[] keys = orderContent.keySet().toArray();
+            for (Object key : keys) {
+                TagableService tagableService = orderContent.get(key.toString());
+                array.put(tagableService.getCommitContent());
+            }
+
+            json.put("content", array);
+
+            return json.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

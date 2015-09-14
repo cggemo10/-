@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
-import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.TagableService;
@@ -204,7 +203,7 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
                 }
             }
 
-            totalFee.setText("￥" + service.calculateServiceFee());
+            totalFee.setText("￥" + service.calculateServiceTotalFee());
         }
     }
 

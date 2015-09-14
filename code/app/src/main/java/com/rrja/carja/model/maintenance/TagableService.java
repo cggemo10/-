@@ -4,10 +4,15 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -63,7 +68,7 @@ public class TagableService implements TagableElement, Parcelable {
         return subServiceList;
     }
 
-    public double calculateServiceFee() {
+    public double calculateServiceTotalFee() {
 
         serviceAmount = 0;
 
@@ -80,6 +85,19 @@ public class TagableService implements TagableElement, Parcelable {
         }
 
         return serviceAmount;
+    }
+
+    public double caculateServiceFee() {
+
+        if (subServiceList.size() != 0) {
+            for (TagableSubService service : subServiceList) {
+                if ("服务费".equals(service.getServiceName())) {
+                    return service.getServiceAmount();
+                }
+            }
+        }
+
+        return 0;
     }
 
     public void removeSubService(TagableSubService subService) {
@@ -103,9 +121,10 @@ public class TagableService implements TagableElement, Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeParcelable(service,flags);
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("sub_service", subServiceList);
-        dest.writeBundle(bundle);
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList("sub_service", subServiceList);
+//        dest.writeBundle(bundle);
+        dest.writeList(subServiceList);
         dest.writeDouble(serviceAmount);
     }
 
@@ -115,10 +134,11 @@ public class TagableService implements TagableElement, Parcelable {
 
             TagableService tagableService = new TagableService();
             tagableService.setService((MaintenanceService) source.readParcelable(MaintenanceService.class.getClassLoader()));
-            Bundle bundle = source.readBundle();
-            ArrayList<TagableSubService> sub_service = bundle.getParcelableArrayList("sub_service");
-            tagableService.subServiceList = new ArrayList<>();
-            tagableService.subServiceList.addAll(sub_service);
+//            Bundle bundle = source.readBundle();
+//            ArrayList<TagableSubService> sub_service = bundle.getParcelableArrayList("sub_service");
+//            tagableService.subServiceList = new ArrayList<>();
+//            tagableService.subServiceList.addAll(sub_service);
+            tagableService.subServiceList = source.readArrayList(TagableSubService.class.getClassLoader());
             tagableService.serviceAmount = source.readDouble();
             return tagableService;
         }
@@ -128,4 +148,32 @@ public class TagableService implements TagableElement, Parcelable {
             return new TagableService[0];
         }
     };
+
+    public JSONObject getCommitContent() throws JSONException{
+
+        JSONObject json = new JSONObject();
+        json.put("serviceId", service.getId());
+        json.put("tag", service.getParentId());
+        json.put("serviceAmount", caculateServiceFee());
+
+        JSONArray array = new JSONArray();
+        for (TagableSubService subService : subServiceList) {
+            JSONObject subJson = subService.getCommitContent();
+            if (subJson == null) {
+                if (TextUtils.isEmpty(subService.getServiceName()) ||
+                        !"服务费".equals(subService.getServiceName())) {
+                    throw new JSONException("subservice is null");
+                } else {
+                    continue;
+                }
+            }
+
+            array.put(subJson);
+        }
+
+        json.put("subService", array);
+
+        return json;
+    }
+
 }

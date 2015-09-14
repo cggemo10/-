@@ -8,6 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TagableSubService implements TagableElement, Parcelable {
@@ -113,4 +114,28 @@ public class TagableSubService implements TagableElement, Parcelable {
             return new TagableSubService[size];
         }
     };
+
+    public JSONObject getCommitContent() throws JSONException {
+
+        if (subService == null) {
+            return null;
+        }
+
+        if ("服务费".equals(subService.getName())) {
+            return null;
+        }
+
+        if (goods == null) {
+            return null;
+        }
+
+        JSONObject json = new JSONObject();
+        json.put("goodsAmount", goods.getPrice());
+        json.put("goodsId", goods.getId());
+        json.put("subServiceId", subService.getAmount());
+        json.put("couponsAmount", 0);
+        json.put("couponId", 0);
+
+        return json;
+    }
 }
