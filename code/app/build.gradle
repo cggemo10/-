@@ -24,9 +24,10 @@ dependencies {
     compile project(':pulltorefreshview')
     compile project(':httpclient_expand')
     compile project(':stickysideheaderrecycle')
-    compile files('libs/httpmime-4.5.jar')
+    compile files('libs/httpmime-4.3.6.jar')
     compile files('libs/ormlite-core-4.49-SNAPSHOT.jar')
     compile files('libs/ormlite-android-4.49-SNAPSHOT.jar')
+
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/locSDK_5.2.jar')
     compile 'com.android.support:support-v4:22.2.0'
