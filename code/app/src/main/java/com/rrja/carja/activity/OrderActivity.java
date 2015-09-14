@@ -3,6 +3,7 @@ package com.rrja.carja.activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -37,6 +38,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
 
     private SwitchCompat switchInvoice;
     private View invoiceView;
+    private AppCompatButton btnCommit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -213,6 +215,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
         });
         switchInvoice.setChecked(false);
 
+        btnCommit = (AppCompatButton) findViewById(R.id.btn_confirm_order);
+        btnCommit.setOnClickListener(this);
     }
 
     @Override
@@ -253,6 +257,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener 
                         Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
                 dialog.show();
+                break;
+            case R.id.btn_commit_order:
+                boolean checkInput = verifyParam();
         }
+    }
+
+    private boolean verifyParam() {
+
+
+
+        return false;
     }
 }
