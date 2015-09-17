@@ -22,6 +22,7 @@ public class Constant {
 
     public static final String ACTION_INIT_SERVICE = "rrja.request.init";
     public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
+    public static final String ACTION_STORE_RESERVATION_SERVICE = "rrja.request.store.reservation";
     public static final String ACTION_CAR_SERVICE = "rrja.request.car.service";
     public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
     public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
@@ -37,6 +38,9 @@ public class Constant {
     public static final String ACTION_BROADCAST_REFRESH_REGION_ERROR = "rrja.boradcast.refresh.REGIONS_ERROR";
     public static final String ACTION_BROADCAST_REFRESH_CARBRAND = "rrja.broadcast.refresh.CARBRAND";
     public static final String ACTION_BROADCAST_REFRESH_CARBRAND_ERROR = "rrja.broadcast.refresh.CARBRAND_ERROR";
+
+    public static final String ACTION_BORADCAST_GET_STORE_LIST = "rrja.boradcast.get.STORE";
+    public static final String ACTION_BROADCAST_GET_STORE_LIST_ERROR = "rrja.boradcast.get.STORE_ERR";
 
     public static final String ACTION_BROADCAST_GET_CAR_SERIES = "rrja.broadcast.get.CAR_SERIES";
     public static final String ACTION_BROADCAST_GET_CAR_SERIES_ERR = "rrja.broadcast.get.CAR_SERIES_ERR";

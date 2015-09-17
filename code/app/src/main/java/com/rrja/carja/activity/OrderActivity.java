@@ -636,7 +636,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     private void pay() {
 
-        Stirn
+
     }
 
     private class PayInfo {

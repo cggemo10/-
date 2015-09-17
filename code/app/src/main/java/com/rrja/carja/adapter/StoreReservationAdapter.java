@@ -45,7 +45,6 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
         });
     }
 
-
     @Override
     public int getItemCount() {
         return CoreManager.getManager().getStores().size();
