@@ -1,5 +1,8 @@
 package com.rrja.carja.activity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -8,9 +11,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -77,7 +77,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             }
         });
 
-        fragmentManager = getSupportFragmentManager();
+        fragmentManager = getFragmentManager();
         Bundle extras = getIntent().getExtras();
         if (extras != null && extras.containsKey("car_info")) {
             carInfo = extras.getParcelable("car_info");

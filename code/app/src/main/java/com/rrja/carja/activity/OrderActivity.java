@@ -9,7 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
@@ -27,18 +29,18 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.OrderBinder;
+import com.rrja.carja.utils.PayResult;
 import com.rrja.carja.utils.SignUtils;
 
-import java.text.SimpleDateFormat;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
-import java.util.Random;
 
 public class OrderActivity extends BaseActivity implements View.OnClickListener,
         View.OnFocusChangeListener, TextView.OnEditorActionListener {
@@ -73,20 +75,26 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     private MaintenanceOrder order;
     private OrderReceiver mReceiver;
+    private String orderSubject;
 
-    private static final String RSA_PRIVATE = "MIICXgIBAAKBgQDTy1lajyzgd7zVJ5rytlRl9cwt2GlWArIfywIKft+SDnoiufk4"+
-            "NGUKooNJwZOmjK5lhaRIQzfAouB2uSxMZKnBO/yf75p6+EoIgPDaGjqXfDQzycGl"+
-            "MV1hKljeJmMZLENocpF8Dj2Ik4veFt75Fcnu+S13/TEPEGB931AFwbsURQIDAQAB"+
-            "AoGBAJ7VaMx2hYRNp+r/Sb/uJztT6+0R2GVtniIjwAMZBRfnDYePiyywdnpUSDt/"+
-            "FfkYlg2C/SJIbr5kKAxBcMxVzcvELHY6ZovF5ps0vk+9rc8KAlusntnPMTkZpVdE"+
-            "/EaiLB+XVZTpGHvrnryI2n1zFFyTA+wloD6xn2TzlT94S4BdAkEA9as8WcZILQVx"+
-            "m+vvSekMiAxCTXFhRhE2Ww7ERG92CVy7HHfZ2240i0nOoRcP0pYo+0xRqy8h2eJ8"+
-            "TB9sP0cofwJBANyzbz+HJrEmV5zlxFkQR6SuLAFBpHNqQDkh1V3HgvR3m+qNDleY"+
-            "tdL7BM9+nQvrKVGYdk0xVDGcep5x18qzwTsCQCYyn8mdqO9HH2kNAEHPuKEWtuBv"+
-            "tp48YuU5oI67ffDquDUu9XLG6eiWa0hk25L0wh6AuVoSlALa0lTLtfsIx2UCQQC7"+
-            "sttFYzMT7HEM3hicSo0z0HFabDJpeg6+yDiHdlu4gFUZKPfupdDVa2kO8zarYUeV"+
-            "vp22TuK1AskCIf4NxczrAkEAyn7Pt2VndgA/QIxkXGqH5QV8fIXFuuMXq8cw5IyY"+
-            "EUXVfVijXs3KDzDmIomVB/RRD2Ju2uADrjjwju33rGu+hQ==";
+    private static final int SDK_PAY_FLAG = 1;
+    private static final int SDK_ORDRE_FLAG = 10;
+
+    private static final String RSA_PRIVATE =
+            "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANPLWVqPLOB3vNUn" +
+            "mvK2VGX1zC3YaVYCsh/LAgp+35IOeiK5+Tg0ZQqig0nBk6aMrmWFpEhDN8Ci4Ha5" +
+            "LExkqcE7/J/vmnr4SgiA8NoaOpd8NDPJwaUxXWEqWN4mYxksQ2hykXwOPYiTi94W" +
+            "3vkVye75LXf9MQ8QYH3fUAXBuxRFAgMBAAECgYEAntVozHaFhE2n6v9Jv+4nO1Pr" +
+            "7RHYZW2eIiPAAxkFF+cNh4+LLLB2elRIO38V+RiWDYL9IkhuvmQoDEFwzFXNy8Qs" +
+            "djpmi8XmmzS+T72tzwoCW6ye2c8xORmlV0T8RqIsH5dVlOkYe+uevIjafXMUXJMD" +
+            "7CWgPrGfZPOVP3hLgF0CQQD1qzxZxkgtBXGb6+9J6QyIDEJNcWFGETZbDsREb3YJ" +
+            "XLscd9nbbjSLSc6hFw/Slij7TFGrLyHZ4nxMH2w/Ryh/AkEA3LNvP4cmsSZXnOXE" +
+            "WRBHpK4sAUGkc2pAOSHVXceC9Heb6o0OV5i10vsEz36dC+spUZh2TTFUMZx6nnHX" +
+            "yrPBOwJAJjKfyZ2o70cfaQ0AQc+4oRa24G+2njxi5Tmgjrt98Oq4NS71csbp6JZr" +
+            "SGTbkvTCHoC5WhKUAtrSVMu1+wjHZQJBALuy20VjMxPscQzeGJxKjTPQcVpsMml6" +
+            "Dr7IOId2W7iAVRko9+6l0NVraQ7zNqthR5W+nbZO4rUCyQIh/g3FzOsCQQDKfs+3" +
+            "ZWd2AD9AjGRcaoflBXx8hcW64xerxzDkjJgRRdV9WKNezcoPMOYiiZUH9FEPYm7a" +
+            "4AOuOPCO7fesa76F";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +114,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         });
 
         Bundle extras = getIntent().getExtras();
-        if (extras.containsKey("order")) {
+        if (extras.containsKey("order") && extras.containsKey("subject")) {
             try {
                 order = extras.getParcelable("order");
+                orderSubject = extras.getString("subject");
             } catch (Exception e) {
                 // TODO
                 e.printStackTrace();
@@ -608,6 +617,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
             if (Constant.ACTION_BROADCAST_ORDER_SUCC.equals(action)) {
 
                 // TODO pay order
+                if (intent.hasExtra("orderNum")) {
+
+                    Message msg = mHandler.obtainMessage();
+                    msg.what = SDK_ORDRE_FLAG;
+                    msg.obj = intent.getStringExtra("orderNum");
+                    mHandler.sendMessage(msg);
+                } else {
+                    // TODO
+                }
             }
         }
     }
@@ -634,8 +652,43 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     // ----------------------------------------------------------------------------------------
 
-    private void pay() {
+    private void pay(PayInfo info) {
 
+        // 订单
+        String orderInfo = getOrderInfo(info);
+
+        // 对订单做RSA 签名
+        String sign = sign(orderInfo);
+        try {
+            // 仅需对sign 做URL编码
+            sign = URLEncoder.encode(sign, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        // 完整的符合支付宝参数规范的订单信息
+        final String payInfo = orderInfo + "&sign=\"" + sign + "\"&"
+                + getSignType();
+
+        Runnable payRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                // 构造PayTask 对象
+                PayTask alipay = new PayTask(OrderActivity.this);
+                // 调用支付接口，获取支付结果
+                String result = alipay.pay(payInfo);
+
+                Message msg = new Message();
+                msg.what = SDK_PAY_FLAG;
+                msg.obj = result;
+                mHandler.sendMessage(msg);
+            }
+        };
+
+        // 必须异步调用
+        Thread payThread = new Thread(payRunnable);
+        payThread.start();
 
     }
 
@@ -648,7 +701,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     /**
      * create the order info. 创建订单信息
-     *
      */
     public String getOrderInfo(PayInfo payInfo
 //                               String tradeNo,String subject, String body, String price
@@ -657,7 +709,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         String orderInfo = "partner=" + "\"" + "2088911832390945" + "\"";
 
         // 签约卖家支付宝账号
-        orderInfo += "&seller_id=" + "\"" + "330201320@qq.com" + "\"";
+        orderInfo += "&seller_id=" + "\"" + "2088911832390945" + "\"";
 
         // 商户网站唯一订单号
         orderInfo += "&out_trade_no=" + "\"" + payInfo.tradeNo + "\"";
@@ -674,9 +726,13 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         // 服务器异步通知页面路径
 //        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
 //                + "\"";
-       orderInfo += "&notify_url=" + "\""
-               + "http://120.25.201.50/api/order/syncOrderStatus?nattel=" + order.getUserInfo().getTel() + "&authToken="+ order.getUserInfo().getAuthToken() + "&orderNum=" + payInfo.tradeNo + "&status=22"
-               + "\"";
+        orderInfo += "&notify_url=" + "\""
+                + "http://120.25.201.50/api/order/syncOrderStatus?nattel="
+                + order.getUserInfo().getTel() + "%26authToken="
+                + order.getUserInfo().getAuthToken()
+                + "%26orderNum="
+                + payInfo.tradeNo + "%26status=22"
+                + "\"";
 
         // 服务接口名称， 固定值
         orderInfo += "&service=\"mobile.securitypay.pay\"";
@@ -709,8 +765,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     /**
      * sign the order info. 对订单信息进行签名
      *
-     * @param content
-     *            待签名订单信息
+     * @param content 待签名订单信息
      */
     public String sign(String content) {
         return SignUtils.sign(content, RSA_PRIVATE);
@@ -718,10 +773,60 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     /**
      * get the sign type we use. 获取签名方式
-     *
      */
     public String getSignType() {
         return "sign_type=\"RSA\"";
     }
+
+    Handler mHandler = new Handler() {
+
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case SDK_PAY_FLAG:
+                    PayResult payResult = new PayResult((String) msg.obj);
+
+                    // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
+                    String resultInfo = payResult.getResult();
+
+                    String resultStatus = payResult.getResultStatus();
+
+                    // 判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        Toast.makeText(OrderActivity.this, "支付成功",
+                                Toast.LENGTH_SHORT).show();
+
+                        // TODO order sync page
+                        OrderActivity.this.finish();
+                    } else {
+                        // 判断resultStatus 为非“9000”则代表可能支付失败
+                        // “8000”代表支付结果因为支付渠道原因或者系统原因还在等待支付结果确认，最终交易是否成功以服务端异步通知为准（小概率状态）
+                        if (TextUtils.equals(resultStatus, "8000")) {
+                            Toast.makeText(OrderActivity.this, "支付结果确认中",
+                                    Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
+                            Toast.makeText(OrderActivity.this, "支付失败",
+                                    Toast.LENGTH_SHORT).show();
+
+                            btnCommit.setEnabled(true);
+                        }
+                    }
+                    break;
+                case SDK_ORDRE_FLAG:
+                    String orderNum = (String) msg.obj;
+                    PayInfo info = new PayInfo();
+                    info.tradeNo = orderNum;
+                    info.subject = orderSubject;
+                    info.fee = order.calculateTotalFee();
+                    info.body = orderSubject;
+
+                    pay(info);
+                    break;
+            }
+        }
+    };
 
 }

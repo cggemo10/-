@@ -1,11 +1,12 @@
 package com.rrja.carja.fragment.car;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Message;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;

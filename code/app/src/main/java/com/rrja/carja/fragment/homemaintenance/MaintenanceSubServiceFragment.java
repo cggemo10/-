@@ -58,7 +58,8 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
         recyclerSub = (RecyclerView) view.findViewById(R.id.recycler_maintenance_subservice);
         recyclerSub.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        adapter = new SubServiceAdapter();
+        recyclerSub.setAdapter(adapter);
     }
 
 
@@ -71,12 +72,9 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (adapter == null) {
-            adapter = new SubServiceAdapter();
-            recyclerSub.setAdapter(adapter);
-        } else {
-            adapter.notifyDataSetChanged();
-        }
+
+        adapter.notifyDataSetChanged();
+
         registReceiver();
         getActivity().setTitle(maintService.getName());
         ((HomeMaintenanceActivity)getActivity()).dismissAddIcon();
@@ -111,6 +109,9 @@ public class MaintenanceSubServiceFragment extends BaseElementFragment {
 
     public void setService(MaintenanceService service) {
         this.maintService = service;
+        if (recyclerSub != null && recyclerSub.getAdapter() != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.rrja.carja.activity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -9,9 +12,6 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,7 +26,6 @@ import com.rrja.carja.fragment.homemaintenance.MaintenanceGoodsFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceSubServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceTagListServiceFragment;
-import com.rrja.carja.fragment.homemaintenance.MaintenanceTagServiceFragment;
 import com.rrja.carja.fragment.homemaintenance.TagServiceActionListener;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
@@ -88,7 +87,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
             }
         });
 
-        fm = getSupportFragmentManager();
+        fm = getFragmentManager();
 
         mOrder = new MaintenanceOrder();
         mOrder.setUserInfo(CoreManager.getManager().getCurrUser());
@@ -156,15 +155,19 @@ public class HomeMaintenanceActivity extends BaseActivity {
         }
     }
 
-    private void switchFragment(BaseElementFragment fragment, boolean addToStack) {
+    private void switchFragment(BaseElementFragment fragment, boolean leftIn) {
 
         if (fragment == null) {
             return;
         }
         currFragment = fragment;
         FragmentTransaction transaction = fm.beginTransaction();
+        if (leftIn) {
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        } else {
+            transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
         transaction.replace(R.id.fl_maintenance_content, fragment);
-        transaction.addToBackStack(null);
         transaction.commit();
     }
 
@@ -227,19 +230,6 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
             subServiceFragment.setService(service);
             switchFragment(subServiceFragment, true);
-        }
-    }
-
-    // -------------------------------------------------------------------------------
-    public MaintenanceTagServiceFragment.MaintenanceTagActionListener getTagActionListener() {
-        return new TagActionListener();
-    }
-
-    private class TagActionListener implements MaintenanceTagServiceFragment.MaintenanceTagActionListener {
-
-        @Override
-        public void onFragmentInteraction(Uri uri) {
-
         }
     }
 
@@ -344,6 +334,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
             Intent intent = new Intent(HomeMaintenanceActivity.this, OrderActivity.class);
             intent.putExtra("order", mOrder);
+            intent.putExtra("subject", "汽车保养");
             startActivity(intent);
         }
     }
