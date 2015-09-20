@@ -6,6 +6,7 @@ import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
+import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Region;
@@ -243,4 +244,25 @@ public class ResponseUtils {
         return carList;
     }
 
+    public static List<CarStore> parseCatStores(JSONArray jsonArray) throws JSONException{
+
+        if (jsonArray == null) {
+            return null;
+        }
+
+        if (jsonArray.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<CarStore> storeList = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject storeJson = jsonArray.getJSONObject(i);
+            CarStore store = CarStore.parse(storeJson);
+            if (store != null) {
+                storeList.add(store);
+            }
+        }
+        return storeList;
+    }
 }

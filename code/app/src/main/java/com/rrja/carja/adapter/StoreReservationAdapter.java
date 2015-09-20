@@ -35,12 +35,14 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         StoreViewHolder vh = (StoreViewHolder) holder;
 
-        CarStore store = CoreManager.getManager().getStores().get(position);
+        final CarStore store = CoreManager.getManager().getStores().get(position);
         vh.bindData(store);
         vh.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if (mActionListener != null) {
+                    mActionListener.onClick(store);
+                }
             }
         });
     }
@@ -105,5 +107,7 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
     public interface StoreActionListener {
 
         void onRequestStorePic(CarStore carStore);
+        void onClick(CarStore store);
+
     }
 }

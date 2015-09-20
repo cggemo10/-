@@ -27,6 +27,7 @@ public class HttpUtils {
     private static final String SERVICE_GOODS = "/goods";
     private static final String SERVICE_SERVICE = "/service";
     private static final String SERVICE_ORDER = "/order";
+    private static final String SERVICE_STORE = "/store";
 //    http://120.25.201.50/api/car/getBrands?firstLetter=
 //    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
 //    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
@@ -57,6 +58,8 @@ public class HttpUtils {
     private static final String INTERFACE_SERVICE_GOODS = "/getGoodsList";
 
     private static final String INTERFACE_ORDER = "/order";
+
+    private static final String INTERFACE_STORE = "/getStoreList";
 
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -307,7 +310,8 @@ public class HttpUtils {
     // store interface http://120.25.201.50/api/store/getStoreList?nattel=sunde&authToken=123456&area=xxx
     public static JSONObject storeList(UserInfo userInfo, String area) {
 
-        return null;
+        String url = BASE_URL + SERVICE_STORE + INTERFACE_STORE + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken();
+        return Network.doGet(url);
     }
 
     public static JSONObject commitStoreAppointment() {

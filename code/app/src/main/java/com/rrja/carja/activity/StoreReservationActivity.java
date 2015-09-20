@@ -10,9 +10,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rrja.carja.R;
@@ -23,6 +25,7 @@ import com.rrja.carja.model.CarStore;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
 import com.rrja.carja.service.impl.StoreReservationBinder;
+import com.rrja.carja.utils.DialogHelper;
 
 public class StoreReservationActivity extends BaseActivity implements StoreReservationAdapter.StoreActionListener{
 
@@ -59,17 +62,34 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
 
         registReceiver();
 
+    }
+
+    @Override
+    protected void onStart() {
+
+        DialogHelper.getHelper().init(this);
+
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_STORE_RESERVATION_SERVICE);
         bindService(intent, conn, BIND_AUTO_CREATE);
+
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+
+        if (storeService != null) {
+            unbindService(conn);
+        }
+
+        super.onStop();
     }
 
     @Override
     protected void onDestroy() {
 
-        if (storeService != null) {
-            unbindService(conn);
-        }
+
         unRegistReceiver();
         super.onDestroy();
     }
@@ -82,6 +102,18 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
         startService(intent);
     }
 
+    @Override
+    public void onClick(CarStore store) {
+
+        Intent intent = new Intent(this, StoreReservationDetalActivity.class);
+        intent.putExtra("curr_store", store);
+        startActivity(intent);
+    }
+
+    public void loadMoreStores() {
+        storeService.loadStore(1);
+    }
+
     private void registReceiver() {
 
         if (mReceiver == null) {
@@ -89,6 +121,7 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
             IntentFilter filter = new IntentFilter();
             filter.addAction(Constant.ACTION_BORADCAST_GET_STORE_LIST);
             filter.addAction(Constant.ACTION_BROADCAST_GET_STORE_LIST_ERROR);
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
 
             mReceiver = new StoreReceiver();
             registerReceiver(mReceiver, filter);
@@ -108,6 +141,27 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
         @Override
         public void onReceive(Context context, Intent intent) {
 
+            String action = intent.getAction();
+            if (Constant.ACTION_BORADCAST_GET_STORE_LIST.equals(action)) {
+                mAdapter.notifyDataSetChanged();
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_STORE_LIST_ERROR.equals(action)) {
+                String err = "";
+                if (intent.hasExtra("description")) {
+                    err = intent.getStringExtra("description");
+                }
+
+                if (TextUtils.isEmpty(err)) {
+                    Toast.makeText(context, context.getString(R.string.str_err_net), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, err, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE.equals(action)) {
+                mAdapter.notifyDataSetChanged();
+            }
         }
     }
 
@@ -116,6 +170,9 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             storeService = (StoreReservationBinder) service;
+            if (CoreManager.getManager().getStores().size() == 0) {
+                loadMoreStores();
+            }
         }
 
         @Override

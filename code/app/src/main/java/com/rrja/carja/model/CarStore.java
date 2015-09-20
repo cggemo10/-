@@ -9,33 +9,21 @@ import com.j256.ormlite.table.DatabaseTable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by chongge on 15/6/27.
- */
-@DatabaseTable(tableName = "car_store")
+import java.text.SimpleDateFormat;
+
 public class CarStore implements Parcelable {
 
-    @DatabaseField(id = true)
     private String storeId;
-    @DatabaseField
     private String storeName;
-    @DatabaseField
     private String address;
-    @DatabaseField
     private String storeImg;
-    @DatabaseField
     private String area;
-    @DatabaseField
     private String tel;
-    @DatabaseField
-    private String openTime;
-    @DatabaseField
+    private String openTime = "";
+    private String closeTime = "";
     private String payType;
-    @DatabaseField
     private String desc;
-    @DatabaseField
     private double lat;
-    @DatabaseField
     private double lng;
 
     public String getStoreId() {
@@ -92,6 +80,14 @@ public class CarStore implements Parcelable {
 
     public void setOpenTime(String openTime) {
         this.openTime = openTime;
+    }
+
+    public String getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(String closeTime) {
+        this.closeTime = closeTime;
     }
 
     public String getPayType() {
@@ -179,6 +175,23 @@ public class CarStore implements Parcelable {
 
     public static CarStore parse(JSONObject storeJs) throws JSONException {
 
-        return null;
+        if (storeJs == null || storeJs.length() == 0) {
+            return null;
+        }
+
+        CarStore store = new CarStore();
+        store.address = storeJs.getString("address");
+        store.area = storeJs.getString("area");
+        store.storeId = storeJs.getInt("id") + "";
+        store.storeImg = storeJs.getString("img");
+        store.lat = storeJs.getDouble("latitude");
+        store.lng = storeJs.getDouble("longitude");
+        store.storeName = storeJs.getString("name");
+        store.tel = storeJs.getString("tele");
+        store.desc = storeJs.getString("introduce");
+//        store.openTime = storeJs.getString("time_open");
+//        store.closeTime = storeJs.getString("time_close");
+
+        return store;
     }
 }

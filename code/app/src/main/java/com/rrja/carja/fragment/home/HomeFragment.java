@@ -185,8 +185,17 @@ public class HomeFragment extends Fragment implements RecommendAdapter.OnRecomme
             }
 
             if (Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR.equals(action)) {
-                Toast.makeText(context, "aaaaaaa", Toast.LENGTH_LONG).show();
-//                Toast.makeText(context, getString(R.string.str_err_net), Toast.LENGTH_LONG).show();
+                String errMsg = "";
+                if (intent.hasExtra("description")) {
+                    errMsg = intent.getStringExtra("description");
+                } else {
+                    errMsg = context.getString(R.string.str_err_net);
+                }
+                Toast.makeText(context, errMsg, Toast.LENGTH_LONG).show();
+            }
+
+            if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT.equals(action)) {
+                discountAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -197,6 +206,7 @@ public class HomeFragment extends Fragment implements RecommendAdapter.OnRecomme
             IntentFilter filter = new IntentFilter();
             filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA);
             filter.addAction(Constant.ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR);
+            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT);
 
             mReceiver = new RecommendDataReceiver();
             getActivity().registerReceiver(mReceiver, filter);

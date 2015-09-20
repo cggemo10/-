@@ -39,6 +39,8 @@ public class CoreManager {
     private static List<RecommendGoods> discountList = new ArrayList<RecommendGoods>();
 
     private static List<ImageView> companyInfoImgs = new ArrayList<>();
+
+    private static int storeCurPage = 0;
     private static List<CarStore> stores = new ArrayList<>();
     private static List<CouponGoods> couponsList = new ArrayList<>();
     private static List<Forum> forums = new ArrayList<>();
@@ -112,6 +114,14 @@ public class CoreManager {
 
     public List<CarStore> getStores() {
         return stores;
+    }
+
+    public int getStorePage() {
+        return storeCurPage;
+    }
+
+    public void setStorePage(int storePage) {
+        storeCurPage = storePage;
     }
 
     public List<CouponGoods> getCoupons() {
