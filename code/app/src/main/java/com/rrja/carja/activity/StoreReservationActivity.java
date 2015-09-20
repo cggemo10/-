@@ -21,6 +21,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.adapter.StoreReservationAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.store.StoreMainFragment;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
@@ -180,5 +181,6 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
             storeService = null;
         }
     };
+
 
 }

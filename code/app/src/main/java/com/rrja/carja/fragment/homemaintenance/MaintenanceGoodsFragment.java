@@ -5,9 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -20,14 +18,13 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.model.maintenance.TagableSubService;
-import com.rrja.cja.view.recycler.stickyside.LayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.Inflater;
 
 public class MaintenanceGoodsFragment extends BaseElementFragment {
 

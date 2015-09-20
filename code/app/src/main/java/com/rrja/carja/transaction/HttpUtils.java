@@ -51,6 +51,7 @@ public class HttpUtils {
     private static final String INTERFACE_USER_ORDER_LIST = "/getUserOrderList";
     private static final String INTERFACE_USER_COUPON_LIST = "/getUserCoupons";
     private static final String INTERFACE_USER_APPOINTMENT = "/getUserAppointmentList";
+    private static final String INTERFACE_USER_APPOINTMENT_STORE = "/appointmentStore";
 
     private static final String INTERFACE_GOOD_RECOMMEND = "/getRecommendGoods";
     private static final String INTERFACE_GOOD_COUPONS = "/getDiscountGoodsList";
@@ -314,8 +315,10 @@ public class HttpUtils {
         return Network.doGet(url);
     }
 
-    public static JSONObject commitStoreAppointment() {
-        return null;
+    public static JSONObject commitStoreAppointment(String tel, String authToken, String storeId, String data) {
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_APPOINTMENT_STORE + "?nattel=" + tel + "&authToken=" +
+                "&storeId=" + storeId + "&datetime=" + data;
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------

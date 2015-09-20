@@ -727,10 +727,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 //        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
 //                + "\"";
         orderInfo += "&notify_url=" + "\""
-                + "http://120.25.201.50/api/order/syncOrderStatus?nattel="
-                + order.getUserInfo().getTel() + "%26authToken="
-                + order.getUserInfo().getAuthToken()
-                + "%26orderNum="
+                + "http://120.25.201.50/api/order/syncAlipay?nattel="
+                + order.getUserInfo().getTel() + "%26orderNum="
                 + payInfo.tradeNo + "%26status=22"
                 + "\"";
 

@@ -14,6 +14,8 @@ import com.rrja.carja.utils.ResponseUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -71,6 +73,45 @@ public class StoreReservationBinder extends Binder {
                     context.sendBroadcast(intent);
                 }
 
+            }
+        };
+
+        context.execute(task);
+    }
+
+    public void commitBookStore(final String storeId, final String dataTime) {
+
+
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                String tel = CoreManager.getManager().getCurrUser().getTel();
+                String authToken = CoreManager.getManager().getCurrUser().getAuthToken();
+                try {
+                    final String data = URLEncoder.encode(dataTime, "utf-8").replace(" ", "%20");
+                    JSONObject js = HttpUtils.commitStoreAppointment(tel, authToken, storeId, data);
+                    if (js.has("code") && js.getInt("code") == 0) {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_BOOK_STORE);
+                        intent.putExtra("result", "succ");
+                        context.sendBroadcast(intent);
+                    } else {
+                        String errMsg = context.getString(R.string.str_err_net);
+                        if (js.has("description")) {
+                            errMsg = js.getString("description");
+                        }
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_BOOK_STORE_ERR);
+                        intent.putExtra("description", errMsg);
+                        context.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    String errMsg = context.getString(R.string.str_err_net);
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_BOOK_STORE_ERR);
+                    intent.putExtra("description", errMsg);
+                    context.sendBroadcast(intent);
+
+                    e.printStackTrace();
+                }
             }
         };
 

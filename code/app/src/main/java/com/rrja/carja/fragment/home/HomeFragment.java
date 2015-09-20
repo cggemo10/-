@@ -141,8 +141,14 @@ public class HomeFragment extends Fragment implements RecommendAdapter.OnRecomme
 
     @Override
     public void onStoreReservationClick() {
-        Intent maintenance = new Intent(getActivity(), StoreReservationActivity.class);
-        getActivity().startActivity(maintenance);
+        if (CoreManager.getManager().getCurrUser() != null) {
+            Intent maintenance = new Intent(getActivity(), StoreReservationActivity.class);
+            getActivity().startActivity(maintenance);
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            intent.setAction(Constant.ACTION_LOGIN_AFTER_ONDOREWASH);
+            getActivity().startActivity(intent);
+        }
     }
 
     @Override

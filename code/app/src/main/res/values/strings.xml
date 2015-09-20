@@ -124,7 +124,13 @@
     <!-- 门店预约 -->
     <string name="title_store_reservation">门店预约</string>
     <string name="title_store_detial">门店详情</string>
+    <string name="title_store_conform_add">确认添加</string>
     <string name="btn_comform_store_reservation">确认门店预约</string>
+    <string name="hint_book_user">请输入您的姓名</string>
+    <string name="hint_book_tel">请输入您的电话</string>
+    <string name="string_book_time">请选择预约时间</string>
+    <string name="hint_book_area">请输入您的位置</string>
+
 
     <!-- 上门洗车 -->
     <string name="title_wash_car_door">上门洗车</string>

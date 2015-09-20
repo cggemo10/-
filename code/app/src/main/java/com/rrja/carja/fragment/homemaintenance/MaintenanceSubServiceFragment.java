@@ -17,6 +17,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 
 import android.content.IntentFilter;

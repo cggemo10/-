@@ -42,6 +42,9 @@ public class Constant {
     public static final String ACTION_BORADCAST_GET_STORE_LIST = "rrja.boradcast.get.STORE";
     public static final String ACTION_BROADCAST_GET_STORE_LIST_ERROR = "rrja.boradcast.get.STORE_ERR";
 
+    public static final String ACTION_BROADCAST_BOOK_STORE = "rrja.broadcast.BOOK_STORE";
+    public static final String ACTION_BROADCAST_BOOK_STORE_ERR = "rrja.broadcast.BOOK_STORE_ERR";
+
     public static final String ACTION_BROADCAST_GET_CAR_SERIES = "rrja.broadcast.get.CAR_SERIES";
     public static final String ACTION_BROADCAST_GET_CAR_SERIES_ERR = "rrja.broadcast.get.CAR_SERIES_ERR";
 

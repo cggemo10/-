@@ -1,34 +1,39 @@
 package com.rrja.carja.activity;
 
-import android.graphics.BitmapFactory;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.fragment.BaseElementFragment;
+import com.rrja.carja.fragment.store.StoreBookingFragment;
+import com.rrja.carja.fragment.store.StoreMainFragment;
 import com.rrja.carja.model.CarStore;
-
-import java.io.IOException;
+import com.rrja.carja.service.DataCenterService;
+import com.rrja.carja.service.impl.StoreReservationBinder;
 
 /**
  * Created by chongge on 15/6/28.
  */
-public class StoreReservationDetalActivity extends BaseActivity implements View.OnClickListener{
+public class StoreReservationDetalActivity extends BaseActivity{
 
     CarStore store;
+    Fragment currFragment;
+    private FragmentManager fm;
 
-    private TextView txtStoreName;
-    private ImageView imgStoreImg;
-    private TextView txtAddress;
-    private TextView txtStoreArea;
-    private TextView txtStoreTel;
-    private TextView txtStoreOpenTime;
-    private TextView txtStorePayType;
-    private TextView txtStoreService;
-    private Button btnCommit;
+    BaseElementFragment storeMainFragment;
+    BaseElementFragment storeBookFragment;
+
+    StoreReservationBinder mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,45 +61,126 @@ public class StoreReservationDetalActivity extends BaseActivity implements View.
             finish();
         }
 
-        initView();
-
-    }
-
-    private void initView() {
-        txtStoreName = (TextView) findViewById(R.id.txt_store_name_detal);
-        imgStoreImg = (ImageView) findViewById(R.id.img_store_pic_detal);
-        txtAddress = (TextView) findViewById(R.id.txt_store_address_detal_content);
-        txtStoreArea = (TextView) findViewById(R.id.txt_store_area_detal);
-        txtStoreTel = (TextView) findViewById(R.id.txt_store_tel_detal);
-        txtStoreOpenTime = (TextView) findViewById(R.id.txt_store_opentime_detal_content);
-        txtStorePayType = (TextView) findViewById(R.id.txt_store_paytype_content);
-        txtStoreService = (TextView) findViewById(R.id.txt_store_service_content);
-        btnCommit = (Button) findViewById(R.id.btn_gain_coupons);
-
-        txtStoreName.setText(store.getStoreName());
-
-        // TODO demo
-        try {
-            imgStoreImg.setImageBitmap(BitmapFactory.decodeStream(getAssets().open("mendian.jpg")));
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (!TextUtils.isEmpty(store.getStoreName())) {
+            setTitle(store.getStoreName());
         }
 
-        txtAddress.setText(store.getAddress());
-        txtStoreArea.setText(store.getArea());
-        txtStoreTel.setText(store.getTel());
-        txtStoreOpenTime.setText(store.getOpenTime());
-        txtStorePayType.setText(store.getPayType());
-        txtStoreService.setText(store.getDesc());
+        if (mService == null) {
+            Intent intent = new Intent(this, DataCenterService.class);
+            intent.setAction(Constant.ACTION_STORE_RESERVATION_SERVICE);
+            bindService(intent, conn, BIND_AUTO_CREATE);
+        }
 
+        fm = getFragmentManager();
+        storeMainFragment = StoreMainFragment.newInstance();
+        storeBookFragment = StoreBookingFragment.newInstance();
 
-        btnCommit.setOnClickListener(this);
-
-
+        switchFragment(storeMainFragment, false);
     }
 
     @Override
-    public void onClick(View v) {
-        Toast.makeText(this, "已确认预约，您可以在用户中心中查看",Toast.LENGTH_LONG).show();
+    protected void onDestroy() {
+        if (mService != null) {
+            unbindService(conn);
+        }
+        super.onDestroy();
+    }
+
+    public CarStore getCurrentStore() {
+        return store;
+    }
+
+    private void switchFragment(BaseElementFragment fragment, boolean leftIn) {
+
+        if (fragment == null) {
+            return;
+        }
+        currFragment = fragment;
+        FragmentTransaction transaction = fm.beginTransaction();
+        if (leftIn) {
+            transaction.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        } else {
+            transaction.setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left);
+        }
+        transaction.replace(R.id.fl_store_content, fragment);
+        transaction.commit();
+    }
+
+    ServiceConnection conn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mService = (StoreReservationBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mService = null;
+        }
+    };
+
+    // -----------------------------------------------------------------------------
+    public StoreBookingFragment.OnBookActionListener getBookActionListener() {
+        return new BookActionListener();
+    }
+
+    private class BookActionListener implements StoreBookingFragment.OnBookActionListener {
+
+        @Override
+        public void onBookCommit(String name, String tel, String time, String loc) {
+            if (mService != null) {
+                mService.commitBookStore(store.getStoreId(), time);
+            }
+        }
+
+        @Override
+        public void onBackClicked() {
+
+            switchFragment(storeMainFragment, true);
+        }
+
+        @Override
+        public void onCommitResult(boolean result) {
+            if (result) {
+                finish();
+            } else {
+                switchFragment(storeMainFragment, true);
+            }
+        }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (currFragment instanceof StoreBookingFragment) {
+                switchFragment(storeMainFragment, true);
+                return true;
+            }
+
+            if (currFragment instanceof StoreMainFragment) {
+                finish();
+                return true;
+            }
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    // ------------------------------------------------------------------------------------------
+    public StoreMainFragment.OnStoreMainActionListener getStoreMainActionListener () {
+        return new StoreMainActionListener();
+    }
+
+    private class StoreMainActionListener implements StoreMainFragment.OnStoreMainActionListener {
+
+        @Override
+        public void onAddBook() {
+            switchFragment(storeBookFragment, false);
+        }
+
+        @Override
+        public void onBackClicked() {
+            finish();
+        }
     }
 }

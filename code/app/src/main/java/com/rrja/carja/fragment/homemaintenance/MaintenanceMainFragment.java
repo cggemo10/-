@@ -5,36 +5,25 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.adapter.MaintenanceAdapter;
 import com.rrja.carja.constant.Constant;
+import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.CarInfo;
-import com.rrja.carja.model.TagableElement;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.TagableService;
 import com.rrja.carja.model.maintenance.TagableSubService;
 import com.rrja.carja.service.FileService;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MaintenanceMainFragment extends BaseElementFragment implements View.OnClickListener, MaintenanceAdapter.MaintenanceListener {

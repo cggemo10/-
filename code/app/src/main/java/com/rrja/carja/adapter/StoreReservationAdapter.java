@@ -79,7 +79,7 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
 
                 String fileName = picUrl.substring(picUrl.lastIndexOf("/") + 1);
 
-                File img = new File(Constant.getRecommendCacheDir(), fileName);
+                File img = new File(Constant.getStoreCacheDir(), fileName);
                 if (img.exists()) {
                     try {
                         storePic.setImageBitmap(BitmapFactory.decodeFile(img.getAbsolutePath()));

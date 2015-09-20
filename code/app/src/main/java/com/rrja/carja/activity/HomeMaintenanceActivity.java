@@ -9,7 +9,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.KeyEvent;
@@ -21,7 +20,7 @@ import android.widget.Toast;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.fragment.homemaintenance.BaseElementFragment;
+import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceGoodsFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceMainFragment;
 import com.rrja.carja.fragment.homemaintenance.MaintenanceSubServiceFragment;
@@ -402,6 +401,8 @@ public class HomeMaintenanceActivity extends BaseActivity {
             if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
                 Toast.makeText(context, "获取车辆信息失败，请稍后再试！", Toast.LENGTH_LONG).show();
             }
+
+
         }
     }
 
