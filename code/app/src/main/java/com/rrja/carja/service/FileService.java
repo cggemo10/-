@@ -353,6 +353,7 @@ public class FileService extends Service implements Handler.Callback {
 
     private void sendBroadCast(String action) {
         Intent intent = new Intent(action);
+        intent.putExtra("img_load","img");
         sendBroadcast(intent);
     }
 
