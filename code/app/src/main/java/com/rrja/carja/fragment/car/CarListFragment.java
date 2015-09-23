@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -36,6 +37,7 @@ public class CarListFragment extends BaseElementFragment {
 
     private CarListInteractionListener mListener;
 
+    private AppCompatButton btnAdd;
     private RecyclerView mRecycler;
     private PrivateCarAdapter mAdapter;
 
@@ -68,6 +70,16 @@ public class CarListFragment extends BaseElementFragment {
         mAdapter = new PrivateCarAdapter();
         mRecycler.setAdapter(mAdapter);
         mRecycler.addItemDecoration(new CarBrandDecoration(getActivity(),CarBrandDecoration.VERTICAL_LIST));
+
+        btnAdd = (AppCompatButton) view.findViewById(R.id.btn_add_car);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mListener != null) {
+                    mListener.requestAddCar();
+                }
+            }
+        });
     }
 
     @Override
@@ -133,6 +145,7 @@ public class CarListFragment extends BaseElementFragment {
 
     public interface CarListInteractionListener {
         public void onCarSelected(CarInfo car);
+        public void requestAddCar();
     }
 
     private class PrivateCarAdapter extends RecyclerView.Adapter {

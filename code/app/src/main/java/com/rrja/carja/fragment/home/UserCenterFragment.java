@@ -22,10 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
+import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.utils.ImageUtil;
 
@@ -245,7 +247,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), CarInfoActivity.class);
+                    getActivity().startActivity(intent);
                 }
                 break;
             case R.id.rl_setting_coupons:

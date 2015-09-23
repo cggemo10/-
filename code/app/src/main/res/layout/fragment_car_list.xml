@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,10 +7,25 @@
     android:orientation="vertical"
     tools:context="com.rrja.carja.fragment.car.CarListFragment">
 
+    <android.support.v7.widget.AppCompatButton
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/c_style_red"
+        android:id="@+id/btn_add_car"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:text="@string/title_store_conform_add"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_above="@id/btn_add_car"
         android:layout_marginTop="10dp"
         android:id="@+id/recycler_my_car"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</LinearLayout>
+</RelativeLayout>

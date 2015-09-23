@@ -57,6 +57,8 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
 
     private AddCarReceiver mReceiver;
 
+    private boolean isSelecte = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,7 +99,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         addCarFragment = AddCarFragment.newInstance();
         seriesFragment = CarSeriesFragment.newInstance();
         brandFragment = CarBrandFragment.newInstance();
-        modelFragment = newInstance();
+        modelFragment = CarModelFragment.newInstance();
 
         Intent intent = new Intent(this, DataCenterService.class);
         intent.setAction(Constant.ACTION_CAR_SERVICE);
@@ -345,11 +347,20 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         @Override
         public void onCarSelected(CarInfo car) {
 
-            Intent result = new Intent();
-            result.putExtra("car", car);
-            setResult(RESULT_OK, result);
+            if (isSelecte) {
+                Intent result = new Intent();
+                result.putExtra("car", car);
+                setResult(RESULT_OK, result);
 
-            finish();
+                finish();
+            } else {
+                // TODO
+            }
+        }
+
+        @Override
+        public void requestAddCar() {
+            switchFragment(addCarFragment);
         }
     }
 }
