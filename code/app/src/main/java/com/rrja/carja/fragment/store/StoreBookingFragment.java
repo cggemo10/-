@@ -284,7 +284,7 @@ public class StoreBookingFragment extends BaseElementFragment implements View.On
                     break;
                 }
 
-                if (year <= 0 || month <= 0 || day <= 0 || hour == 0 || minute == 0) {
+                if (year < 0 || month < 0 || day < 0 || hour < 0 || minute < 0) {
                     Toast.makeText(getActivity(), "请选择预约时间！", Toast.LENGTH_SHORT).show();
                     break;
                 }

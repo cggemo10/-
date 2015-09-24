@@ -41,6 +41,7 @@ public class CarListFragment extends BaseElementFragment {
     private RecyclerView mRecycler;
     private PrivateCarAdapter mAdapter;
 
+    private AppCompatButton btn
     private UserCarReceiver mReceiver;
 
     public static CarListFragment newInstance() {
@@ -99,6 +100,8 @@ public class CarListFragment extends BaseElementFragment {
 
             DialogHelper.getHelper().showWaitting();
         }
+
+        mAdapter.notifyDataSetChanged();
         registReceiver();
     }
 

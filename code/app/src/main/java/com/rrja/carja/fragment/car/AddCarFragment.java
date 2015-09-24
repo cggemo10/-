@@ -1,10 +1,8 @@
 package com.rrja.carja.fragment.car;
 
 import android.app.Activity;
-import android.net.Uri;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,9 +15,6 @@ import android.widget.Toast;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.CarInfoActivity;
 import com.rrja.carja.model.CarInfo;
-import com.rrja.carja.model.CarSeries;
-
-import org.w3c.dom.Text;
 
 
 public class AddCarFragment extends Fragment implements View.OnClickListener {
@@ -155,7 +150,6 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                 break;
         }
     }
-
 
     public interface OnAddCarFragmentInteractionListener {
 

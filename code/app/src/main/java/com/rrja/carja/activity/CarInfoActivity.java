@@ -14,7 +14,6 @@ import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
@@ -69,7 +68,6 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
         if (llloc != null) {
             llloc.setVisibility(View.GONE);
         }
-
 
         toolbar.setNavigationIcon(android.support.v7.appcompat.R.drawable.abc_ic_ab_back_mtrl_am_alpha);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -181,6 +179,7 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
             }
 
             carService.addCarForUser(CoreManager.getManager().getCurrUser(), carInfo);
+            DialogHelper.getHelper().showWaitting();
         }
     }
 
@@ -333,6 +332,14 @@ public class CarInfoActivity extends BaseActivity implements View.OnClickListene
                 Intent refreshIntent = new Intent(context, DataCenterService.class);
                 refreshIntent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
                 startService(refreshIntent);
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS.equals(action)) {
+
+            }
+
+            if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
+                switchFragment(listFragment);
             }
 
         }
