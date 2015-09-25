@@ -22,7 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.constant.Constant;
@@ -247,7 +247,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-                    Intent intent = new Intent(getActivity(), CarInfoActivity.class);
+                    Intent intent = new Intent(getActivity(), CarManagerActivity.class);
                     getActivity().startActivity(intent);
                 }
                 break;

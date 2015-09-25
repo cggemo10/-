@@ -15,10 +15,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.adapter.CarBrandAdapter;
-import com.rrja.carja.adapter.GridAdapter;
-import com.rrja.carja.adapter.decoration.CarBrandDecoration;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.cja.view.recycler.stickyside.LayoutManager;
@@ -74,7 +72,7 @@ public class CarBrandFragment extends Fragment implements CarBrandAdapter.onItem
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((CarInfoActivity)activity).getBrandInteraction();
+        mListener = ((CarManagerActivity)activity).getBrandInteraction();
     }
 
     @Override

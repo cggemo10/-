@@ -13,7 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.model.CarInfo;
 
 
@@ -24,6 +24,8 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     private String prefix2 = "A";
 
     private EditText txtSeries;
+
+    private CarInfo carInfo = new CarInfo();
 
     private EditText txtCarNum;
     private EditText edFrame;
@@ -54,14 +56,14 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     }
 
     private void initView(View v) {
-        CarInfoActivity mActivity = (CarInfoActivity)getActivity();
+
         txtSeries = (EditText) v.findViewById(R.id.txt_lable_car_series_content);
         txtSeries.setOnClickListener(this);
         txtCarNum = (EditText) v.findViewById(R.id.txt_car_munber);
         txtCarNum.setOnClickListener(this);
         txtPrefix = (TextView) v.findViewById(R.id.txt_prefix_content);
         txtPrefix.setOnClickListener(this);
-        String prefix = mActivity.getPrefix1() + mActivity.getPrefix2();
+        String prefix = prefix1 + prefix2;
         txtPrefix.setText(prefix);
 
         edFrame = (EditText) v.findViewById(R.id.ed_car_frame_munber);
@@ -82,14 +84,13 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((CarInfoActivity)activity).getAddCarInteraction();
+        mListener = ((CarManagerActivity)activity).getAddCarInteraction();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        CarInfoActivity mActivity = (CarInfoActivity)getActivity();
-        CarInfo carInfo = mActivity.getCarInfo();
+
         if (!TextUtils.isEmpty(carInfo.getSeriesId()) && !TextUtils.isEmpty(carInfo.getBrandId()) && !TextUtils.isEmpty(carInfo.getModelId())) {
             String seriesInfo = carInfo.getBrandName() + " " + carInfo.getModelName();
             txtSeries.setText(seriesInfo);
@@ -118,8 +119,6 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.btn_save_car:
-                CarInfoActivity mActivity = (CarInfoActivity)getActivity();
-                CarInfo carInfo = mActivity.getCarInfo();
                 if (TextUtils.isEmpty(carInfo.getBrandId()) || TextUtils.isEmpty(carInfo.getSeriesId()) || TextUtils.isEmpty(carInfo.getModelId())) {
                     Toast.makeText(getActivity(), "请选择您的车型。", Toast.LENGTH_LONG).show();
                     return;
@@ -156,6 +155,36 @@ public class AddCarFragment extends Fragment implements View.OnClickListener {
         public void onBrandClicked();
         public void onPrefixClicked();
         public void onCommit();
+    }
+
+    public String getPrefix1() {
+        return prefix1;
+    }
+
+    public void setPrefix1(String pre1) {
+        this.prefix1 = pre1;
+        if (!TextUtils.isEmpty(prefix1) && !TextUtils.isEmpty(prefix1)) {
+            setPrefix(prefix1 + prefix2);
+        }
+    }
+
+    public void setPrefix2(String pre2) {
+        this.prefix2 = pre2;
+        if (!TextUtils.isEmpty(prefix1) && !TextUtils.isEmpty(prefix1)) {
+            setPrefix(prefix1 + prefix2);
+        }
+    }
+
+    public String getPrefix2() {
+        return prefix2;
+    }
+
+    public CarInfo getCarInfo() {
+        return carInfo;
+    }
+
+    public void clear() {
+        carInfo = new CarInfo();
     }
 
 }

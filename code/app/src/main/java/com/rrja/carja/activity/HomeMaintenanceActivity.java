@@ -110,7 +110,8 @@ public class HomeMaintenanceActivity extends BaseActivity {
         if (carInfos != null && carInfos.size() == 1) {
             mOrder.setmCarInfo(carInfos.get(0));
         } else {
-            Intent intentCarInfo = new Intent(this, CarInfoActivity.class);
+            Intent intentCarInfo = new Intent(this, CarManagerActivity.class);
+            intentCarInfo.putExtra("select", true);
             startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
         }
 
@@ -314,7 +315,8 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         @Override
         public void onCarClicked() {
-            Intent intentCarInfo = new Intent(HomeMaintenanceActivity.this, CarInfoActivity.class);
+            Intent intentCarInfo = new Intent(HomeMaintenanceActivity.this, CarManagerActivity.class);
+            intentCarInfo.putExtra("select", true);
             startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
 
         }

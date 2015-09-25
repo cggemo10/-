@@ -114,7 +114,6 @@
             android:screenOrientation="behind"
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
-
         <activity
             android:name="com.alipay.sdk.auth.AuthActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
@@ -123,6 +122,10 @@
         </activity>
 
         <!-- alipay sdk end -->
+        <activity
+            android:name=".activity.CarManagerActivity"
+            android:label="@string/title_activity_car_manager" >
+        </activity>
     </application>
 
 </manifest>

@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,10 +52,8 @@ public class CarNumberPrefixPickerFragment extends Fragment implements View.OnCl
     String[] prefix2Array = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
             "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
 
-    public static CarNumberPrefixPickerFragment newInstance(String prefix1_, String prefix2_) {
+    public static CarNumberPrefixPickerFragment newInstance() {
         CarNumberPrefixPickerFragment fragment = new CarNumberPrefixPickerFragment();
-        fragment.setPrefix1(prefix1_);
-        fragment.setPrefix2(prefix2_);
         return fragment;
     }
 
@@ -114,7 +112,7 @@ public class CarNumberPrefixPickerFragment extends Fragment implements View.OnCl
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((CarInfoActivity)activity).getPrefixFragmentInteraction();
+        mListener = ((CarManagerActivity)activity).getPrefixFragmentInteraction();
     }
 
     @Override

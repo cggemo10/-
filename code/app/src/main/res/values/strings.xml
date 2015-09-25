@@ -97,7 +97,7 @@
 
     <!-- car info -->
     <string name="title_car_inf">车辆信息</string>
-
+    <string name="btn_add_car">添加车辆</string>
     <!-- car report -->
     <string name="title_test_report">检测报告</string>
 
@@ -240,6 +240,7 @@
         <item>台(台湾)</item>
 
     </string-array>
+    <string name="title_activity_car_manager">CarManagerActivity</string>
 
 
 

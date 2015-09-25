@@ -16,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.adapter.CarModelAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -110,7 +110,7 @@ public class CarModelFragment extends Fragment implements CarModelAdapter.OnMode
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((CarInfoActivity)activity).getModelInteraction();
+        mListener = ((CarManagerActivity)activity).getModelInteraction();
     }
 
     @Override

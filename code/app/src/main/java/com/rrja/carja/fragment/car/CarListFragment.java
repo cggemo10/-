@@ -19,7 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarInfoActivity;
+import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.adapter.decoration.CarBrandDecoration;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -41,7 +41,6 @@ public class CarListFragment extends BaseElementFragment {
     private RecyclerView mRecycler;
     private PrivateCarAdapter mAdapter;
 
-    private AppCompatButton btn
     private UserCarReceiver mReceiver;
 
     public static CarListFragment newInstance() {
@@ -86,7 +85,7 @@ public class CarListFragment extends BaseElementFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        mListener = ((CarInfoActivity) activity).getCarListListener();
+        mListener = ((CarManagerActivity) activity).getCarListListener();
     }
 
     @Override
@@ -125,6 +124,7 @@ public class CarListFragment extends BaseElementFragment {
     private void unregistReceiver() {
         if (mReceiver != null) {
             getActivity().unregisterReceiver(mReceiver);
+            mReceiver = null;
         }
     }
 

@@ -16,7 +16,7 @@
         android:textSize="16sp"
         android:layout_marginTop="20dp"
         android:textColor="@android:color/white"
-        android:text="@string/title_store_conform_add"
+        android:text="@string/btn_add_car"
         android:padding="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
