@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     ImageView imgMenuCoupons;
 
     LinearLayout llHOme;
-    LinearLayout llForum;
+//    LinearLayout llForum;
     LinearLayout llDiscount;
 
     UserBinder userService;
@@ -171,8 +171,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                         return homeFragment;
                     case 1:
                         return couponsFragment;
-                    case 2:
-                        return forumFragment;
+//                    case 2:
+//                        return forumFragment;
                 }
 
                 return null;
@@ -180,7 +180,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
             @Override
             public int getCount() {
-                return 3;
+                return 2;
             }
         });
         fragmentPager.setOnPageChangeListener(this);
@@ -191,8 +191,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         llHOme = (LinearLayout) findViewById(R.id.ll_menu_home);
         llHOme.setOnClickListener(this);
-        llForum = (LinearLayout) findViewById(R.id.ll_menu_forum);
-        llForum.setOnClickListener(this);
+//        llForum = (LinearLayout) findViewById(R.id.ll_menu_forum);
+//        llForum.setOnClickListener(this);
         llDiscount = (LinearLayout) findViewById(R.id.ll_menu_onsale);
         llDiscount.setOnClickListener(this);
 
@@ -239,9 +239,9 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             case R.id.ll_menu_onsale:
                 fragmentPager.setCurrentItem(1, true);
                 break;
-            case R.id.ll_menu_forum:
-                fragmentPager.setCurrentItem(2, true);
-                break;
+//            case R.id.ll_menu_forum:
+//                fragmentPager.setCurrentItem(2, true);
+//                break;
             case R.id.ll_cur_loc:
                 Intent intent = new Intent(this, CityListActivity.class);
                 startActivityForResult(intent, REQUEST_CITY);

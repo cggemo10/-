@@ -53,7 +53,7 @@ public class MaintenanceOrder implements Parcelable{
         this.orderId = orderId;
     }
 
-    public void addGoods(String serviceId, MaintenanceService service, TagableSubService subService) {
+    public void  addGoods(String serviceId, MaintenanceService service, TagableSubService subService) {
 
         if (TextUtils.isEmpty(serviceId) || subService == null) {
             return;

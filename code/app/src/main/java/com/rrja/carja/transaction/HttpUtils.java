@@ -112,12 +112,12 @@ public class HttpUtils {
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
         try {
-            String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(),"utf-8").replace(" ", "%2b");
+            String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(),"UTF-8");
             String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
             String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
-            String brandName = TextUtils.isEmpty(carInfo.getBrandName()) ? "" : URLEncoder.encode(carInfo.getBrandName(), "utf-8").replace(" ", "%2b");
-            String modelName = TextUtils.isEmpty(carInfo.getModelName()) ? "" : URLEncoder.encode(carInfo.getModelName(), "utf-8").replace(" ", "%2b");
-            String seriesName = TextUtils.isEmpty(carInfo.getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeriesName(), "utf-8").replace(" ", "%2b");
+            String brandName = TextUtils.isEmpty(carInfo.getBrandName()) ? "" : URLEncoder.encode(carInfo.getBrandName(), "UTF-8");
+            String modelName = TextUtils.isEmpty(carInfo.getModelName()) ? "" : URLEncoder.encode(carInfo.getModelName(), "UTF-8");
+            String seriesName = TextUtils.isEmpty(carInfo.getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeriesName(), "UTF-8");
             String cityId = CoreManager.getManager().getCostumerRegion() == null ?
                     "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
 
