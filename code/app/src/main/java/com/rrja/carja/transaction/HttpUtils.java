@@ -10,6 +10,7 @@ import com.rrja.carja.model.UserInfo;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,7 +113,7 @@ public class HttpUtils {
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
         try {
-            String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(),"UTF-8");
+            String palteNum = TextUtils.isEmpty(carInfo.getPlatNum()) ? "" : URLEncoder.encode(carInfo.getPlatNum(), "UTF-8");
             String engineNo = TextUtils.isEmpty(carInfo.getEngineNo()) ? "" : carInfo.getEngineNo();
             String frameNo = TextUtils.isEmpty(carInfo.getFrameNo6()) ? "" : carInfo.getFrameNo6();
             String brandName = TextUtils.isEmpty(carInfo.getBrandName()) ? "" : URLEncoder.encode(carInfo.getBrandName(), "UTF-8");
@@ -120,6 +121,7 @@ public class HttpUtils {
             String seriesName = TextUtils.isEmpty(carInfo.getSeriesName()) ? "" : URLEncoder.encode(carInfo.getSeriesName(), "UTF-8");
             String cityId = CoreManager.getManager().getCostumerRegion() == null ?
                     "" : (CoreManager.getManager().getCostumerRegion().getId() + "");
+            URLDecoder.decode("xxx", "UTF-8");
 
             String url = BASE_URL + SERVICE_USER + INTERFACE_ADD_CAR + "?nattel=" + userInfo.getTel() +
                     "&authToken=" + userInfo.getAuthToken() +

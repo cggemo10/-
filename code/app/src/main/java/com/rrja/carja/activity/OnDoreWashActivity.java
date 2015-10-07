@@ -9,7 +9,9 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,6 +24,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
+import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.model.maintenance.TagableService;
@@ -29,11 +32,12 @@ import com.rrja.carja.model.maintenance.TagableSubService;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
 import com.rrja.carja.service.impl.MaintenanceBinder;
+import com.rrja.carja.utils.DialogHelper;
 
 import java.io.File;
 import java.util.List;
 
-public class OnDoreWashActivity extends BaseActivity implements View.OnClickListener{
+public class OnDoreWashActivity extends BaseActivity implements View.OnClickListener, Handler.Callback{
 
     private static final int REQUEST_SELECT_CAR = 10;
 
@@ -47,6 +51,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
     MaintenanceBinder orderService;
     OrderReceiver orderReceiver;
+    Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +83,8 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
         order = new MaintenanceOrder();
         order.setUserInfo(CoreManager.getManager().getCurrUser());
 
+        mHandler = new Handler(this);
+
     }
 
     @Override
@@ -98,7 +105,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
     protected void onStop() {
         super.onStop();
         unRegistReceiver();
-        unBindService();;
+        unBindService();
     }
 
     @Override
@@ -107,25 +114,51 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
         if (id == R.id.v_chose_car) {
             Intent intent = new Intent(this, CarManagerActivity.class);
             intent.putExtra("select", true);
-            startActivity(intent);
+            startActivityForResult(intent, REQUEST_SELECT_CAR);
         }
 
         if (id == R.id.btn_on_dore_wash_commit) {
             btnCommit.setEnabled(false);
-            if (CoreManager.getManager().getMaintenanceService("104").size() != 0) {
-                List<MaintenanceService> services = CoreManager.getManager().getMaintenanceService("104");
-                MaintenanceService service = services.get(0);
-                if (CoreManager.getManager().getMaintenanceService(service.getId()).size() != 0) {
-                    List<MaintenanceService> subServices = CoreManager.getManager().getMaintenanceService(service.getId());
-                    MaintenanceService subService = subServices.get(0);
-                    TagableSubService tagableSubService = new TagableSubService();
-                    tagableSubService.setSubService(subService);
+            DialogHelper.getHelper().showWaitting();
+            mHandler.sendEmptyMessage(1);
 
-                    TagableService tagableService = new TagableService();
-                    tagableService.setService(service);
+        }
+    }
 
-                }
+    private void checkOrder() {
+        if (CoreManager.getManager().getMaintenanceService("104").size() != 0) {
+            List<MaintenanceService> services = CoreManager.getManager().getMaintenanceService("104");
+            MaintenanceService service = services.get(0);
+            if (CoreManager.getManager().getMaintenanceService(service.getId()).size() != 0) {
+                List<MaintenanceService> subServices = CoreManager.getManager().getMaintenanceService(service.getId());
+                MaintenanceService subService = subServices.get(0);
+                TagableSubService tagableSubService = new TagableSubService();
+                tagableSubService.setSubService(subService);
+
+                MaintenanceGoods goods = new MaintenanceGoods();
+                goods.setId("1000026");
+                goods.setPrice(0);
+
+                tagableSubService.setGoods(goods);
+                // TODO check coupons
+
+                TagableService tagableService = new TagableService();
+                tagableService.setService(service);
+
+                order.addGoods(service.getId(), service, tagableSubService);
+
+                DialogHelper.getHelper().dismissWatting();
+
+                Intent intent = new Intent(this,OrderActivity.class);
+                intent.putExtra("order", order);
+                intent.putExtra("subject", "上门洗车");
+                startActivity(intent);
+
+                finish();
+            } else {
+                orderService.getService(service.getId());
             }
+        } else {
             orderService.getService("104");
         }
     }
@@ -217,8 +250,8 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
         if (orderReceiver == null) {
             IntentFilter filter = new IntentFilter();
-            filter.addAction(Constant.ACTION_BROADCAST_ORDER_SUCC);
-            filter.addAction(Constant.ACTION_BROADCAST_ORDER_ERR);
+            filter.addAction(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA);
+            filter.addAction(Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR);
             filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO);
 
             orderReceiver = new OrderReceiver();
@@ -233,6 +266,12 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
         }
     }
 
+    @Override
+    public boolean handleMessage(Message msg) {
+        checkOrder();
+        return false;
+    }
+
     private class OrderReceiver extends BroadcastReceiver {
 
         @Override
@@ -242,12 +281,14 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
                 reloadCarInfo();
             }
 
-            if (Constant.ACTION_BROADCAST_ORDER_SUCC.equals(action)) {
-
+            if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA.equals(action)) {
+                mHandler.sendEmptyMessage(1);
             }
 
-            if (Constant.ACTION_BROADCAST_ORDER_ERR.equals(action)) {
-
+            if (Constant.ACTION_BROADCAST_MAINTENANCE_SERVICE_DATA_ERR.equals(action)) {
+                Toast.makeText(context, "获取订单失败，请稍后再试！", Toast.LENGTH_LONG).show();
+                DialogHelper.getHelper().dismissWatting();
+                btnCommit.setEnabled(true);
             }
         }
     }

@@ -23,6 +23,7 @@ import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
+import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 
 import java.io.IOException;
@@ -48,6 +49,8 @@ public class CoreManager {
     private static List<CarBrand> brandList = new ArrayList<>();
     private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
     private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
+
+    private static HashMap<String, List<MaintenanceOrder>> myOrderMap = new HashMap<>();
 
     private static List<CarInfo> userCars = new ArrayList<>();
 
@@ -321,5 +324,14 @@ public class CoreManager {
         } else {
             Log.e("rrja.CoreManager", "refreshCarBrand->get DBHelper failed");
         }
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------my order----------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+
+    // 11 22 33
+    public List<MaintenanceOrder> getMyOrders(String key) {
+        return null;
     }
 }

@@ -138,6 +138,8 @@ public class CarManagerActivity extends BaseActivity {
             IntentFilter filter = new IntentFilter();
             filter.addAction(Constant.ACTION_BROADCAST_ADD_CAR);
             filter.addAction(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS);
+            filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
 
             mReceiver = new AddCarReceiver();
             registerReceiver(mReceiver, filter);
@@ -181,6 +183,7 @@ public class CarManagerActivity extends BaseActivity {
             }
 
             if (Constant.ACTION_BROADCAST_GET_USER_CARS.equals(action)) {
+                DialogHelper.getHelper().dismissWatting();
                 int size = CoreManager.getManager().getUserCars().size();
                 if (size == 0) {
                     // TODO
@@ -201,6 +204,7 @@ public class CarManagerActivity extends BaseActivity {
             }
 
             if (Constant.ACTION_BROADCAST_GET_USER_CARS_ERR.equals(action)) {
+                DialogHelper.getHelper().dismissWatting();
                 Toast.makeText(context, "获取车辆信息失败，请稍后再试！", Toast.LENGTH_SHORT).show();
                 if (currentFragment instanceof AddCarFragment) {
                     if (CoreManager.getManager().getUserCars().size() == 0) {

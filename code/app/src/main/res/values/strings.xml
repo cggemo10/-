@@ -241,6 +241,7 @@
 
     </string-array>
     <string name="title_activity_car_manager">CarManagerActivity</string>
+    <string name="title_activity_order_list">OrderListActivity</string>
 
 
 
