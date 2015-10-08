@@ -10,6 +10,7 @@ import com.rrja.carja.model.UserInfo;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class HttpUtils {
     private static final String INTERFACE_SERVICE_GOODS = "/getGoodsList";
 
     private static final String INTERFACE_ORDER = "/order";
+    private static final String INTERFACE_SYNCORDER = "/syncOrderStatus";
 
     private static final String INTERFACE_STORE = "/getStoreList";
 
@@ -291,8 +293,19 @@ public class HttpUtils {
         return null;
     }
 
-    public static JSONObject syncOrderState() {
-        return null;
+    //http://120.25.201.50/api/order/syncOrderStatus?nattel=xxx&authToken=xxx&orderNum=xxx&payChannel=xxx&payNumber=xxx&status=xx
+    public static JSONObject syncOrderState(UserInfo userInfo, String tradNm, String state) {
+        String payChannel = "";
+        try {
+            payChannel = URLEncoder.encode("支付宝", "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        String url = BASE_URL + SERVICE_ORDER + INTERFACE_SYNCORDER + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken()
+                + "&orderNum=" + tradNm + "&payChannel=" + payChannel + "&payNumber=" + "" +
+                "&status=" + state;
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------

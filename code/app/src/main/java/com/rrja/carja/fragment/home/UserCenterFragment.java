@@ -25,6 +25,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.activity.MainActivity;
+import com.rrja.carja.activity.OrderListActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
@@ -218,7 +219,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                    startActivity(intent);
                 }
 
                 break;

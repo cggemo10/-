@@ -332,6 +332,10 @@ public class CoreManager {
 
     // 11 22 33
     public List<MaintenanceOrder> getMyOrders(String key) {
-        return null;
+        if (myOrderMap.containsKey(key)) {
+            return myOrderMap.get(key);
+        } else {
+            return new ArrayList<>();
+        }
     }
 }

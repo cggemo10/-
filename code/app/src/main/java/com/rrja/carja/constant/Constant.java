@@ -75,6 +75,9 @@ public class Constant {
     public static final String ACTION_BROADCAST_GET_USER_CARS = "rrja.data.USER_CAR";
     public static final String ACTION_BROADCAST_GET_USER_CARS_ERR = "rrja.data.USER_CAR_ERR";
 
+    public static final String ACTION_BROADCAST_SYNC_ORDER = "rrja.data.SYNC_ORDER";
+    public static final String ACTION_BROADCAST_SYNC_ORDER_ERR = "rrja.data.SYNC_ORDER_ERR";
+
     public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
 
     public static final String ACTION_REQUEST_REFRESH_USER_CAR = "rrja.action.REFRESH_USERCAR";

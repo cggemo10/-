@@ -10,6 +10,7 @@ import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,9 +21,10 @@ import android.widget.TextView;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.OrderListActivity;
 import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 
-public class OrderListFragment extends Fragment {
+public class OrderListFragment extends BaseElementFragment {
 
     private RecyclerView unpayRecycler;
     private RecyclerView payRecycler;
@@ -115,8 +117,29 @@ public class OrderListFragment extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public boolean onKey(View v, int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            getActivity().finish();
+            return true;
+        }
+        return false;
+    }
+
     public interface OnOrderListListener {
         public void onOrderClicked(MaintenanceOrder order);
+        public void onOrderDataRequest(String type);
     }
 
     private class OrderListAdapter extends RecyclerView.Adapter {

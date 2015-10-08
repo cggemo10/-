@@ -4,8 +4,8 @@
              android:layout_height="match_parent"
              tools:context="com.rrja.carja.fragment.orderlist.OrderListFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_order_list"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_order_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

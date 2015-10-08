@@ -39,10 +39,6 @@
             android:label="@string/title_activity_user_center" >
         </activity>
         <activity
-            android:name=".activity.CarInfoActivity"
-            android:label="@string/title_activity_car_info" >
-        </activity>
-        <activity
             android:name=".activity.FeedbackActivity"
             android:label="@string/title_activity_feedback"
             android:parentActivityName=".activity.BaseActivity" >
@@ -80,10 +76,6 @@
         <activity
             android:name=".activity.CouponsDetalActivity"
             android:label="@string/title_activity_coupons_detal" >
-        </activity>
-        <activity
-            android:name=".activity.AddCarActivity"
-            android:label="@string/title_car_name" >
         </activity>
         <activity
             android:name=".activity.LoginActivity"

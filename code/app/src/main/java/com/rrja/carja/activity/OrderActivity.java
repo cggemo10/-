@@ -652,7 +652,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
     // ----------------------------------------------------------------------------------------
 
-    private void pay(PayInfo info) {
+    private void pay(final PayInfo info) {
 
         // 订单
         String orderInfo = getOrderInfo(info);
@@ -681,7 +681,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
                 Message msg = new Message();
                 msg.what = SDK_PAY_FLAG;
-                msg.obj = result;
+                Bundle bundle = new Bundle();
+                bundle.putString("payResult", result);
+                bundle.putString("orderNum", info.tradeNo);
+                msg.obj = bundle;
                 mHandler.sendMessage(msg);
             }
         };
@@ -783,7 +786,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
             switch (msg.what) {
                 case SDK_PAY_FLAG:
-                    PayResult payResult = new PayResult((String) msg.obj);
+                    Bundle data = (Bundle) msg.obj;
+
+                    PayResult payResult = new PayResult(data.getString("payResult"));
 
                     // 支付宝返回此次支付结果及加签，建议对支付宝签名信息拿签约时支付宝提供的公钥做验签
                     String resultInfo = payResult.getResult();
@@ -796,6 +801,8 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                                 Toast.LENGTH_SHORT).show();
 
                         // TODO order sync page
+//                        payResult.
+                        orderService.syncOrder(data.getString("orderNum"), "22");
                         OrderActivity.this.finish();
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
@@ -803,12 +810,12 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         if (TextUtils.equals(resultStatus, "8000")) {
                             Toast.makeText(OrderActivity.this, "支付结果确认中",
                                     Toast.LENGTH_SHORT).show();
-
+                            orderService.syncOrder(data.getString("orderNum"), "22");
                         } else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
                             Toast.makeText(OrderActivity.this, "支付失败",
                                     Toast.LENGTH_SHORT).show();
-
+                            orderService.syncOrder(data.getString("orderNum"), "11");
                             btnCommit.setEnabled(true);
                         }
                     }

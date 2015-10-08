@@ -83,4 +83,73 @@ public class OrderBinder extends Binder {
 
         context.execute(task);
     }
+
+    public void syncOrder(final String tradNum, final String state) {
+        if (TextUtils.isEmpty(tradNum) || TextUtils.isEmpty(state)) {
+            String errMsg = "格式异常，请稍后再试。";
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_SYNC_ORDER_ERR);
+            intent.putExtra("description", errMsg);
+            context.sendBroadcast(intent);
+            return;
+        }
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                JSONObject syncData = HttpUtils.syncOrderState(CoreManager.getManager().getCurrUser(), tradNum, state);
+                if (syncData.has("code")) {
+                    try {
+                        int code = syncData.getInt("code");
+                        if (code == 0) {
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_SYNC_ORDER);
+                            intent.putExtra("syncOrder", "syncOrder");
+                            context.sendBroadcast(intent);
+                            return;
+                        } else {                            String errMsg = null;
+                            if (syncData.has("description")) {
+                                errMsg = syncData.getString("description");
+                            }
+                            if (TextUtils.isEmpty(errMsg)) {
+                                errMsg = "网络异常，请稍后再试。";
+                            }
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_SYNC_ORDER_ERR);
+                            intent.putExtra("description", errMsg);
+                            context.sendBroadcast(intent);
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        String errMsg = "网络异常，请稍后再试。";
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_SYNC_ORDER_ERR);
+                        intent.putExtra("description", errMsg);
+                        context.sendBroadcast(intent);
+                    }
+                }
+            }
+        };
+        context.execute(task);
+    }
+
+    public void getMyOrderList(final UserInfo userInfo, final String type) {
+        if (TextUtils.isEmpty(type)) {
+            // TODO
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                JSONObject orderList = HttpUtils.getOrderList(userInfo, type);
+                if (orderList.has("code")) {
+                    try {
+                        int code = orderList.getInt("code");
+                        if (code == 0) {
+
+                        }
+                    } catch (Exception e) {
+
+                    }
+                }
+            }
+        };
+        context.execute(task);
+    }
 }
