@@ -303,7 +303,7 @@ public class HttpUtils {
         }
 
         String url = BASE_URL + SERVICE_ORDER + INTERFACE_SYNCORDER + "?nattel=" + userInfo.getTel() + "&authToken=" + userInfo.getAuthToken()
-                + "&orderNum=" + tradNm + "&payChannel=" + payChannel + "&payNumber=" + "" +
+                + "&orderNum=" + tradNm + "&payChannel=" + payChannel + "&payNumber=" + "0" +
                 "&status=" + state;
         return Network.doGet(url);
     }
