@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/txt_violation_platnm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/txt_violation_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:text="城市："
+        android:textColor="@android:color/primary_text_light"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_action_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_violation_platnm"
+        android:layout_below="@id/txt_violation_platnm"
+        android:layout_marginLeft="20dp"
+        android:text="事件："
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/txt_action_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/txt_action_label"
+        android:layout_toRightOf="@id/txt_action_label"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_location_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_violation_platnm"
+        android:layout_below="@id/txt_action_label"
+        android:layout_marginLeft="20dp"
+        android:text="地点："
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/txt_location_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/txt_action_label"
+        android:layout_toRightOf="@id/txt_action_label"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_time_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_violation_platnm"
+        android:layout_below="@id/txt_location_label"
+        android:layout_marginLeft="20dp"
+        android:text="时间："
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/txt_time_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/txt_action_label"
+        android:layout_toRightOf="@id/txt_action_label"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_fen_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_violation_platnm"
+        android:layout_below="@id/txt_time_label"
+        android:layout_marginLeft="20dp"
+        android:text="扣分："
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/txt_fen_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/txt_action_label"
+        android:layout_toRightOf="@id/txt_action_label"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_money_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/txt_violation_platnm"
+        android:layout_below="@id/txt_fen_label"
+        android:layout_marginLeft="20dp"
+        android:text="罚款："
+        android:textColor="@android:color/secondary_text_light" />
+
+    <TextView
+        android:id="@+id/txt_money_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/txt_action_label"
+        android:layout_toRightOf="@id/txt_action_label"
+        android:text="aaaaaa:"
+        android:textColor="@android:color/secondary_text_light" />
+
+</RelativeLayout>

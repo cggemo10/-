@@ -31,6 +31,18 @@ public class ViolationActivity extends BaseActivity implements View.OnClickListe
     private ViolateAdapter adapter;
     private ViolateReceiver receiver;
 
+    /*
+    {"code":0,"data":[
+    {"act":"未按尾号限制通行的",
+    "area":"【北京】北京市海淀区学清路北口 北向南",
+    "code":"70064","date":"2015-05-18 10:05:00",
+    "fen":"0","handled":"0","money":"100"},
+    {"act":"机动车违反规定停车","area":"【北京】北京市海淀区北洼路七贤村路西口",
+    "code":"10391","date":"2014-08-11 10:04:00",
+    "fen":"0","handled":"0","money":"200"}
+    ],"description":"OK","total":"02"}
+     */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
