@@ -30,6 +30,7 @@ public class HttpUtils {
     private static final String SERVICE_SERVICE = "/service";
     private static final String SERVICE_ORDER = "/order";
     private static final String SERVICE_STORE = "/store";
+    private static final String SERVICE_TRAFFIC = "/traffic";
 //    http://120.25.201.50/api/car/getBrands?firstLetter=
 //    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
 //    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
@@ -37,7 +38,7 @@ public class HttpUtils {
     private static final String INTERFACE_PROVINCE = "/getProvinceList";
     private static final String INTERFACE_CITY = "/getCityListByProvinceId";
     private static final String INTERFACE_ALL_CITY = "/getAllAreaList";
-
+    private static final String INTERFACE_ILLEGAL = "/queryIllegal";
     private static final String INTERFACE_BRAND = "/getBrands";
     private static final String INTERFACE_SERIES = "/getSeries";
     private static final String INTERFACE_MODEL = "/getModels";
@@ -338,7 +339,10 @@ public class HttpUtils {
 
     //-------------------------------------------------------------------------------------------------------------------
     // query interface
-    public static JSONObject queryIllegal(CarInfo carInfo) {
-        return null;
+    public static JSONObject queryIllegal(String carId) {
+
+        String url = BASE_URL + SERVICE_TRAFFIC + INTERFACE_ILLEGAL + "?nattel=" + CoreManager.getManager().getCurrUser().getTel() +
+                "?authToken=" + CoreManager.getManager().getCurrUser().getAuthToken() + "?carId=" + carId;
+        return Network.doGet(url);
     }
 }

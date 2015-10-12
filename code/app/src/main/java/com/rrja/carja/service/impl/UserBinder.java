@@ -12,6 +12,7 @@ import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.model.ViolationRecord;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;
@@ -19,6 +20,7 @@ import com.rrja.carja.utils.ResponseUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserBinder extends Binder {
@@ -371,6 +373,49 @@ public class UserBinder extends Binder {
             }
         };
 
+        mContext.execute(task);
+    }
+
+    public void getIllegalRecord(final String carId) {
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    JSONObject illegalJson = HttpUtils.queryIllegal(carId);
+                    int code = illegalJson.getInt("code");
+                    if (code == 0) {
+                        List<ViolationRecord> carInfoList = ResponseUtils.parseViolation(illegalJson.getJSONArray("data"));
+                        if (carInfoList == null) {
+                            Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION_ERR);
+                            intent.putExtra("usercars","usercars");
+                            mContext.sendBroadcast(intent);
+                            return;
+                        }
+
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION);
+                        intent.putParcelableArrayListExtra("violation_record", (ArrayList)carInfoList);
+                        mContext.sendBroadcast(intent);
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION_ERR);
+                        String errMg = null;
+                        if (illegalJson.has("description")) {
+                            errMg = illegalJson.getString("description");
+                        } else {
+                            errMg = mContext.getString(R.string.str_err_net);
+                        }
+                        intent.putExtra("description", errMg);
+                        mContext.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION_ERR);
+                    String errMg = mContext.getString(R.string.str_err_net);
+                    intent.putExtra("description", errMg);
+                    mContext.sendBroadcast(intent);
+                }
+            }
+        };
         mContext.execute(task);
     }
 

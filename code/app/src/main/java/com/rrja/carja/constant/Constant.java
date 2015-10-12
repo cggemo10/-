@@ -78,9 +78,13 @@ public class Constant {
     public static final String ACTION_BROADCAST_SYNC_ORDER = "rrja.data.SYNC_ORDER";
     public static final String ACTION_BROADCAST_SYNC_ORDER_ERR = "rrja.data.SYNC_ORDER_ERR";
 
+    public static final String ACTION_BROADCAST_VIOLATION = "rrja.data.VIOLATION";
+    public static final String ACTION_BROADCAST_VIOLATION_ERR = "rrja.data.VIOLATION_ERR";
+
     public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
 
     public static final String ACTION_REQUEST_REFRESH_USER_CAR = "rrja.action.REFRESH_USERCAR";
+    public static final String ACTION_REQUEST_VIOLATION = "rrja.request_QUERY_ILLEGAL";
 
     public static final String DIR_BASE = "rrja";
     public static final String DIR_IMG_CACHE = "cacheImg";

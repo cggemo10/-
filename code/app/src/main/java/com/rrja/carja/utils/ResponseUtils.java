@@ -10,6 +10,7 @@ import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
 import com.rrja.carja.model.RecommendGoods;
 import com.rrja.carja.model.Region;
+import com.rrja.carja.model.ViolationRecord;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 
@@ -264,5 +265,26 @@ public class ResponseUtils {
             }
         }
         return storeList;
+    }
+
+    public static List<ViolationRecord> parseViolation (JSONArray jsonArray) throws JSONException {
+        if (jsonArray == null) {
+            return null;
+        }
+
+        if (jsonArray.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<ViolationRecord> records = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject recordJson = jsonArray.getJSONObject(i);
+            ViolationRecord record = ViolationRecord.parse(recordJson);
+            if (record != null) {
+                records.add(record);
+            }
+        }
+        return records;
     }
 }

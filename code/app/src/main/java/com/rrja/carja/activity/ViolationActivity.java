@@ -1,10 +1,12 @@
 package com.rrja.carja.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -12,13 +14,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
+import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
+import com.rrja.carja.model.ViolationRecord;
+import com.rrja.carja.service.DataCenterService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.rrja.carja.R.id.recycler_violation;
+import static com.rrja.carja.R.id.txt_loc;
 
 public class ViolationActivity extends BaseActivity implements View.OnClickListener{
+
+    public static final int REQUEST_SELECT_CAR = 11;
 
     View carView;
     ImageView imgLogo;
@@ -26,6 +40,8 @@ public class ViolationActivity extends BaseActivity implements View.OnClickListe
     TextView txtCarDetal;
 
     RecyclerView recyclerViolate;
+
+    List<ViolationRecord> recordList = new ArrayList<>();
 
     private CarInfo carInfo;
     private ViolateAdapter adapter;
@@ -92,13 +108,26 @@ public class ViolationActivity extends BaseActivity implements View.OnClickListe
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // TODO
+
+        if (requestCode == REQUEST_SELECT_CAR) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data.hasExtra("car")) {
+                    carInfo = data.getParcelableExtra("car");
+                    loadCarInfo();
+                } else {
+                    Toast.makeText(this, "获取车辆信息失败，请稍后再试。", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(this, "上门洗车已取消。", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void registReceiver() {
         if (receiver == null) {
             IntentFilter filter = new IntentFilter();
-            // TODO
+            filter.addAction(Constant.ACTION_BROADCAST_VIOLATION);
+            filter.addAction(Constant.ACTION_BROADCAST_VIOLATION_ERR);
 
             receiver = new ViolateReceiver();
             registerReceiver(receiver, filter);
@@ -138,25 +167,71 @@ public class ViolationActivity extends BaseActivity implements View.OnClickListe
     public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.view_car) {
-            // TODO
+            Intent intent = new Intent(this, CarManagerActivity.class);
+            intent.putExtra("select", true);
+            startActivityForResult(intent, REQUEST_SELECT_CAR);
+        }
+
+        if (id == R.id.btn_commit_violation) {
+            if (carInfo == null) {
+                Toast.makeText(this, "请选择您的车辆！", Toast.LENGTH_LONG).show();
+                return;
+            }
+            Intent intent = new Intent(this, DataCenterService.class);
+            intent.setAction(Constant.ACTION_REQUEST_VIOLATION);
+            intent.putExtra("carId", carInfo.getId());
         }
     }
 
-    private class ViolateAdapter extends RecyclerView.Adapter {
+    private class ViolateAdapter extends RecyclerView.Adapter<ViolateHolder> {
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public ViolateHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return null;
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        public void onBindViewHolder(ViolateHolder holder, int position) {
+            ViolationRecord record = recordList.get(position);
+            holder.bindData(record);
         }
 
         @Override
         public int getItemCount() {
-            return 0;
+            return recordList.size();
+        }
+    }
+
+    private class ViolateHolder extends RecyclerView.ViewHolder {
+
+        private TextView txtPlat;
+        private TextView txtLoc;
+        private TextView txtAct;
+        private TextView txtArea;
+        private TextView txtTime;
+        private TextView txtFen;
+        private TextView txtMoney;
+
+        public ViolateHolder(View itemView) {
+            super(itemView);
+
+            txtPlat = (TextView) itemView.findViewById(R.id.txt_violation_platnm);
+            txtLoc = (TextView) itemView.findViewById(R.id.txt_violation_region);
+            txtAct = (TextView) itemView.findViewById(R.id.txt_action_content);
+            txtArea = (TextView) itemView.findViewById(R.id.txt_location_content);
+            txtTime = (TextView) itemView.findViewById(R.id.txt_time_content);
+            txtFen = (TextView) itemView.findViewById(R.id.txt_fen_content);
+            txtMoney = (TextView) itemView.findViewById(R.id.txt_money_content);
+        }
+
+        public void bindData(ViolationRecord record) {
+            txtPlat.setText(carInfo.getPlatNum());
+//            txtPlat.setText();
+            txtAct.setText(record.getAct());
+            txtArea.setText(record.getArea());
+            txtTime.setText(record.getDate());
+            txtFen.setText(record.getFen());
+            txtMoney.setText(record.getMoney());
         }
     }
 
@@ -164,7 +239,22 @@ public class ViolationActivity extends BaseActivity implements View.OnClickListe
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO
+
+            String action = intent.getAction();
+            if (Constant.ACTION_BROADCAST_VIOLATION.equals(action)) {
+                Bundle extras = intent.getExtras();
+                if (extras.containsKey("violation_record")) {
+                    recordList.clear();
+                    ViolationRecord[] violation_records = (ViolationRecord[]) extras.getParcelableArray("violation_record");
+                    Collections.addAll(recordList, violation_records);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+            if (Constant.ACTION_BROADCAST_VIOLATION_ERR.equals(action)) {
+                recordList.clear();
+                adapter.notifyDataSetChanged();
+            }
+
         }
     }
 

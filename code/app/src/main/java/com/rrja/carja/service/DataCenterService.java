@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.text.TextUtils;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.table.TableUtils;
@@ -84,6 +85,15 @@ public class DataCenterService extends Service implements Handler.Callback {
 
             if (Constant.ACTION_REQUEST_REFRESH_USER_CAR.equals(action)) {
                 userBinder.getUserCars();
+            }
+
+            if (Constant.ACTION_REQUEST_VIOLATION.equals(action)) {
+                if (intent.hasExtra("carId") && !TextUtils.isEmpty(intent.getStringExtra("carId"))) {
+                    String carId = intent.getStringExtra("carId");
+                    userBinder.getIllegalRecord(carId);
+                } else {
+                    // TODO
+                }
             }
 
         }
