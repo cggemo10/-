@@ -13,6 +13,7 @@ import com.rrja.carja.model.Region;
 import com.rrja.carja.model.ViolationRecord;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceService;
+import com.rrja.carja.model.myorder.OrderRecord;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -281,6 +282,27 @@ public class ResponseUtils {
         for (int i = 0; i < jsonArray.length(); i++) {
             JSONObject recordJson = jsonArray.getJSONObject(i);
             ViolationRecord record = ViolationRecord.parse(recordJson);
+            if (record != null) {
+                records.add(record);
+            }
+        }
+        return records;
+    }
+
+    public static List<OrderRecord> parseOrderRecord (JSONArray jsonArray) throws JSONException {
+        if (jsonArray == null) {
+            return null;
+        }
+
+        if (jsonArray.length() == 0) {
+            return new ArrayList<>();
+        }
+
+        ArrayList<OrderRecord> records = new ArrayList<>();
+
+        for (int i = 0; i < jsonArray.length(); i++) {
+            JSONObject recordJson = jsonArray.getJSONObject(i);
+            OrderRecord record = OrderRecord.parse(recordJson);
             if (record != null) {
                 records.add(record);
             }

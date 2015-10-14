@@ -9,10 +9,14 @@ import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
+import com.rrja.carja.model.myorder.OrderRecord;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
+import com.rrja.carja.utils.ResponseUtils;
 
 import org.json.JSONObject;
+
+import java.util.List;
 
 public class OrderBinder extends Binder {
 
@@ -129,8 +133,12 @@ public class OrderBinder extends Binder {
     }
 
     public void getMyOrderList(final UserInfo userInfo, final String type) {
-        if (TextUtils.isEmpty(type)) {
-            // TODO
+        if (TextUtils.isEmpty(type) || userInfo == null || userInfo.getId() == null) {
+            String errMsg = "网络异常，请稍后再试。";
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_MY_ORDER_ERR);
+            intent.putExtra("description", errMsg);
+            intent.putExtra("order_type", type);
+            context.sendBroadcast(intent);
             return;
         }
 
@@ -142,10 +150,35 @@ public class OrderBinder extends Binder {
                     try {
                         int code = orderList.getInt("code");
                         if (code == 0) {
+                            List<OrderRecord> records = ResponseUtils.parseOrderRecord(orderList.getJSONArray("data"));
+                            if (records != null) {
+                                CoreManager.getManager().getMyOrders(type).clear();
+                                CoreManager.getManager().getMyOrders(type).addAll(records);
 
+                                Intent intent = new Intent(Constant.ACTION_BROADCAST_MY_ORDER);
+                                intent.putExtra("order_type", type);
+                                context.sendBroadcast(intent);
+                                return;
+                            }
                         }
+                        String errMsg = null;
+                        if (orderList.has("description")) {
+                            errMsg = orderList.getString("description");
+                        }
+                        if (TextUtils.isEmpty(errMsg)) {
+                            errMsg = "网络异常，请稍后再试。";
+                        }
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MY_ORDER_ERR);
+                        intent.putExtra("description", errMsg);
+                        intent.putExtra("order_type", type);
+                        context.sendBroadcast(intent);
                     } catch (Exception e) {
-
+                        e.printStackTrace();
+                        String errMsg = "网络异常，请稍后再试。";
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_MY_ORDER_ERR);
+                        intent.putExtra("description", errMsg);
+                        intent.putExtra("order_type", type);
+                        context.sendBroadcast(intent);
                     }
                 }
             }

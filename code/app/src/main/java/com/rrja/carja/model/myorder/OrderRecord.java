@@ -181,7 +181,7 @@ public class OrderRecord {
         JSONObject orderDetails = new JSONObject(orderDetailsStr);
         record.setUserId(orderDetails.getString("userId"));
         record.setCarId(orderDetails.getString("carId"));
-        record.setTotalAmount(orderDetails.getDouble("totalAmount"));
+        record.setTotalAmount(orderDetails.getDouble("totlaAmount"));
 
         record.setOrderNumber(json.getString("orderNumber"));
         record.setOrderStatus(json.getString("orderStatus"));
@@ -233,4 +233,24 @@ public class OrderRecord {
 
     }
 
+    public String getServiceString() {
+        StringBuffer buffer = new StringBuffer();
+        for (ServiceRecord record : records) {
+            if ("101".equals(record.getTag())) {
+                buffer.append("保养/");
+            }
+            if ("102".equals(record.getTag())) {
+                buffer.append("维修/");
+            }
+            if ("103".equals(record.getTag())) {
+                buffer.append("美容/");
+            }
+            if ("104".equals(record.getTag())) {
+                buffer.append("洗车/");
+            }
+        }
+        String content = buffer.toString();
+        content = content.substring(0, content.lastIndexOf("/"));
+        return content;
+    }
 }

@@ -25,6 +25,7 @@ import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
+import com.rrja.carja.model.myorder.OrderRecord;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -50,7 +51,7 @@ public class CoreManager {
     private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
     private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
 
-    private static HashMap<String, List<MaintenanceOrder>> myOrderMap = new HashMap<>();
+    private static HashMap<String, List<OrderRecord>> myOrderMap = new HashMap<>();
 
     private static List<CarInfo> userCars = new ArrayList<>();
 
@@ -331,7 +332,7 @@ public class CoreManager {
     //----------------------------------------------------------------------------------------------
 
     // 11 22 33
-    public List<MaintenanceOrder> getMyOrders(String key) {
+    public List<OrderRecord> getMyOrders(String key) {
         if (myOrderMap.containsKey(key)) {
             return myOrderMap.get(key);
         } else {

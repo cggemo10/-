@@ -81,6 +81,9 @@ public class Constant {
     public static final String ACTION_BROADCAST_VIOLATION = "rrja.data.VIOLATION";
     public static final String ACTION_BROADCAST_VIOLATION_ERR = "rrja.data.VIOLATION_ERR";
 
+    public static final String ACTION_BROADCAST_MY_ORDER = "rrja.data.MY_ORDER";
+    public static final String ACTION_BROADCAST_MY_ORDER_ERR = "rrja.data.MY_ORDER_ERR";
+
     public static final String ACTION_GAIN_COUPONS = "rrja.gain_COUPONS";
 
     public static final String ACTION_REQUEST_REFRESH_USER_CAR = "rrja.action.REFRESH_USERCAR";
