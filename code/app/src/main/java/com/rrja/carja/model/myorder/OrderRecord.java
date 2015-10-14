@@ -1,13 +1,11 @@
-package com.rrja.carja.model;
-
-import com.rrja.carja.model.maintenance.MaintenanceOrder;
+package com.rrja.carja.model.myorder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Created by chongge on 15/10/10.
@@ -32,6 +30,8 @@ public class OrderRecord {
     private String receiverName;
     private long serviceDateTime;
     private String serviceLocation;
+
+    private List<ServiceRecord> records = new ArrayList<>();
 
     public String getContact() {
         return contact;
@@ -199,8 +199,13 @@ public class OrderRecord {
             JSONObject contentJson = content.getJSONObject(i);
             String serviceId = contentJson.getString("serviceId");
             String tag = contentJson.getString("tag");
-            int serviceAmount = contentJson.getInt("serviceAmount");
+            double serviceAmount = contentJson.getDouble("serviceAmount");
             JSONArray subService = contentJson.getJSONArray("subService");
+
+            ServiceRecord serviceRecord = new ServiceRecord();
+            serviceRecord.setServiceId(serviceId);
+            serviceRecord.setTag(tag);
+            serviceRecord.setAmount(serviceAmount);
 
             for (int j = 0; j < subService.length(); j++) {
                 JSONObject subServiceJson = subService.getJSONObject(j);
@@ -209,10 +214,18 @@ public class OrderRecord {
                 long subServiceId = subServiceJson.getLong("subServiceId");
                 double couponsAmount = subServiceJson.getDouble("couponsAmount");
                 long couponId = subServiceJson.getLong("couponId");
+
+                SubServiceRecord subRecord = new SubServiceRecord();
+                subRecord.setGoodsAmount(goodsAmount);
+                subRecord.setGoodsId(goodsId);
+                subRecord.setSubServiceId(subServiceId);
+                subRecord.setCouponsAmount(couponsAmount);
+                subRecord.setCouponsId(couponId);
+
+                serviceRecord.getSubServiceRecords().add(subRecord);
             }
 
-
-            // TODO
+            record.records.add(serviceRecord);
 
         }
 
