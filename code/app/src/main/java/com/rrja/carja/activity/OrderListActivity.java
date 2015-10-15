@@ -22,6 +22,7 @@ import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.fragment.orderlist.OrderDetalFragment;
 import com.rrja.carja.fragment.orderlist.OrderListFragment;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
+import com.rrja.carja.model.myorder.OrderRecord;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.OrderBinder;
 import com.rrja.carja.utils.DialogHelper;
@@ -134,7 +135,12 @@ public class OrderListActivity extends BaseActivity {
     private class OrderListListener implements OrderListFragment.OnOrderListListener {
 
         @Override
-        public void onOrderClicked(MaintenanceOrder order) {
+        public void onOrderClicked(OrderRecord order) {
+
+        }
+
+        @Override
+        public void onPayRequest(OrderRecord orderRecord) {
 
         }
 

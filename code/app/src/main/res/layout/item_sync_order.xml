@@ -3,13 +3,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
+    android:layout_margin="10dp"
     android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="5dp"
+        android:layout_margin="8dp"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -17,21 +17,26 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
                 android:id="@+id/txt_order_nm_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="订单编码："
+                android:text="订单："
                 android:textColor="@android:color/secondary_text_light"/>
 
             <TextView
+                android:layout_marginTop="5dp"
                 android:id="@+id/txt_order_nm_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toRightOf="@id/txt_order_nm_label"
-                android:text="1000123"
+                android:text="201510092237481029223958"
                 android:textColor="@android:color/secondary_text_light"/>
 
             <TextView
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
                 android:id="@+id/txt_order_owner"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@id/txt_order_owner"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/txt_order_owner_content"
                 android:text="车牌："
                 android:textColor="@android:color/secondary_text_light"/>
@@ -69,6 +74,7 @@
                 android:textColor="@android:color/secondary_text_light"/>
 
             <TextView
+                android:visibility="gone"
                 android:id="@+id/txt_sync_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -81,6 +87,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:layout_marginTop="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -92,6 +99,7 @@
                 android:src="@drawable/demo_car_brand"/>
 
             <TextView
+                android:layout_marginLeft="10dp"
                 android:id="@+id/txt_order_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +113,16 @@
 
         </RelativeLayout>
 
+        <View
+            android:background="@color/c_style_red"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_margin="5dp"
+            />
+
         <RelativeLayout
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -113,10 +130,12 @@
                 android:id="@+id/txt_order_amount_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="总价："
                 android:textColor="@android:color/secondary_text_light"/>
 
             <TextView
+                android:layout_alignBaseline="@id/txt_order_amount_label"
                 android:id="@+id/txt_order_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -127,12 +146,12 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_pay_for"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_alignParentRight="true"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="付款"
-                android:textColor="@android:color/darker_gray"/>
+                android:textColor="@android:color/white"/>
 
         </RelativeLayout>
 

@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,13 +27,15 @@ import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.myorder.OrderRecord;
 
-public class OrderListFragment extends BaseElementFragment implements View.OnClickListener, AdapterView.OnItemClickListener{
+public class OrderListFragment extends BaseElementFragment implements View.OnClickListener, AdapterView.OnItemClickListener {
 
-    private ListView orderList;
+    private RecyclerView orderList;
     private TextView txtUnpay;
     private TextView txtPayed;
     private TextView txtFinished;
     private TextView txtCancel;
+
+    private TextView txtEmpty;
 
     private OrderListAdapter payListAdapter;
 
@@ -60,18 +59,6 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
 
     public void setType(String type) {
         this.type = type;
-        if ("11".equals(type)) {
-            onSelectedType(0);
-        }
-        if ("22".equals(type)) {
-            onSelectedType(1);
-        }
-        if ("33".equals(type)) {
-            onSelectedType(2);
-        }
-        if ("44".equals(type)) {
-            onSelectedType(3);
-        }
     }
 
     public String getType() {
@@ -94,9 +81,10 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     private void initView(View view) {
 
         payListAdapter = new OrderListAdapter();
-        orderList = (ListView) view.findViewById(R.id.list_order);
+        orderList = (RecyclerView) view.findViewById(R.id.list_order);
+        orderList.setLayoutManager(new LinearLayoutManager(getActivity()));
         orderList.setAdapter(payListAdapter);
-        orderList.setOnItemClickListener(this);
+//        orderList.setOnItemClickListener(this);
 
         txtUnpay = (TextView) view.findViewById(R.id.txt_label_unpay);
         txtUnpay.setOnClickListener(this);
@@ -106,6 +94,31 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
         txtFinished.setOnClickListener(this);
         txtCancel = (TextView) view.findViewById(R.id.txt_label_cancel_order);
         txtCancel.setOnClickListener(this);
+
+        txtEmpty = (TextView) view.findViewById(R.id.txt_order_empty);
+        txtEmpty.setOnClickListener(this);
+        txtEmpty.setVisibility(View.GONE);
+        if (CoreManager.getManager().getMyOrders(type).size() == 0) {
+            txtEmpty.setVisibility(View.VISIBLE);
+            orderList.setVisibility(View.GONE);
+        } else {
+            txtEmpty.setVisibility(View.GONE);
+            orderList.setVisibility(View.VISIBLE);
+        }
+
+        if ("11".equals(type)) {
+            onSelectedType(0);
+        }
+        if ("22".equals(type)) {
+            onSelectedType(1);
+        }
+        if ("33".equals(type)) {
+            onSelectedType(2);
+        }
+        if ("44".equals(type)) {
+            onSelectedType(3);
+        }
+
     }
 
     @Override
@@ -126,6 +139,14 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     public void onStart() {
         super.onStart();
         registReceiver();
+        if (CoreManager.getManager().getMyOrders(type).size() == 0) {
+            txtEmpty.setVisibility(View.VISIBLE);
+            orderList.setVisibility(View.GONE);
+        } else {
+            txtEmpty.setVisibility(View.GONE);
+            orderList.setVisibility(View.VISIBLE);
+            payListAdapter.notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -144,6 +165,15 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     }
 
     private void onSelectedType(int status) {
+
+        if (CoreManager.getManager().getMyOrders(type).size() == 0) {
+            txtEmpty.setVisibility(View.VISIBLE);
+            orderList.setVisibility(View.GONE);
+        } else {
+            txtEmpty.setVisibility(View.GONE);
+            orderList.setVisibility(View.VISIBLE);
+        }
+
         if (status == 0) {
             txtUnpay.setTextColor(getResources().getColor(R.color.c_style_red));
             txtPayed.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
@@ -194,6 +224,8 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
                 onSelectedType(3);
                 payListAdapter.notifyDataSetChanged();
                 break;
+            case R.id.txt_order_empty:
+                // TODO
         }
     }
 
@@ -203,72 +235,85 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     }
 
     public interface OnOrderListListener {
-        public void onOrderClicked(MaintenanceOrder order);
+        public void onOrderClicked(OrderRecord order);
+
+        public void onPayRequest(OrderRecord orderRecord);
 
         public void onOrderDataRequest(String type);
     }
 
-    private class OrderListAdapter extends BaseAdapter {
-
-
-
-        @Override
-        public int getCount() {
-            return CoreManager.getManager().getMyOrders(type).size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return CoreManager.getManager().getMyOrders(type).get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            OrderHolder holder = null;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sync_order, null);
-                holder = new OrderHolder(convertView);
-                convertView.setTag(convertView);
-            } else {
-                holder = (OrderHolder) convertView.getTag();
-            }
-            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(type).get(position);
-            holder.bindData(orderRecord);
-
-            return convertView;
-        }
-    }
-
-//    private class OrderListAdapter extends RecyclerView.Adapter<OrderHolder> {
+//    private class OrderListAdapter extends BaseAdapter {
 //
-//        private String orderType;
 //
-//        public OrderListAdapter(String type) {
-//            this.orderType = type;
+//        @Override
+//        public int getCount() {
+//            return CoreManager.getManager().getMyOrders(type).size();
 //        }
 //
 //        @Override
-//        public OrderHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sync_order, parent, false);
-//            return new OrderHolder(view);
+//        public Object getItem(int position) {
+//            return CoreManager.getManager().getMyOrders(type).get(position);
 //        }
 //
 //        @Override
-//        public void onBindViewHolder(OrderHolder holder, int position) {
-//            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(orderType).get(position);
+//        public long getItemId(int position) {
+//            return position;
+//        }
+//
+//        @Override
+//        public View getView(int position, View convertView, ViewGroup parent) {
+//            OrderHolder holder = null;
+//            if (convertView == null) {
+//                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sync_order, null);
+//                holder = new OrderHolder(convertView);
+//                convertView.setTag(convertView);
+//            } else {
+//                holder = (OrderHolder) convertView.getTag();
+//            }
+//            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(type).get(position);
 //            holder.bindData(orderRecord);
-//        }
 //
-//        @Override
-//        public int getItemCount() {
-//            return CoreManager.getManager().getMyOrders(orderType).size();
+//            return convertView;
 //        }
 //    }
+
+    private class OrderListAdapter extends RecyclerView.Adapter<OrderHolder> {
+
+        @Override
+        public OrderHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sync_order, parent, false);
+            return new OrderHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(OrderHolder holder, int position) {
+            final OrderRecord orderRecord = CoreManager.getManager().getMyOrders(type).get(position);
+            holder.bindData(orderRecord);
+            if ("11".equals(type)) {
+                holder.btnPay.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            mListener.onPayRequest(orderRecord);
+                        }
+                    }
+                });
+            }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mListener != null) {
+                        mListener.onOrderClicked(orderRecord);
+                    }
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return CoreManager.getManager().getMyOrders(type).size();
+        }
+    }
 
 
     private class OrderHolder extends RecyclerView.ViewHolder {
@@ -292,6 +337,18 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
             txtOrderContent = (TextView) itemView.findViewById(R.id.txt_order_content);
             txtAmount = (TextView) itemView.findViewById(R.id.txt_order_amount);
             btnPay = (AppCompatButton) itemView.findViewById(R.id.btn_pay_for);
+            if ("11".equals(type)) {
+
+            }
+            if ("22".equals(type)) {
+                btnPay.setVisibility(View.GONE);
+            }
+            if ("33".equals(type)) {
+                btnPay.setVisibility(View.GONE);
+            }
+            if ("44".equals(type)) {
+                btnPay.setVisibility(View.GONE);
+            }
         }
 
         public void bindData(OrderRecord order) {
@@ -319,7 +376,6 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     }
 
 
-
     private void registReceiver() {
         if (receiver == null) {
             IntentFilter filter = new IntentFilter();
@@ -339,7 +395,6 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
     }
 
 
-
     private class OrderRecordReceiver extends BroadcastReceiver {
 
         @Override
@@ -351,10 +406,30 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
             if (Constant.ACTION_BROADCAST_MY_ORDER.equals(action)) {
                 String type = intent.getStringExtra("order_type");
                 if (OrderListFragment.this.type.equals(type)) {
-                    payListAdapter.notifyDataSetChanged();
+
+                    if (CoreManager.getManager().getMyOrders(type).size() == 0) {
+                        txtEmpty.setVisibility(View.VISIBLE);
+                        orderList.setVisibility(View.GONE);
+                    } else {
+                        txtEmpty.setVisibility(View.GONE);
+                        orderList.setVisibility(View.VISIBLE);
+                        payListAdapter.notifyDataSetChanged();
+                    }
+
                 }
-            } else {
-                payListAdapter.notifyDataSetChanged();
+            }
+            if (Constant.ACTION_BROADCAST_MY_ORDER_ERR.equals(type)) {
+                String type = intent.getStringExtra("order_type");
+                if (OrderListFragment.this.type.equals(type)){
+                    if (CoreManager.getManager().getMyOrders(type).size() == 0) {
+                        txtEmpty.setVisibility(View.VISIBLE);
+                        orderList.setVisibility(View.GONE);
+                    } else {
+                        txtEmpty.setVisibility(View.GONE);
+                        orderList.setVisibility(View.VISIBLE);
+                        payListAdapter.notifyDataSetChanged();
+                    }
+                }
             }
         }
     }

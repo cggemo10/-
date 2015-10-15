@@ -333,10 +333,10 @@ public class CoreManager {
 
     // 11 22 33
     public List<OrderRecord> getMyOrders(String key) {
-        if (myOrderMap.containsKey(key)) {
-            return myOrderMap.get(key);
-        } else {
-            return new ArrayList<>();
+        if (!myOrderMap.containsKey(key)) {
+            List<OrderRecord> records = new ArrayList<>();
+            myOrderMap.put(key, records);
         }
+        return myOrderMap.get(key);
     }
 }
