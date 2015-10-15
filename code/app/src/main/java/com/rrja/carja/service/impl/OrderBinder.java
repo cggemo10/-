@@ -15,6 +15,7 @@ import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -183,6 +184,23 @@ public class OrderBinder extends Binder {
                 }
             }
         };
+        context.execute(task);
+    }
+
+    public void queryOrderInfo(final UserInfo userInfo, final String orderId) {
+
+        if (userInfo == null || TextUtils.isEmpty(orderId)) {
+            // TODO
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                JSONObject orderDetailJs = HttpUtils.orderDetail(userInfo.getTel(), userInfo.getAuthToken(), orderId);
+            }
+        };
+
         context.execute(task);
     }
 }

@@ -63,6 +63,7 @@ public class HttpUtils {
 
     private static final String INTERFACE_ORDER = "/order";
     private static final String INTERFACE_SYNCORDER = "/syncOrderStatus";
+    private static final String INTERFACE_QUERYORDER = "/queryOrderInfo";
 
     private static final String INTERFACE_STORE = "/getStoreList";
 
@@ -290,8 +291,10 @@ public class HttpUtils {
         return Network.doPost(url, pairs, null);
     }
 
-    public static JSONObject orderDetail() {
-        return null;
+    public static JSONObject orderDetail(String tel, String authToken, String orderId) {
+
+        String url = BASE_URL + SERVICE_ORDER + INTERFACE_QUERYORDER + "?nattel=" + tel + "&authToken=" + authToken + "&orderNum=" + orderId ;
+        return Network.doGet(url);
     }
 
     //http://120.25.201.50/api/order/syncOrderStatus?nattel=xxx&authToken=xxx&orderNum=xxx&payChannel=xxx&payNumber=xxx&status=xx

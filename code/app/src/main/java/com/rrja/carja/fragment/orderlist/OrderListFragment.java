@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -29,32 +30,52 @@ import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.myorder.OrderRecord;
 
-public class OrderListFragment extends BaseElementFragment {
+public class OrderListFragment extends BaseElementFragment implements View.OnClickListener, AdapterView.OnItemClickListener{
 
-    private ListView unpayRecycler;
-    private ListView payRecycler;
-    private ListView finishedRecycler;
-    private ListView cancelRecycler;
+    private ListView orderList;
+    private TextView txtUnpay;
+    private TextView txtPayed;
+    private TextView txtFinished;
+    private TextView txtCancel;
 
-    private ViewPager vpOrderList;
-
-    private OrderPagerAdapter pagerAdapter;
-
-    private OrderListAdapter unPayAdapter;
-    private OrderListAdapter payedAdapter;
-    private OrderListAdapter finishedAdapter;
-    private OrderListAdapter cancelAdapter;
+    private OrderListAdapter payListAdapter;
 
     private OnOrderListListener mListener;
     private OrderRecordReceiver receiver;
 
+    private String type;
+
+    private static OrderListFragment instance;
+
     // TODO: Rename and change types and number of parameters
     public static OrderListFragment newInstance() {
-        OrderListFragment fragment = new OrderListFragment();
-        return fragment;
+        if (instance == null) {
+            instance = new OrderListFragment();
+        }
+        return instance;
     }
 
     public OrderListFragment() {
+    }
+
+    public void setType(String type) {
+        this.type = type;
+        if ("11".equals(type)) {
+            onSelectedType(0);
+        }
+        if ("22".equals(type)) {
+            onSelectedType(1);
+        }
+        if ("33".equals(type)) {
+            onSelectedType(2);
+        }
+        if ("44".equals(type)) {
+            onSelectedType(3);
+        }
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -72,43 +93,19 @@ public class OrderListFragment extends BaseElementFragment {
 
     private void initView(View view) {
 
-        unPayAdapter = new OrderListAdapter("11");
-        payedAdapter = new OrderListAdapter("22");
-        finishedAdapter = new OrderListAdapter("33");
-        cancelAdapter = new OrderListAdapter("44");
+        payListAdapter = new OrderListAdapter();
+        orderList = (ListView) view.findViewById(R.id.list_order);
+        orderList.setAdapter(payListAdapter);
+        orderList.setOnItemClickListener(this);
 
-        unpayRecycler = new ListView(getActivity());
-        payRecycler = new ListView(getActivity());
-        finishedRecycler = new ListView(getActivity());
-        cancelRecycler = new ListView(getActivity());
-
-        LinearLayout.LayoutParams unPayParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        unpayRecycler.setLayoutParams(unPayParam);
-//        unpayRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        unpayRecycler.setAdapter(unPayAdapter);
-
-        LinearLayout.LayoutParams payedParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        payRecycler.setLayoutParams(payedParam);
-//        payRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        payRecycler.setAdapter(payedAdapter);
-
-        LinearLayout.LayoutParams finishedParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        finishedRecycler.setLayoutParams(finishedParam);
-//        finishedRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        finishedRecycler.setAdapter(finishedAdapter);
-
-        LinearLayout.LayoutParams cancelParam = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        cancelRecycler.setLayoutParams(cancelParam);
-//        cancelRecycler.setLayoutManager(new LinearLayoutManager(getActivity()));
-        cancelRecycler.setAdapter(cancelAdapter);
-
-        vpOrderList = (ViewPager) view.findViewById(R.id.vp_order_list);
-        pagerAdapter = new OrderPagerAdapter();
-        vpOrderList.setAdapter(pagerAdapter);
+        txtUnpay = (TextView) view.findViewById(R.id.txt_label_unpay);
+        txtUnpay.setOnClickListener(this);
+        txtPayed = (TextView) view.findViewById(R.id.txt_label_payed);
+        txtPayed.setOnClickListener(this);
+        txtFinished = (TextView) view.findViewById(R.id.txt_label_finish_order);
+        txtFinished.setOnClickListener(this);
+        txtCancel = (TextView) view.findViewById(R.id.txt_label_cancel_order);
+        txtCancel.setOnClickListener(this);
     }
 
     @Override
@@ -146,6 +143,65 @@ public class OrderListFragment extends BaseElementFragment {
         return false;
     }
 
+    private void onSelectedType(int status) {
+        if (status == 0) {
+            txtUnpay.setTextColor(getResources().getColor(R.color.c_style_red));
+            txtPayed.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtFinished.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtCancel.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+        }
+        if (status == 1) {
+            txtUnpay.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtPayed.setTextColor(getResources().getColor(R.color.c_style_red));
+            txtFinished.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtCancel.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+        }
+        if (status == 2) {
+            txtUnpay.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtPayed.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtFinished.setTextColor(getResources().getColor(R.color.c_style_red));
+            txtCancel.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+        }
+        if (status == 3) {
+            txtUnpay.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtPayed.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtFinished.setTextColor(getResources().getColor(android.R.color.secondary_text_light));
+            txtCancel.setTextColor(getResources().getColor(R.color.c_style_red));
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id) {
+            case R.id.txt_label_unpay:
+                this.type = "11";
+                onSelectedType(0);
+                payListAdapter.notifyDataSetChanged();
+                break;
+            case R.id.txt_label_payed:
+                this.type = "22";
+                onSelectedType(1);
+                payListAdapter.notifyDataSetChanged();
+                break;
+            case R.id.txt_label_finish_order:
+                this.type = "33";
+                onSelectedType(2);
+                payListAdapter.notifyDataSetChanged();
+                break;
+            case R.id.txt_label_cancel_order:
+                this.type = "44";
+                onSelectedType(3);
+                payListAdapter.notifyDataSetChanged();
+                break;
+        }
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
     public interface OnOrderListListener {
         public void onOrderClicked(MaintenanceOrder order);
 
@@ -154,20 +210,16 @@ public class OrderListFragment extends BaseElementFragment {
 
     private class OrderListAdapter extends BaseAdapter {
 
-        private String orderType;
 
-        public OrderListAdapter(String type) {
-            this.orderType = type;
-        }
 
         @Override
         public int getCount() {
-            return CoreManager.getManager().getMyOrders(orderType).size();
+            return CoreManager.getManager().getMyOrders(type).size();
         }
 
         @Override
         public Object getItem(int position) {
-            return CoreManager.getManager().getMyOrders(orderType).get(position);
+            return CoreManager.getManager().getMyOrders(type).get(position);
         }
 
         @Override
@@ -185,7 +237,7 @@ public class OrderListFragment extends BaseElementFragment {
             } else {
                 holder = (OrderHolder) convertView.getTag();
             }
-            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(orderType).get(position);
+            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(type).get(position);
             holder.bindData(orderRecord);
 
             return convertView;
@@ -266,59 +318,7 @@ public class OrderListFragment extends BaseElementFragment {
         }
     }
 
-    private class OrderPagerAdapter extends PagerAdapter {
 
-        @Override
-        public int getCount() {
-            return 4;
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            View view = null;
-            switch (position) {
-                case 0:
-                    view = unpayRecycler;
-                    break;
-                case 1:
-                    view = payRecycler;
-                    break;
-                case 2:
-                    view = finishedRecycler;
-                    break;
-                case 3:
-                    view = cancelRecycler;
-                    break;
-            }
-            container.addView(view);
-            return view;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            View view = null;
-            switch (position) {
-                case 0:
-                    view = unpayRecycler;
-                    break;
-                case 1:
-                    view = payRecycler;
-                    break;
-                case 2:
-                    view = finishedRecycler;
-                    break;
-                case 3:
-                    view = cancelRecycler;
-                    break;
-            }
-            container.removeView(view);
-        }
-    }
 
     private void registReceiver() {
         if (receiver == null) {
@@ -338,6 +338,8 @@ public class OrderListFragment extends BaseElementFragment {
         }
     }
 
+
+
     private class OrderRecordReceiver extends BroadcastReceiver {
 
         @Override
@@ -348,18 +350,11 @@ public class OrderListFragment extends BaseElementFragment {
             }
             if (Constant.ACTION_BROADCAST_MY_ORDER.equals(action)) {
                 String type = intent.getStringExtra("order_type");
-                if ("11".equals(type)) {
-                    unPayAdapter.notifyDataSetChanged();
+                if (OrderListFragment.this.type.equals(type)) {
+                    payListAdapter.notifyDataSetChanged();
                 }
-                if ("22".equals(type)) {
-                    payedAdapter.notifyDataSetChanged();
-                }
-                if ("33".equals(type)) {
-                    finishedAdapter.notifyDataSetChanged();
-                }
-                if ("44".equals(type)) {
-                    cancelAdapter.notifyDataSetChanged();
-                }
+            } else {
+                payListAdapter.notifyDataSetChanged();
             }
         }
     }

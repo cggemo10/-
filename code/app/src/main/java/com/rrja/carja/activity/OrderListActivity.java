@@ -9,6 +9,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,19 @@ public class OrderListActivity extends BaseActivity {
 
         listFragment = OrderListFragment.newInstance();
         detalFragment = OrderDetalFragment.newInstance();
+
+        String type = null;
+        Intent intent = getIntent();
+        if (intent.hasExtra("order_type")) {
+            type = intent.getStringExtra("order_type");
+        }
+
+        if (TextUtils.isEmpty(type)) {
+            type = "11";
+        }
+
+        listFragment.setType(type);
+
         switchFragment(listFragment, false);
 
     }
@@ -117,7 +131,7 @@ public class OrderListActivity extends BaseActivity {
         return new OrderListListener();
     }
 
-    private class OrderListListener implements OrderListFragment.OnOrderListListener{
+    private class OrderListListener implements OrderListFragment.OnOrderListListener {
 
         @Override
         public void onOrderClicked(MaintenanceOrder order) {
@@ -130,10 +144,11 @@ public class OrderListActivity extends BaseActivity {
                 orderService.getMyOrderList(CoreManager.getManager().getCurrUser(), type);
             }
         }
+
     }
 
     // ---------------------------------------------------------------------------------------------------------------------
-    // ---------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------------------------------------------------
     ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -143,7 +158,7 @@ public class OrderListActivity extends BaseActivity {
 //                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"11");
 //            }
             if (CoreManager.getManager().getMyOrders("22").size() == 0) {
-                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"22");
+                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(), "22");
             }
 //            if (CoreManager.getManager().getMyOrders("33").size() == 0) {
 //                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"33");
