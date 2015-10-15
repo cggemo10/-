@@ -96,7 +96,7 @@
     <string name="str_btn_delete_car">删除车型</string>
 
     <!-- car info -->
-    <string name="title_car_inf">车辆信息</string>
+    <string name="title_car_inf">我的爱车</string>
     <string name="btn_add_car">添加车辆</string>
     <!-- car report -->
     <string name="title_test_report">检测报告</string>
