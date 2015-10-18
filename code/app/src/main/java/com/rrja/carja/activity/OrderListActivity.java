@@ -14,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
@@ -21,13 +22,19 @@ import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.fragment.orderlist.OrderDetalFragment;
 import com.rrja.carja.fragment.orderlist.OrderListFragment;
+import com.rrja.carja.model.PayInfo;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.myorder.OrderRecord;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.OrderBinder;
 import com.rrja.carja.utils.DialogHelper;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class OrderListActivity extends BaseActivity {
+
+    public static final int REQUEST_ORDER_PAY = 12;
 
     Fragment currFragment;
     private FragmentManager fm;
@@ -75,7 +82,17 @@ public class OrderListActivity extends BaseActivity {
         listFragment.setType(type);
 
         switchFragment(listFragment, false);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_ORDER_PAY) {
+            if (resultCode == RESULT_OK) {
+                CoreManager.getManager().getMyOrders("11").clear();
+                CoreManager.getManager().getMyOrders("22").clear();
+            }
+        }
     }
 
     @Override
@@ -141,7 +158,29 @@ public class OrderListActivity extends BaseActivity {
 
         @Override
         public void onPayRequest(OrderRecord orderRecord) {
+            if (orderRecord == null) {
+                Toast.makeText(OrderListActivity.this, "订单错误。", Toast.LENGTH_LONG).show();
+                return;
+            } else {
+                PayInfo info = new PayInfo();
+                info.setFee(orderRecord.getTotalAmount());
+                info.setBody(orderRecord.getServiceString());
+                info.setSubject(orderRecord.getServiceString());
+                info.setTradeNo(orderRecord.getOrderNumber());
+                info.setCarPlat(orderRecord.getPlatNum());
+                info.setUserName(orderRecord.getContact());
+                info.setServiceLoc(orderRecord.getServiceLocation());
+                SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日 hh时mm分");
+                info.setServiceTime(format.format(new Date(orderRecord.getServiceDateTime())));
+                info.setInvoiceTitle(orderRecord.getInvoiceTitle());
+                info.setInvoiceMail(orderRecord.getReceiverAddress());
+                info.setInvoiceReceiver(orderRecord.getReceiverName());
+                info.setInvoicePayType("到付");
 
+                Intent intent = new Intent(OrderListActivity.this, OrderActivity.class);
+                intent.putExtra("payInfo", info);
+                startActivityForResult(intent, REQUEST_ORDER_PAY);
+            }
         }
 
         @Override

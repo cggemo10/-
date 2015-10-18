@@ -177,7 +177,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         // TODO show avatar from path
         try {
             Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("user.jpg"));
-            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 3.14f);
+            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
             imgAvatar.setImageBitmap(roundedAvatar);
         } catch (IOException e) {
             e.printStackTrace();

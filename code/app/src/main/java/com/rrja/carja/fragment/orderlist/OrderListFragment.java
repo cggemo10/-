@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -337,18 +338,6 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
             txtOrderContent = (TextView) itemView.findViewById(R.id.txt_order_content);
             txtAmount = (TextView) itemView.findViewById(R.id.txt_order_amount);
             btnPay = (AppCompatButton) itemView.findViewById(R.id.btn_pay_for);
-            if ("11".equals(type)) {
-
-            }
-            if ("22".equals(type)) {
-                btnPay.setVisibility(View.GONE);
-            }
-            if ("33".equals(type)) {
-                btnPay.setVisibility(View.GONE);
-            }
-            if ("44".equals(type)) {
-                btnPay.setVisibility(View.GONE);
-            }
         }
 
         public void bindData(OrderRecord order) {
@@ -356,18 +345,27 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
             txtOrderNm.setText(order.getOrderNumber());
             txtOwner.setText(CoreManager.getManager().getCurrUser().getTel());
             txtCarPlat.setText(order.getPlatNum());
-            if ("11".equals(order.getOrderStatus())) {
-                txtSyncState.setText("未支付");
+
+            if ("11".equals(type)) {
+                txtSyncState.setVisibility(View.GONE);
+                btnPay.setVisibility(View.VISIBLE);
             }
-            if ("22".equals(order.getOrderStatus())) {
+            if ("22".equals(type)) {
                 txtSyncState.setText("已支付");
+                txtSyncState.setTextColor(Color.BLUE);
+                btnPay.setVisibility(View.GONE);
             }
-            if ("33".equals(order.getOrderStatus())) {
+            if ("33".equals(type)) {
                 txtSyncState.setText("已完成");
+                txtSyncState.setTextColor(Color.GREEN);
+                btnPay.setVisibility(View.GONE);
             }
-            if ("44".equals(order.getOrderStatus())) {
+            if ("44".equals(type)) {
                 txtSyncState.setText("已取消");
+                txtSyncState.setTextColor(Color.GRAY);
+                btnPay.setVisibility(View.GONE);
             }
+
             String orderContent = order.getServiceString();
             txtOrderContent.setText(orderContent);
             txtAmount.setText(order.getTotalAmount() + "");

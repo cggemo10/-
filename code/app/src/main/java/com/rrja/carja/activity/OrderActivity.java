@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.alipay.sdk.app.PayTask;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
+import com.rrja.carja.model.PayInfo;
 import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.OrderBinder;
@@ -80,21 +81,23 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
     private static final int SDK_PAY_FLAG = 1;
     private static final int SDK_ORDRE_FLAG = 10;
 
+    private PayInfo payInfo;
+
     private static final String RSA_PRIVATE =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANPLWVqPLOB3vNUn" +
-            "mvK2VGX1zC3YaVYCsh/LAgp+35IOeiK5+Tg0ZQqig0nBk6aMrmWFpEhDN8Ci4Ha5" +
-            "LExkqcE7/J/vmnr4SgiA8NoaOpd8NDPJwaUxXWEqWN4mYxksQ2hykXwOPYiTi94W" +
-            "3vkVye75LXf9MQ8QYH3fUAXBuxRFAgMBAAECgYEAntVozHaFhE2n6v9Jv+4nO1Pr" +
-            "7RHYZW2eIiPAAxkFF+cNh4+LLLB2elRIO38V+RiWDYL9IkhuvmQoDEFwzFXNy8Qs" +
-            "djpmi8XmmzS+T72tzwoCW6ye2c8xORmlV0T8RqIsH5dVlOkYe+uevIjafXMUXJMD" +
-            "7CWgPrGfZPOVP3hLgF0CQQD1qzxZxkgtBXGb6+9J6QyIDEJNcWFGETZbDsREb3YJ" +
-            "XLscd9nbbjSLSc6hFw/Slij7TFGrLyHZ4nxMH2w/Ryh/AkEA3LNvP4cmsSZXnOXE" +
-            "WRBHpK4sAUGkc2pAOSHVXceC9Heb6o0OV5i10vsEz36dC+spUZh2TTFUMZx6nnHX" +
-            "yrPBOwJAJjKfyZ2o70cfaQ0AQc+4oRa24G+2njxi5Tmgjrt98Oq4NS71csbp6JZr" +
-            "SGTbkvTCHoC5WhKUAtrSVMu1+wjHZQJBALuy20VjMxPscQzeGJxKjTPQcVpsMml6" +
-            "Dr7IOId2W7iAVRko9+6l0NVraQ7zNqthR5W+nbZO4rUCyQIh/g3FzOsCQQDKfs+3" +
-            "ZWd2AD9AjGRcaoflBXx8hcW64xerxzDkjJgRRdV9WKNezcoPMOYiiZUH9FEPYm7a" +
-            "4AOuOPCO7fesa76F";
+                    "mvK2VGX1zC3YaVYCsh/LAgp+35IOeiK5+Tg0ZQqig0nBk6aMrmWFpEhDN8Ci4Ha5" +
+                    "LExkqcE7/J/vmnr4SgiA8NoaOpd8NDPJwaUxXWEqWN4mYxksQ2hykXwOPYiTi94W" +
+                    "3vkVye75LXf9MQ8QYH3fUAXBuxRFAgMBAAECgYEAntVozHaFhE2n6v9Jv+4nO1Pr" +
+                    "7RHYZW2eIiPAAxkFF+cNh4+LLLB2elRIO38V+RiWDYL9IkhuvmQoDEFwzFXNy8Qs" +
+                    "djpmi8XmmzS+T72tzwoCW6ye2c8xORmlV0T8RqIsH5dVlOkYe+uevIjafXMUXJMD" +
+                    "7CWgPrGfZPOVP3hLgF0CQQD1qzxZxkgtBXGb6+9J6QyIDEJNcWFGETZbDsREb3YJ" +
+                    "XLscd9nbbjSLSc6hFw/Slij7TFGrLyHZ4nxMH2w/Ryh/AkEA3LNvP4cmsSZXnOXE" +
+                    "WRBHpK4sAUGkc2pAOSHVXceC9Heb6o0OV5i10vsEz36dC+spUZh2TTFUMZx6nnHX" +
+                    "yrPBOwJAJjKfyZ2o70cfaQ0AQc+4oRa24G+2njxi5Tmgjrt98Oq4NS71csbp6JZr" +
+                    "SGTbkvTCHoC5WhKUAtrSVMu1+wjHZQJBALuy20VjMxPscQzeGJxKjTPQcVpsMml6" +
+                    "Dr7IOId2W7iAVRko9+6l0NVraQ7zNqthR5W+nbZO4rUCyQIh/g3FzOsCQQDKfs+3" +
+                    "ZWd2AD9AjGRcaoflBXx8hcW64xerxzDkjJgRRdV9WKNezcoPMOYiiZUH9FEPYm7a" +
+                    "4AOuOPCO7fesa76F";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,8 +127,13 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 finish();
             }
 
+        } else if (extras.containsKey("payInfo") && extras.get("payInfo") != null) {
+            // from orderlist
+            payInfo = getIntent().getParcelableExtra("payInfo");
+            if (payInfo == null) {
+                finish();
+            }
         } else {
-            // TODO
             finish();
         }
 
@@ -333,6 +341,58 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
         btnCommit = (AppCompatButton) findViewById(R.id.btn_confirm_order);
         btnCommit.setOnClickListener(this);
+
+        if (payInfo != null) {
+
+            edName.setText(payInfo.getUserName());
+            edName.setEnabled(false);
+
+            edTel.setText(payInfo.getTel());
+            edTel.setEnabled(false);
+
+            txtPlateNum.setText(payInfo.getCarPlat());
+            txtPlateNum.setEnabled(false);
+
+            edServerAddr.setText(payInfo.getServiceLoc());
+            edServerAddr.setEnabled(false);
+
+            txtServerTime.setText(payInfo.getServiceTime());
+            txtServerTime.setEnabled(false);
+            txtServerTime.setClickable(false);
+
+            String invoiceTitle = payInfo.getInvoiceTitle();
+            String invoiceMail = payInfo.getInvoiceMail();
+            String invoiceReceiver = payInfo.getInvoiceReceiver();
+            if (!TextUtils.isEmpty(invoiceTitle) && !TextUtils.isEmpty(invoiceMail) && !TextUtils.isEmpty(invoiceReceiver)) {
+                switchInvoice.setChecked(true);
+                edInvoiceTitle.setText(payInfo.getInvoiceTitle());
+                edInvoiceTitle.setEnabled(false);
+
+                edReceiver.setText(payInfo.getInvoiceReceiver());
+                edReceiver.setEnabled(false);
+
+                edReceiverMail.setText(payInfo.getInvoiceMail());
+                edReceiverMail.setEnabled(false);
+            } else {
+                switchInvoice.setChecked(false);
+            }
+            switchInvoice.setEnabled(false);
+
+            nameDel.setVisibility(View.GONE);
+            telDel.setVisibility(View.GONE);
+            serverAddrDel.setVisibility(View.GONE);
+            invoiceTitleDel.setVisibility(View.GONE);
+            mailreceiverDel.setVisibility(View.GONE);
+            mailAddrDel.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (payInfo != null) {
+            pay(payInfo);
+        }
     }
 
     @Override
@@ -406,12 +466,14 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
             case R.id.btn_confirm_order:
                 btnCommit.setEnabled(false);
-                boolean success = commitOrder();
-                if (!success) {
-                    btnCommit.setEnabled(true);
+                if (payInfo == null) {
+                    boolean success = commitOrder();
+                    if (!success) {
+                        btnCommit.setEnabled(true);
+                    }
+                } else {
+                    pay(payInfo);
                 }
-
-
         }
     }
 
@@ -683,7 +745,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 msg.what = SDK_PAY_FLAG;
                 Bundle bundle = new Bundle();
                 bundle.putString("payResult", result);
-                bundle.putString("orderNum", info.tradeNo);
+                bundle.putString("orderNum", info.getTradeNo());
                 msg.obj = bundle;
                 mHandler.sendMessage(msg);
             }
@@ -693,13 +755,6 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         Thread payThread = new Thread(payRunnable);
         payThread.start();
 
-    }
-
-    private class PayInfo {
-        String tradeNo;
-        double fee;
-        String subject;
-        String body;
     }
 
     /**
@@ -715,16 +770,16 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         orderInfo += "&seller_id=" + "\"" + "2088911832390945" + "\"";
 
         // 商户网站唯一订单号
-        orderInfo += "&out_trade_no=" + "\"" + payInfo.tradeNo + "\"";
+        orderInfo += "&out_trade_no=" + "\"" + payInfo.getTradeNo() + "\"";
 
         // 商品名称
-        orderInfo += "&subject=" + "\"" + payInfo.subject + "\"";
+        orderInfo += "&subject=" + "\"" + payInfo.getSubject() + "\"";
 
         // 商品详情
-        orderInfo += "&body=" + "\"" + payInfo.body + "\"";
+        orderInfo += "&body=" + "\"" + payInfo.getBody() + "\"";
 
         // 商品金额
-        orderInfo += "&total_fee=" + "\"" + payInfo.fee + "\"";
+        orderInfo += "&total_fee=" + "\"" + payInfo.getFee() + "\"";
 
         // 服务器异步通知页面路径
 //        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
@@ -732,7 +787,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         orderInfo += "&notify_url=" + "\""
                 + "http://120.25.201.50/api/order/syncAlipay?nattel="
                 + order.getUserInfo().getTel() + "%26orderNum="
-                + payInfo.tradeNo + "%26status=22"
+                + payInfo.getTradeNo() + "%26status=22"
                 + "\"";
 
         // 服务接口名称， 固定值
@@ -823,10 +878,10 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                 case SDK_ORDRE_FLAG:
                     String orderNum = (String) msg.obj;
                     PayInfo info = new PayInfo();
-                    info.tradeNo = orderNum;
-                    info.subject = orderSubject;
-                    info.fee = order.calculateTotalFee();
-                    info.body = orderSubject;
+                    info.setTradeNo(orderNum);
+                    info.setSubject(orderSubject);
+                    info.setFee(order.calculateTotalFee());
+                    info.setBody(orderSubject);
 
                     pay(info);
                     break;
