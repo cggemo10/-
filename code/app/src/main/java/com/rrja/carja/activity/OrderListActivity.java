@@ -163,6 +163,7 @@ public class OrderListActivity extends BaseActivity {
                 return;
             } else {
                 PayInfo info = new PayInfo();
+                info.setTel(orderRecord.getPhone());
                 info.setFee(orderRecord.getTotalAmount());
                 info.setBody(orderRecord.getServiceString());
                 info.setSubject(orderRecord.getServiceString());
@@ -199,18 +200,18 @@ public class OrderListActivity extends BaseActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             orderService = (OrderBinder) service;
 
-//            if (CoreManager.getManager().getMyOrders("11").size() == 0) {
-//                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"11");
-//            }
+            if (CoreManager.getManager().getMyOrders("11").size() == 0) {
+                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"11");
+            }
             if (CoreManager.getManager().getMyOrders("22").size() == 0) {
                 orderService.getMyOrderList(CoreManager.getManager().getCurrUser(), "22");
             }
-//            if (CoreManager.getManager().getMyOrders("33").size() == 0) {
-//                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"33");
-//            }
-//            if (CoreManager.getManager().getMyOrders("44").size() == 0) {
-//                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"44");
-//            }
+            if (CoreManager.getManager().getMyOrders("33").size() == 0) {
+                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"33");
+            }
+            if (CoreManager.getManager().getMyOrders("44").size() == 0) {
+                orderService.getMyOrderList(CoreManager.getManager().getCurrUser(),"44");
+            }
         }
 
         @Override

@@ -146,6 +146,7 @@ public class OrderBinder extends Binder {
         Runnable task = new Runnable() {
             @Override
             public void run() {
+
                 JSONObject orderList = HttpUtils.getOrderList(userInfo, type);
                 if (orderList.has("code")) {
                     try {

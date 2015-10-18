@@ -185,7 +185,9 @@ public class OrderRecord {
 
         record.setOrderNumber(json.getString("orderNumber"));
         record.setOrderStatus(json.getString("orderStatus"));
-        record.setPayChannel(json.getString("payChannel"));
+        if (json.has("payChannel")) {
+            record.setPayChannel(json.getString("payChannel"));
+        }
         record.setPhone(json.getString("phone"));
         record.setPlatNum(json.getString("plateNum"));
         record.setPrice(json.getDouble("price"));

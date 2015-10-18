@@ -243,41 +243,6 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
         public void onOrderDataRequest(String type);
     }
 
-//    private class OrderListAdapter extends BaseAdapter {
-//
-//
-//        @Override
-//        public int getCount() {
-//            return CoreManager.getManager().getMyOrders(type).size();
-//        }
-//
-//        @Override
-//        public Object getItem(int position) {
-//            return CoreManager.getManager().getMyOrders(type).get(position);
-//        }
-//
-//        @Override
-//        public long getItemId(int position) {
-//            return position;
-//        }
-//
-//        @Override
-//        public View getView(int position, View convertView, ViewGroup parent) {
-//            OrderHolder holder = null;
-//            if (convertView == null) {
-//                convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sync_order, null);
-//                holder = new OrderHolder(convertView);
-//                convertView.setTag(convertView);
-//            } else {
-//                holder = (OrderHolder) convertView.getTag();
-//            }
-//            OrderRecord orderRecord = CoreManager.getManager().getMyOrders(type).get(position);
-//            holder.bindData(orderRecord);
-//
-//            return convertView;
-//        }
-//    }
-
     private class OrderListAdapter extends RecyclerView.Adapter<OrderHolder> {
 
         @Override
@@ -351,16 +316,19 @@ public class OrderListFragment extends BaseElementFragment implements View.OnCli
                 btnPay.setVisibility(View.VISIBLE);
             }
             if ("22".equals(type)) {
+                txtSyncState.setVisibility(View.VISIBLE);
                 txtSyncState.setText("已支付");
                 txtSyncState.setTextColor(Color.BLUE);
                 btnPay.setVisibility(View.GONE);
             }
             if ("33".equals(type)) {
+                txtSyncState.setVisibility(View.VISIBLE);
                 txtSyncState.setText("已完成");
                 txtSyncState.setTextColor(Color.GREEN);
                 btnPay.setVisibility(View.GONE);
             }
             if ("44".equals(type)) {
+                txtSyncState.setVisibility(View.VISIBLE);
                 txtSyncState.setText("已取消");
                 txtSyncState.setTextColor(Color.GRAY);
                 btnPay.setVisibility(View.GONE);

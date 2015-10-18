@@ -335,7 +335,7 @@ public class HttpUtils {
     }
 
     public static JSONObject commitStoreAppointment(String tel, String authToken, String storeId, String data) {
-        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_APPOINTMENT_STORE + "?nattel=" + tel + "&authToken=" +
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USER_APPOINTMENT_STORE + "?nattel=" + tel + "&authToken=" + authToken +
                 "&storeId=" + storeId + "&datetime=" + data;
         return Network.doGet(url);
     }

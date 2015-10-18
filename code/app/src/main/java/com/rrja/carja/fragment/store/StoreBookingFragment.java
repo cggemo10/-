@@ -288,7 +288,7 @@ public class StoreBookingFragment extends BaseElementFragment implements View.On
                     Toast.makeText(getActivity(), "请选择预约时间！", Toast.LENGTH_SHORT).show();
                     break;
                 }
-                String time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":";
+                String time = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + "00";
 
                 String location = edLoc.getText().toString();
                 if (TextUtils.isEmpty(location)) {

@@ -129,6 +129,7 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
 
         } else if (extras.containsKey("payInfo") && extras.get("payInfo") != null) {
             // from orderlist
+            setResult(RESULT_CANCELED);
             payInfo = getIntent().getParcelableExtra("payInfo");
             if (payInfo == null) {
                 finish();
@@ -223,7 +224,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         edTel.setOnEditorActionListener(this);
 
         txtPlateNum = (TextView) findViewById(R.id.txt_order_car_num);
-        txtPlateNum.setText(order.getmCarInfo().getPlatNum());
+        if (order != null) {
+            txtPlateNum.setText(order.getmCarInfo().getPlatNum());
+        }
 
         edServerAddr = (EditText) findViewById(R.id.ed_order_server_address);
         edServerAddr.addTextChangedListener(new TextWatcher() {
@@ -387,11 +390,13 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         }
     }
 
+    boolean firstStart = false;
     @Override
     protected void onResume() {
         super.onResume();
-        if (payInfo != null) {
+        if (payInfo != null && !firstStart) {
             pay(payInfo);
+            firstStart = true;
         }
     }
 
@@ -784,9 +789,15 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
         // 服务器异步通知页面路径
 //        orderInfo += "&notify_url=" + "\"" + "http://notify.msp.hk/notify.htm"
 //                + "\"";
+        String tel = null;
+        if (order != null) {
+            tel = order.getUserInfo().getTel();
+        } else if (payInfo != null) {
+            tel = payInfo.getTel();
+        }
         orderInfo += "&notify_url=" + "\""
                 + "http://120.25.201.50/api/order/syncAlipay?nattel="
-                + order.getUserInfo().getTel() + "%26orderNum="
+                + tel + "%26orderNum="
                 + payInfo.getTradeNo() + "%26status=22"
                 + "\"";
 
@@ -858,6 +869,9 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                         // TODO order sync page
 //                        payResult.
                         orderService.syncOrder(data.getString("orderNum"), "22");
+                        if (payInfo != null) {
+                            setResult(RESULT_OK);
+                        }
                         OrderActivity.this.finish();
                     } else {
                         // 判断resultStatus 为非“9000”则代表可能支付失败
@@ -866,11 +880,13 @@ public class OrderActivity extends BaseActivity implements View.OnClickListener,
                             Toast.makeText(OrderActivity.this, "支付结果确认中",
                                     Toast.LENGTH_SHORT).show();
                             orderService.syncOrder(data.getString("orderNum"), "22");
+                            setResult(RESULT_OK);
                         } else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
                             Toast.makeText(OrderActivity.this, "支付失败",
                                     Toast.LENGTH_SHORT).show();
                             orderService.syncOrder(data.getString("orderNum"), "11");
+                            setResult(RESULT_CANCELED);
                             btnCommit.setEnabled(true);
                         }
                     }

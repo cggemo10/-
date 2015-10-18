@@ -84,18 +84,17 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
         order.setUserInfo(CoreManager.getManager().getCurrUser());
 
         mHandler = new Handler(this);
-
+        bindService();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        bindService();
         registReceiver();
 
         if (order.getmCarInfo() == null) {
             tvCarDetal.setText("请选择您的车辆");
+            txtPlatNum.setVisibility(View.GONE);
             txtPlatNum.setText("");
             carLogo.setVisibility(View.GONE);
         }
@@ -103,9 +102,14 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
     @Override
     protected void onStop() {
-        super.onStop();
         unRegistReceiver();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
         unBindService();
+        super.onDestroy();
     }
 
     @Override
@@ -156,7 +160,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
                 finish();
             } else {
-                orderService.getService(service.getId());
+                orderService.getSubService(service.getId());
             }
         } else {
             orderService.getService("104");
@@ -189,6 +193,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
         if (order.getmCarInfo() != null) {
             CarInfo carInfo = order.getmCarInfo();
+            txtPlatNum.setVisibility(View.VISIBLE);
             txtPlatNum.setText(carInfo.getPlatNum());
             tvCarDetal.setText(carInfo.getSeriesName() + " " + carInfo.getModelName());
             carLogo.setVisibility(View.VISIBLE);
@@ -223,7 +228,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
         if (orderService == null) {
             Intent intent = new Intent(this, DataCenterService.class);
-            intent.setAction(Constant.ACTION_ORDER_SERVICE);
+            intent.setAction(Constant.ACTION_MAINTENANCE_SERVICE);
             bindService(intent, conn, BIND_AUTO_CREATE);
         }
     }
@@ -263,6 +268,7 @@ public class OnDoreWashActivity extends BaseActivity implements View.OnClickList
 
         if (orderReceiver != null) {
             unregisterReceiver(orderReceiver);
+            orderReceiver = null;
         }
     }
 
