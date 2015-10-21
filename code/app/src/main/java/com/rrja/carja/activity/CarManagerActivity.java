@@ -140,6 +140,8 @@ public class CarManagerActivity extends BaseActivity {
             filter.addAction(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
             filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS);
             filter.addAction(Constant.ACTION_BROADCAST_GET_USER_CARS_ERR);
+            filter.addAction(Constant.ACTION_BROADCAST_REMOVE_CAR);
+            filter.addAction(Constant.ACTION_BROADCAST_REMOVE_CAR_ERR);
 
             mReceiver = new AddCarReceiver();
             registerReceiver(mReceiver, filter);
@@ -224,6 +226,25 @@ public class CarManagerActivity extends BaseActivity {
 
             }
 
+            if (Constant.ACTION_BROADCAST_REMOVE_CAR.equals(action)) {
+                Toast.makeText(context, "移除爱车成功！", Toast.LENGTH_LONG).show();
+//                CoreManager.getManager().getUserCars().clear();
+//
+//                Intent carIntent = new Intent(CarManagerActivity.this, DataCenterService.class);
+//                intent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
+//                startService(carIntent);
+            }
+
+            if (Constant.ACTION_BROADCAST_REMOVE_CAR_ERR.equals(action)) {
+                Toast.makeText(context, "移除爱车失败！", Toast.LENGTH_LONG).show();
+                CoreManager.getManager().getUserCars().clear();
+
+                Intent carIntent = new Intent(CarManagerActivity.this, DataCenterService.class);
+                intent.setAction(Constant.ACTION_REQUEST_REFRESH_USER_CAR);
+                startService(carIntent);
+
+            }
+
         }
     }
 
@@ -289,6 +310,10 @@ public class CarManagerActivity extends BaseActivity {
         return false;
     }
 
+    public boolean isSelecte() {
+        return isSelecte;
+    }
+
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
     public CarListFragment.CarListInteractionListener getCarListListener() {
@@ -315,6 +340,11 @@ public class CarManagerActivity extends BaseActivity {
         public void requestAddCar() {
             addCarFragment.clear();
             switchFragment(addCarFragment, false);
+        }
+
+        @Override
+        public void onCarDelete(CarInfo car) {
+            carService.removeCar(car);
         }
     }
 

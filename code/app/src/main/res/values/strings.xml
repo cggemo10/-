@@ -166,6 +166,8 @@
     <string name="title_feed_back">意见反馈</string>
     <string name="hint_feed_back_title">标题</string>
     <string name="hint_feed_back_content">内容</string>
+    <string name="str_err_feedtitle_empty">请输入标题！</string>
+    <string name="str_err_feedcontent_empty">请输入反馈信息！</string>
 
     <!-- 订单 -->
     <string name="str_order_content_empty">订单信息为空</string>

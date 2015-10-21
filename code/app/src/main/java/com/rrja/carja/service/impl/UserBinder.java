@@ -20,6 +20,7 @@ import com.rrja.carja.utils.ResponseUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,6 +196,56 @@ public class UserBinder extends Binder {
             }
         };
 
+        mContext.execute(task);
+    }
+
+    public void updateAvatar(final File avatarFile) {
+
+        if (CoreManager.getManager().getCurrUser() == null || !avatarFile.exists()) {
+
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+                    JSONObject avatarJs = HttpUtils.updateUserAvatar(CoreManager.getManager().getCurrUser(), avatarFile);
+                    int code = avatarJs.getInt("code");
+                    if (code == 0) {
+
+                        CoreManager.getManager().getCurrUser().setAvatarPath(avatarFile.getAbsolutePath());
+
+                        Intent intent = new Intent(Constant.ACTION_MODIFY_AVATAR);
+                        intent.putExtra("avatar", avatarFile.getAbsoluteFile());
+                        mContext.sendBroadcast(intent);
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_MODIFY_AVATAR_ERR);
+                        String errMsg = null;
+                        if (avatarJs.has("description")) {
+                            errMsg = avatarJs.getString("description");
+                        }
+
+                        if (TextUtils.isEmpty(errMsg)) {
+                            errMsg = "网络异常，请稍后再试。";
+                        }
+                        intent.putExtra("description", errMsg);
+                        mContext.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+
+                    Intent intent = new Intent(Constant.ACTION_MODIFY_AVATAR_ERR);
+                    String errMsg = "网络异常，请稍后再试。";
+                    intent.putExtra("description", errMsg);
+                    mContext.sendBroadcast(intent);
+
+                    return;
+                }
+
+            }
+        };
         mContext.execute(task);
     }
 

@@ -20,6 +20,9 @@ public class Constant {
     public static final String ACTION_MODIFY_NICK_NAME = "rrja.MODIFY_NICK_NAME";
     public static final String ACTION_MODIFY_NICK_NAME_ERROR = "rrja.MODIFY_NICK_NAME_ERROR";
 
+    public static final String ACTION_MODIFY_AVATAR = "rrja.MODIFY_AVATAR";
+    public static final String ACTION_MODIFY_AVATAR_ERR = "rrja.MODIFY_AVATAR_ERR";
+
     public static final String ACTION_INIT_SERVICE = "rrja.request.init";
     public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
     public static final String ACTION_STORE_RESERVATION_SERVICE = "rrja.request.store.reservation";
@@ -27,12 +30,18 @@ public class Constant {
     public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
     public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
     public static final String ACTION_ORDER_SERVICE = "rrja.ORDER_SERVICE";
+    public static final String ACTION_FEEDBACK_SERVICE = "rrja.FEEDBACK";
+
+    public static final String ACTION_BROADCAST_FEEDBACK = "rrja.broadcast.FEEDBACK";
+    public static final String ACTION_BROADCAST_FEEDBACK_ERR = "rrja.broadcast.FEEDBACK_ERR";
 
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS = "rrja.broadcast.download.COUPONS_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT = "rrja.broadcast.download.DISCOUNT_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_FORUM = "rrja.broadcast.download.FORUM_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_STORE = "rrja.broadcast.download.STORE_IMG";
     public static final String ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO = "rrja.broadcast.download.CAR_LOGO";
+    public static final String ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR = "rrja.broadcast.download.AVATAR";
+    public static final String ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR = "rrja.broadcast.download.AVATAR_ERR";
 
     public static final String ACTION_BROADCAST_REFRESH_REGION = "rrja.boradcast.refresh.REGIONS";
     public static final String ACTION_BROADCAST_REFRESH_REGION_ERROR = "rrja.boradcast.refresh.REGIONS_ERROR";
@@ -53,6 +62,9 @@ public class Constant {
 
     public static final String ACTION_BROADCAST_ADD_CAR = "rrja.broadcast.add.CAR";
     public static final String ACTION_BROADCAST_ADD_CAR_ERR = "rrja.broadcast.add.CAR_ERR";
+
+    public static final String ACTION_BROADCAST_REMOVE_CAR = "rrja.broadcast.remove.CAR";
+    public static final String ACTION_BROADCAST_REMOVE_CAR_ERR = "rrja.broadcast.remove.CAR_ERR";
 
     public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA = "rrja.broadcast.get.RECOMMEND_DATA";
     public static final String ACTION_BROADCAST_GET_RECOMMEND_DATA_ERR = "rrja.broadcast.get.RECOMMEND_DATA_ERR";
@@ -96,6 +108,7 @@ public class Constant {
     public static final String DIR_FORUM = "forum";
     public static final String DIR_STORE = "store";
     public static final String DIR_CAR_LOGO = "carLogo";
+    public static final String DIR_USER = "avatar";
 
     public static final String ACTION_LOGIN_AFTER_HOMEMAINTENANCE = "rrja.login_HOMEMAINTENANCE";
     public static final String ACTION_LOGIN_AFTER_ONDOREWASH = "rrja.login_ONDOREWASH";
@@ -107,6 +120,17 @@ public class Constant {
             path = Environment.getExternalStorageDirectory().getAbsolutePath() +
                     File.separator + DIR_BASE + File.separator + DIR_IMG_CACHE +
                     File.separator + DIR_RECOMMEND + File.separator;
+        }
+
+        return path;
+    }
+
+    public static String getUserAvatarCacheDir() {
+        String path = "";
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            path = Environment.getExternalStorageDirectory().getAbsolutePath() +
+                    File.separator + DIR_BASE + File.separator + DIR_IMG_CACHE +
+                    File.separator + DIR_USER + File.separator;
         }
 
         return path;

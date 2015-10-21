@@ -43,6 +43,8 @@ public class CarListFragment extends BaseElementFragment {
 
     private UserCarReceiver mReceiver;
 
+    boolean isSelect;
+
     public static CarListFragment newInstance() {
         CarListFragment fragment = new CarListFragment();
         return fragment;
@@ -86,6 +88,7 @@ public class CarListFragment extends BaseElementFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         mListener = ((CarManagerActivity) activity).getCarListListener();
+        isSelect = ((CarManagerActivity) activity).isSelecte();
     }
 
     @Override
@@ -149,6 +152,7 @@ public class CarListFragment extends BaseElementFragment {
     public interface CarListInteractionListener {
         public void onCarSelected(CarInfo car);
         public void requestAddCar();
+        public void onCarDelete(CarInfo car);
     }
 
     private class PrivateCarAdapter extends RecyclerView.Adapter {
@@ -162,7 +166,7 @@ public class CarListFragment extends BaseElementFragment {
         }
 
         @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
             final CarInfo carInfo = CoreManager.getManager().getUserCars().get(position);
             CarVH vh = (CarVH) holder;
             vh.bindData(carInfo);
@@ -175,6 +179,18 @@ public class CarListFragment extends BaseElementFragment {
                     }
                 }
             });
+            if (!isSelect) {
+                vh.imgCarOption.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+                            mListener.onCarDelete(carInfo);
+                        }
+                        CoreManager.getManager().getUserCars().remove(position);
+                        notifyDataSetChanged();
+                    }
+                });
+            }
         }
 
         @Override
@@ -188,6 +204,7 @@ public class CarListFragment extends BaseElementFragment {
         private ImageView imgLogo;
         private TextView txtCarPlat;
         private TextView txtDetal;
+        ImageView imgCarOption;
 
         public CarVH(View itemView) {
             super(itemView);
@@ -195,6 +212,7 @@ public class CarListFragment extends BaseElementFragment {
             imgLogo = (ImageView) itemView.findViewById(R.id.img_car_ic);
             txtCarPlat = (TextView) itemView.findViewById(R.id.txt_car_platnm);
             txtDetal = (TextView) itemView.findViewById(R.id.txt_car_detial);
+            imgCarOption = (ImageView) itemView.findViewById(R.id.img_car_option);
         }
 
         public void bindData(CarInfo carInfo) {
@@ -218,6 +236,9 @@ public class CarListFragment extends BaseElementFragment {
 
             txtCarPlat.setText(carInfo.getPlatNum());
             txtDetal.setText(carInfo.getSeriesName() + " " + carInfo.getModelName());
+            if (!isSelect) {
+                imgCarOption.setImageResource(R.drawable.ic_del);
+            }
         }
     }
 

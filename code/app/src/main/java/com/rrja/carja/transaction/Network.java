@@ -109,41 +109,6 @@ public class Network {
             e.printStackTrace();
             return createErrorNetJsonObject();
         }
-
-//        try {
-//            URL url = new URL(urlStr);
-//            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//
-//            conn.setConnectTimeout(10000);
-//            conn.setReadTimeout(10000);
-//            conn.setDoInput(true);
-//            conn.setDoOutput(true);
-//            conn.setRequestMethod("POST");
-//
-//            conn.setUseCaches(false);// 忽略缓存
-//
-//            conn.setRequestProperty("Accept", "*/*");
-//            conn.setRequestProperty("Connection", "Keep-Alive");
-//            conn.setRequestProperty("User-Agent",
-//                    "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1;SV1)");
-//
-//            conn.setRequestProperty("Content-length", "" + content.length());
-//            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");;
-//
-//            conn.setRequestProperty("Charset", "UTF-8");
-//
-//            JSONObject json = new JSONObject();
-//
-//            return json;
-//
-//
-//        } catch (MalformedURLException e) {
-//            e.printStackTrace();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return null;
     }
 
     public static boolean doDownload(String url, String path) {

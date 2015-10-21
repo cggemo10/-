@@ -1,8 +1,5 @@
 package com.rrja.carja.transaction;
 
-import android.os.Parcelable;
-import android.view.TextureView;
-
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
@@ -10,15 +7,13 @@ import com.rrja.carja.model.UserInfo;
 import org.apache.http.util.TextUtils;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by chongge on 15/7/8.
- */
 public class HttpUtils {
 
     private static final String BASE_URL = "http://120.25.201.50/api";
@@ -31,9 +26,6 @@ public class HttpUtils {
     private static final String SERVICE_ORDER = "/order";
     private static final String SERVICE_STORE = "/store";
     private static final String SERVICE_TRAFFIC = "/traffic";
-//    http://120.25.201.50/api/car/getBrands?firstLetter=
-//    http://120.25.201.50/api/car/getSeries?brandName=&brandId=1
-//    http://120.25.201.50/api/car/getModels?seriesName=&seriesId=8
 
     private static final String INTERFACE_PROVINCE = "/getProvinceList";
     private static final String INTERFACE_CITY = "/getCityListByProvinceId";
@@ -66,6 +58,8 @@ public class HttpUtils {
     private static final String INTERFACE_QUERYORDER = "/queryOrderInfo";
 
     private static final String INTERFACE_STORE = "/getStoreList";
+
+    private static final String INTERFACE_FEEDBACK = "/feedback";
 
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -111,8 +105,17 @@ public class HttpUtils {
         return null;
     }
 
-    public static JSONObject updateUserAvatar(UserInfo userInfo, String avatarPath) {
-        return null;
+    public static JSONObject updateUserAvatar(UserInfo userInfo, File avatarFile) {
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_USRE_AVATAR_UPDATE;
+        List<TextKeyValuePair> valuePairs = new ArrayList<>();
+        valuePairs.add(new TextKeyValuePair("nattel", userInfo.getTel()));
+        valuePairs.add(new TextKeyValuePair("authToken", userInfo.getAuthToken()));
+
+        List<FileKeyValuePair> filePairs = new ArrayList<>();
+        filePairs.add(new FileKeyValuePair("avatar", avatarFile.getName(), avatarFile.getAbsolutePath()));
+
+        return Network.doPost(url, valuePairs, filePairs);
     }
 
     public static JSONObject addPrivateCar(UserInfo userInfo, CarInfo carInfo) {
@@ -225,7 +228,7 @@ public class HttpUtils {
         String url = String.format("%s%s%s?provinceId=%s", BASE_URL, SERVICE_AREA, INTERFACE_CITY, provinceId);
         return Network.doGet(url);
     }
-    
+
     //-------------------------------------------------------------------------------------------------------------------
     // goods interface
     public static JSONObject getRecommendGoods(int page) {
@@ -264,7 +267,6 @@ public class HttpUtils {
     }
 
 
-
     //-------------------------------------------------------------------------------------------------------------------
     // order interface
     public static JSONObject commitOrder(String nattel, String authToken, String contacts,
@@ -293,7 +295,7 @@ public class HttpUtils {
 
     public static JSONObject orderDetail(String tel, String authToken, String orderId) {
 
-        String url = BASE_URL + SERVICE_ORDER + INTERFACE_QUERYORDER + "?nattel=" + tel + "&authToken=" + authToken + "&orderNum=" + orderId ;
+        String url = BASE_URL + SERVICE_ORDER + INTERFACE_QUERYORDER + "?nattel=" + tel + "&authToken=" + authToken + "&orderNum=" + orderId;
         return Network.doGet(url);
     }
 
@@ -347,5 +349,20 @@ public class HttpUtils {
         String url = BASE_URL + SERVICE_TRAFFIC + INTERFACE_ILLEGAL + "?nattel=" + CoreManager.getManager().getCurrUser().getTel() +
                 "?authToken=" + CoreManager.getManager().getCurrUser().getAuthToken() + "?carId=" + carId;
         return Network.doGet(url);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+    // feedback
+    public static JSONObject commitFeedback(String tel, String authToken, String title, String content) {
+
+        String url = BASE_URL + SERVICE_USER + INTERFACE_FEEDBACK;
+
+        List<TextKeyValuePair> pairs = new ArrayList<>();
+        pairs.add(new TextKeyValuePair("nattel", tel));
+        pairs.add(new TextKeyValuePair("authToken", authToken));
+        pairs.add(new TextKeyValuePair("subject", title));
+        pairs.add(new TextKeyValuePair("message", content));
+
+        return Network.doPost(url, pairs, null);
     }
 }

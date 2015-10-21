@@ -9,7 +9,7 @@ public class FileKeyValuePair {
     private String fileName;
     private String filePath;
 
-    public void FileKeyValuePair(String name, String fileName, String filePath) {
+    public FileKeyValuePair(String name, String fileName, String filePath) {
         this.name = name;
         this.fileName = fileName;
         this.filePath = filePath;

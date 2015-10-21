@@ -1,8 +1,10 @@
 package com.rrja.carja.fragment.home;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -20,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.activity.CarManagerActivity;
@@ -28,11 +31,9 @@ import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.activity.OrderListActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.service.FileService;
 import com.rrja.carja.utils.ImageUtil;
-
-import java.io.IOException;
 
 
 public class UserCenterFragment extends Fragment implements View.OnClickListener, Handler.Callback {
@@ -102,6 +103,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
     private void initView(View view) {
         imgAvatar = (ImageView) view.findViewById(R.id.img_avatar);
+        imgAvatar.setOnClickListener(this);
         txtAccount = (TextView) view.findViewById(R.id.txt_account);
         txtNickName = (TextView) view.findViewById(R.id.txt_nick_name);
         btnModifyNick = (Button) view.findViewById(R.id.btn_modify_nick_name);
@@ -174,14 +176,6 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
     public void onLogin(UserInfo userInfo) {
 
-        // TODO show avatar from path
-        try {
-            Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("user.jpg"));
-            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
-            imgAvatar.setImageBitmap(roundedAvatar);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         txtAccount.setText(userInfo.getName());
         txtNickName.setText(userInfo.getNikeName());
         imgAvatar.setVisibility(View.VISIBLE);
@@ -190,6 +184,31 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         btnModifyNick.setVisibility(View.VISIBLE);
 
         btnLogin.setVisibility(View.GONE);
+
+        String avatarPath = userInfo.getAvatarPath();
+        try {
+            if (avatarPath.endsWith(".png") || avatarPath.endsWith(".jpg")) {
+                if (avatarPath.startsWith("http")) {
+                    Intent intent = new Intent(getActivity(), FileService.class);
+                    intent.setAction(FileService.ACTION_IMG_USER_AVATAR);
+                    intent.putExtra("avatar", avatarPath);
+                    getActivity().startService(intent);
+                } else {
+                    Bitmap bitmap = BitmapFactory.decodeFile(avatarPath);
+                    Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
+                    imgAvatar.setImageBitmap(roundedAvatar);
+                    return;
+                }
+            }
+
+            Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getAssets().open("user.jpg"));
+            Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
+            imgAvatar.setImageBitmap(roundedAvatar);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -199,6 +218,30 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.btn_modify_nick_name:
                 mListener.modifyNickname();
+                break;
+            case R.id.img_avatar:
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                String[] items = new String[]{"相册", "照片"};
+                builder.setTitle("更新头像");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        if (which == 0) {
+                            Intent intent = new Intent();
+                            intent.setType("image/*");
+                            intent.setAction(Intent.ACTION_GET_CONTENT);
+                            startActivityForResult(intent, MainActivity.TAKE_PICTURE);
+                        }
+                        if (which == 1) {
+                            Intent intent = new Intent();
+                            intent.setAction("android.media.action.IMAGE_CAPTURE");
+                            startActivityForResult(intent, MainActivity.MAKE_PICTURE);
+                        }
+                    }
+                });
+                builder.setNegativeButton("取消", null);
+                builder.show();
                 break;
             case R.id.btn_show_login:
                 mListener.loginInteraction();
@@ -291,6 +334,10 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         filter.addAction(Constant.ACTION_LOGIN_BY_AUTH_ERROR);
         filter.addAction(Constant.ACTION_MODIFY_NICK_NAME);
         filter.addAction(Constant.ACTION_MODIFY_NICK_NAME_ERROR);
+        filter.addAction(Constant.ACTION_MODIFY_AVATAR);
+        filter.addAction(Constant.ACTION_MODIFY_AVATAR_ERR);
+        filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR);
+        filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR);
 
         getActivity().registerReceiver(userReceiver, filter);
     }
@@ -324,11 +371,39 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             }
 
             if (Constant.ACTION_MODIFY_NICK_NAME_ERROR.equals(action)) {
-                // TODO
+                Toast.makeText(context, "更新昵称失败，请稍后再试！", Toast.LENGTH_LONG).show();
             }
 
             if (Constant.ACTION_LOGIN_BY_AUTH_ERROR.equals(action)) {
                 // TODO
+            }
+
+            if (Constant.ACTION_MODIFY_AVATAR.equals(action)) {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeFile(CoreManager.getManager().getCurrUser().getAvatarPath());
+                    Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
+                    imgAvatar.setImageBitmap(roundedAvatar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (Constant.ACTION_MODIFY_AVATAR_ERR.equals(action)) {
+                Toast.makeText(context, "更新头像失败，请稍后再试！", Toast.LENGTH_LONG).show();
+            }
+
+            if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR.equals(action)) {
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeFile(CoreManager.getManager().getCurrUser().getAvatarPath());
+                    Bitmap roundedAvatar = ImageUtil.getRoundedCornerBitmap(bitmap, bitmap.getHeight() / 2);
+                    imgAvatar.setImageBitmap(roundedAvatar);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR.equals(action)) {
+                Toast.makeText(context, "获取头像失败，请稍后再试！", Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -1,12 +1,20 @@
 package com.rrja.carja.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
@@ -31,6 +40,16 @@ import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.UserBinder;
 import com.rrja.carja.utils.DialogHelper;
+import com.rrja.carja.utils.RrjaUtils;
+
+import org.apache.http.Consts;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.UUID;
 
 
 public class MainActivity extends BaseActivity implements ViewPager.OnPageChangeListener, View.OnClickListener {
@@ -249,17 +268,88 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
     }
 
-    /**
-     * Dispatch incoming result to the correct fragment.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
+    public static final int TAKE_PICTURE = 20;
+    public static final int MAKE_PICTURE = 21;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        // TODO
+        if (!RrjaUtils.getNetworkStatus(this)) {
+            Toast.makeText(this, R.string.str_err_net, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String avatarPath = null;
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == TAKE_PICTURE) {
+                Uri uri = data.getData();
+                ContentResolver cr = this.getContentResolver();
+                try {
+                    BitmapFactory.Options options = new BitmapFactory.Options();
+                    options.inJustDecodeBounds = true;
+                    // Bitmap bitmap = BitmapFactory.decodeFile(uri.getPath(),
+                    // options); // 此时返回bm为空
+                    Bitmap bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri), null, options);
+                    options.inJustDecodeBounds = false;
+                    // 缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+                    int be = (int) (options.outHeight / (float) 300);
+                    if (be <= 0)
+                        be = 1;
+                    options.inSampleSize = be;
+                    // 重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
+                    bitmap = BitmapFactory.decodeStream(cr.openInputStream(uri), null, options);
+
+                    // Bitmap img = BitmapFactory.decodeStream(fis);
+                    // imageCache.put(position, bitmap);
+                    // imgHead.setImageBitmap(bitmap);
+                    File dir = new File(Constant.getUserAvatarCacheDir());
+                    if (!dir.exists()) {
+                        dir.mkdirs();
+                    }
+
+                    String fileName = CoreManager.getManager().getCurrUser().getId() + ".jpg";
+                    File myCaptureFile = new File(dir, fileName);
+                    FileOutputStream fos = new FileOutputStream(myCaptureFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 80, fos);
+                    avatarPath = myCaptureFile.getAbsolutePath();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == MAKE_PICTURE) {
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                // imgHead.setImageBitmap(bm);// 想图像显示在ImageView视图上，private
+                // ImageView
+                // img;
+                File myCaptureFile = new File(getFilesDir(), UUID.randomUUID().toString() + ".jpg");
+                try {
+                    BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+                    bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
+                    bos.flush();
+					/*
+					 * 采用压缩转档方法 bm.compress(Bitmap.CompressFormat.JPEG, 80,
+					 * bos); /* 调用flush()方法，更新BufferStream bos.flush();
+					 * 结束OutputStream
+					 */
+                    bos.close();
+                    bm.recycle();
+                    // imgHead.setImageBitmap(BitmapFactory
+                    // .decodeStream(new FileInputStream(myCaptureFile)));
+                    avatarPath = myCaptureFile.getAbsolutePath();
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (!TextUtils.isEmpty(avatarPath)) {
+
+                DialogHelper.getHelper().showWaitting();
+                userService.updateAvatar(new File(avatarPath));
+
+            }
+        }
+
     }
 
     //------------------------------------------------------------------------------------------------------------fragment interaction
@@ -335,4 +425,5 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         }
     }
+
 }

@@ -10,12 +10,14 @@ import android.text.TextUtils;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.table.TableUtils;
+import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.core.DBHelper;
 import com.rrja.carja.model.CarBrand;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.service.impl.CarBinder;
+import com.rrja.carja.service.impl.FeedbackBinder;
 import com.rrja.carja.service.impl.ForumBinder;
 import com.rrja.carja.service.impl.MaintenanceBinder;
 import com.rrja.carja.service.impl.OrderBinder;
@@ -145,6 +147,10 @@ public class DataCenterService extends Service implements Handler.Callback {
 
         if (Constant.ACTION_STORE_RESERVATION_SERVICE.equals(action)) {
             return new StoreReservationBinder(this);
+        }
+
+        if (Constant.ACTION_FEEDBACK_SERVICE.equals(action)) {
+            return new FeedbackBinder(this);
         }
 
         throw new UnsupportedOperationException("Not yet implemented");

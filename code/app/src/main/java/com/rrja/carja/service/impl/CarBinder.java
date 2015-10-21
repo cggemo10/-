@@ -13,6 +13,7 @@ import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
+import com.rrja.carja.utils.Code;
 import com.rrja.carja.utils.ResponseUtils;
 
 import org.json.JSONObject;
@@ -144,7 +145,9 @@ public class CarBinder extends Binder {
     public void addCarForUser(final UserInfo userInfo, final CarInfo carInfo) {
 
         if (userInfo == null || carInfo == null || carInfo.isDataEmpty()) {
-            // TODO
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_ADD_CAR_ERR);
+            intent.putExtra("description", "网络异常，请稍后再试。");
+            mContext.sendBroadcast(intent);
             return;
         }
 
@@ -183,4 +186,43 @@ public class CarBinder extends Binder {
 
     }
 
+    public void removeCar(final CarInfo carInfo) {
+        final UserInfo userInfo = CoreManager.getManager().getCurrUser();
+        if (userInfo == null || carInfo == null || carInfo.isDataEmpty()) {
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_REMOVE_CAR_ERR);
+            intent.putExtra("description", "网络异常，请稍后再试。");
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                JSONObject removeJs = HttpUtils.removePrivateCar(userInfo, carInfo);
+
+                try {
+                    int code = removeJs.getInt("code");
+                    if (code == 0) {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_REMOVE_CAR);
+                        intent.putExtra("description", "OK");
+                        mContext.sendBroadcast(intent);
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_REMOVE_CAR_ERR);
+                        if (removeJs.has("description")) {
+                            intent.putExtra("description", removeJs.getString("description"));
+                        } else {
+                            intent.putExtra("description", "网络异常，请稍后再试。");
+                        }
+                        mContext.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_REMOVE_CAR_ERR);
+                    intent.putExtra("description", "网络异常，请稍后再试。");
+                    mContext.sendBroadcast(intent);
+                }
+            }
+        };
+
+        mContext.execute(task);
+    }
 }

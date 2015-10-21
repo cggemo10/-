@@ -13,6 +13,7 @@ import android.os.Message;
 import android.text.TextUtils;
 
 import com.rrja.carja.constant.Constant;
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.model.CouponGoods;
@@ -33,12 +34,14 @@ public class FileService extends Service implements Handler.Callback {
     public static final String ACTION_IMG_FORUM = "rrja.forum.img";
     public static final String ACTION_IMG_STORE = "rrja.store.img";
     public static final String ACTION_APP_CLOSE = "rrja.app.close";
+    public static final String ACTION_IMG_USER_AVATAR = "rrja.user.avatar";
 
     private static final int WHAT_COUPONS = 10;
     private static final int WHAT_DISCOUNT = 11;
     private static final int WHAT_FORUM = 12;
     private static final int WHAT_STORE = 13;
     private static final int WHAT_CARINFO = 14;
+    private static final int WHAT_AVATAR = 15;
 
     private static final int MSG_DOWNLOAD_SUCC = 21;
     private static final int MSG_DOWNLOAD_FAILED = 22;
@@ -76,6 +79,10 @@ public class FileService extends Service implements Handler.Callback {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (intent == null) {
+            return super.onStartCommand(intent, flags, startId);
+        }
 
         String action = intent.getAction();
         if (ACTION_IMG_COUPONS.equals(action)) {
@@ -133,6 +140,13 @@ public class FileService extends Service implements Handler.Callback {
                 CarImgTask task = new CarImgTask(carInfo);
                 executor.execute(task);
             }
+        }
+
+        if (ACTION_IMG_USER_AVATAR.equals(action)) {
+            String avatarPath = intent.getStringExtra("avatar");
+
+            AvatarTask task = new AvatarTask(CoreManager.getManager().getCurrUser().getId(), avatarPath);
+            executor.execute(task);
         }
 
         if (ACTION_APP_CLOSE.equals(action)) {
@@ -195,7 +209,14 @@ public class FileService extends Service implements Handler.Callback {
                     sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_CARLOGO);
                 }
                 loadingStoreMap.remove(carKey);
-
+                break;
+            case WHAT_AVATAR:
+                if (msg.arg1 == MSG_DOWNLOAD_SUCC) {
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR);
+                } else {
+                    sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR);
+                }
+                break;
         }
         return false;
     }
@@ -347,6 +368,38 @@ public class FileService extends Service implements Handler.Callback {
             }
             msg.sendToTarget();
 
+        }
+    }
+
+    private class AvatarTask implements Runnable {
+
+        String uid;
+        String avatarPath;
+
+        public AvatarTask(String uid, String avatarPath) {this.uid = uid; this.avatarPath = avatarPath; }
+
+        @Override
+        public void run() {
+            Message msg = mHandler.obtainMessage(WHAT_AVATAR);
+            msg.obj = uid;
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
+            } else {
+                String path = Constant.getUserAvatarCacheDir();
+                String url = avatarPath;
+
+                boolean result = HttpUtils.getPicture(url, path);
+
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                    String fileName = avatarPath.substring(avatarPath.lastIndexOf("/") + 1);
+                    File avatar = new File(Constant.getUserAvatarCacheDir(), fileName);
+                    CoreManager.getManager().getCurrUser().setAvatarPath(avatar.getAbsolutePath());
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
+            }
+            msg.sendToTarget();
         }
     }
 

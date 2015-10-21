@@ -41,7 +41,7 @@
         </activity>
         <activity
             android:name=".activity.FeedbackActivity"
-            android:label="@string/title_activity_feedback"
+            android:label="@string/title_feed_back"
             android:parentActivityName=".activity.BaseActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
