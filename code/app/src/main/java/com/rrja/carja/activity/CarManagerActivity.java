@@ -287,7 +287,8 @@ public class CarManagerActivity extends BaseActivity {
 //            }
 
             if (currentFragment instanceof CarListFragment) {
-                return false;
+                onBackPressed();
+                return true;
             }
 
             if (currentFragment instanceof AddCarFragment) {
@@ -303,8 +304,6 @@ public class CarManagerActivity extends BaseActivity {
                 switchFragment(addCarFragment, true);
                 return true;
             }
-
-
         }
 
         return false;
