@@ -271,21 +271,27 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                    intent.putExtra("order_type", "11");
+                    startActivity(intent);
                 }
                 break;
             case R.id.ll_setting_order_finished:
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                    intent.putExtra("order_type", "22");
+                    startActivity(intent);
                 }
                 break;
             case R.id.ll_setting_order_cancel:
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                    intent.putExtra("order_type", "33");
+                    startActivity(intent);
                 }
                 break;
             case R.id.rl_setting_mycar:
@@ -293,6 +299,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                     mListener.loginInteraction();
                 } else {
                     Intent intent = new Intent(getActivity(), CarManagerActivity.class);
+                    intent.putExtra("order_type", "44");
                     getActivity().startActivity(intent);
                 }
                 break;

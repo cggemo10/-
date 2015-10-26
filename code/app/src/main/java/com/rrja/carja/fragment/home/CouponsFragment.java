@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.rrja.carja.R;
 import com.rrja.carja.activity.CouponsDetalActivity;
+import com.rrja.carja.activity.LoginActivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.adapter.CouponsAdapter;
 import com.rrja.carja.constant.Constant;
@@ -98,9 +99,14 @@ public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemCl
 
     @Override
     public void onCouponsGoodsClick(CouponGoods goods) {
-        Intent intent = new Intent(getActivity(), CouponsDetalActivity.class);
-        intent.putExtra("coupons", goods);
-        getActivity().startActivity(intent);
+        if (CoreManager.getManager().getCurrUser() != null) {
+            Intent intent = new Intent(getActivity(), CouponsDetalActivity.class);
+            intent.putExtra("coupons", goods);
+            getActivity().startActivity(intent);
+        } else {
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
