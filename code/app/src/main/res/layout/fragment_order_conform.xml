@@ -1,10 +1,255 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.rrja.carja.fragment.order.OrderConformFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView android:layout_width="match_parent" android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/btn_confirm_order"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="20dp"
+        android:text="@string/str_commit"
+        android:textSize="16sp" />
 
-</FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_confirm_order"
+        android:layout_below="@id/titlebar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_label_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_order_label_name"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/img_name_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_del"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/ed_order_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/img_name_del"
+                    android:layout_toRightOf="@id/txt_label_name"
+                    android:gravity="right|center_vertical"
+                    android:hint="@string/hint_order_your_name"
+                    android:imeOptions="actionNext"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_order_label_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_order_label_tel"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/img_tel_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_del"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/ed_order_tel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/img_tel_del"
+                    android:layout_toRightOf="@id/txt_order_label_tel"
+                    android:gravity="right|center_vertical"
+                    android:hint="@string/hint_order_your_tel"
+                    android:imeOptions="actionNext"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_label_car_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_order_label_plate_num"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txt_order_car_num"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/txt_label_car_num"
+                    android:editable="false"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/darker_gray"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_label_server_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_order_label_server_address"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/img_server_address_del"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/ic_del"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/ed_order_server_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@id/img_server_address_del"
+                    android:layout_toRightOf="@id/txt_label_server_address"
+                    android:gravity="right|center_vertical"
+                    android:hint="@string/hint_order_server_address"
+                    android:imeOptions="actionDone"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_label_server_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_order_label_server_time"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txt_order_server_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/txt_label_server_time"
+                    android:editable="false"
+                    android:gravity="right|center_vertical"
+                    android:paddingRight="10dp"
+                    android:singleLine="true"
+                    android:text="@string/hint_order_server_time"
+                    android:textColor="@android:color/darker_gray"
+                    android:textColorHint="@android:color/darker_gray"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:background="@android:color/white">
+
+                <TextView
+                    android:id="@+id/txt_label_need_invoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="10dp"
+                    android:text="@string/str_maintenance_need_invoice"
+                    android:textColor="@android:color/secondary_text_light"
+                    android:textSize="16sp" />
+
+                <android.support.v7.widget.SwitchCompat
+                    android:id="@+id/switch_need_invoice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp" />
+
+            </RelativeLayout>
+
+            <include
+                android:id="@+id/view_invoice"
+                layout="@layout/view_order_invoice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

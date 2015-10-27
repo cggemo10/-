@@ -46,8 +46,7 @@ public class OrderPayFragment extends Fragment {
     private OnOrderPayInteractionListener mListener;
 
 
-
-    public static OrderPayFragment newInstance(String param1, String param2) {
+    public static OrderPayFragment newInstance() {
         OrderPayFragment fragment = new OrderPayFragment();
         return fragment;
     }
@@ -70,23 +69,14 @@ public class OrderPayFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
+
+        mListener = ((OrderActivity) activity).getOrderPayListener();
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
-
-    public interface OnOrderPayInteractionListener {
-        // TODO: Update argument type and name
-        public void syncPayment(String payStatus, String orderNum);
     }
 
     // ----------------------------------------------------------------------------------------
@@ -239,7 +229,9 @@ public class OrderPayFragment extends Fragment {
 
                         // TODO order sync page
 //                        payResult.
-                        orderService.syncOrder(data.getString("orderNum"), "22");
+                        if (mListener != null) {
+                            mListener.syncPayment("22", data.getString("orderNum"));
+                        }
                         PayInfo payInfo = ((OrderActivity) getActivity()).getpayInfo();
                         if (payInfo != null) {
                             getActivity().setResult(Activity.RESULT_OK);
@@ -251,13 +243,17 @@ public class OrderPayFragment extends Fragment {
                         if (TextUtils.equals(resultStatus, "8000")) {
                             Toast.makeText(getActivity(), "支付结果确认中",
                                     Toast.LENGTH_SHORT).show();
-                            orderService.syncOrder(data.getString("orderNum"), "22");
+                            if (mListener != null) {
+                                mListener.syncPayment("22", data.getString("orderNum"));
+                            }
                             getActivity().setResult(Activity.RESULT_OK);
                         } else {
                             // 其他值就可以判断为支付失败，包括用户主动取消支付，或者系统返回的错误
                             Toast.makeText(getActivity(), "支付失败",
                                     Toast.LENGTH_SHORT).show();
-                            orderService.syncOrder(data.getString("orderNum"), "11");
+                            if (mListener != null) {
+                                mListener.syncPayment("11", data.getString("orderNum"));
+                            }
                             getActivity().setResult(Activity.RESULT_CANCELED);
                             btnCommit.setEnabled(true);
                         }
@@ -267,4 +263,9 @@ public class OrderPayFragment extends Fragment {
             }
         }
     };
+
+    public interface OnOrderPayInteractionListener {
+
+        public void syncPayment(String payStatus, String orderNum);
+    }
 }
