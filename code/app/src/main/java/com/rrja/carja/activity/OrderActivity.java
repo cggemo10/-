@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.rrja.carja.R;
@@ -33,7 +34,7 @@ public class OrderActivity extends BaseActivity {
 
     private Fragment currentFragment;
     private FragmentManager fragmentManager;
-    private OrderConformFragment confromFragment;
+    private OrderConformFragment conformFragment;
     private OrderPayFragment payFragment;
 
 
@@ -81,10 +82,10 @@ public class OrderActivity extends BaseActivity {
         bindService(intent, conn, BIND_AUTO_CREATE);
 
         fragmentManager = getFragmentManager();
-        confromFragment = OrderConformFragment.newInstance();
+        conformFragment = OrderConformFragment.newInstance();
         payFragment = OrderPayFragment.newInstance();
 
-        switchFragment(confromFragment, false);
+        switchFragment(conformFragment, false);
 
 
     }
@@ -178,4 +179,17 @@ public class OrderActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (currentFragment == conformFragment) {
+                finish();
+                return true;
+            } else if (currentFragment == payFragment) {
+                switchFragment(conformFragment, true);
+                return true;
+            }
+        }
+        return super.dispatchKeyEvent(event);
+    }
 }

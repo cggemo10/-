@@ -361,28 +361,28 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
 
         String name = edName.getText().toString();
         if (TextUtils.isEmpty(name)) {
-            Toast.makeText(getActivity(), "ÇëÌîĞ´ÄúµÄĞÕÃû", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "è¯·å¡«å†™æ‚¨çš„å§“å", Toast.LENGTH_LONG).show();
             edName.requestFocus();
             return false;
         }
 
         String tel = edTel.getText().toString();
         if (TextUtils.isEmpty(tel)) {
-            Toast.makeText(getActivity(), "ÇëÌîĞ´ÄúµÄÁªÏµµç»°", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "è¯·å¡«å†™æ‚¨çš„è”ç³»ç”µè¯", Toast.LENGTH_LONG).show();
             edTel.requestFocus();
             return false;
         }
 
         String serverAddr = edServerAddr.getText().toString();
         if (TextUtils.isEmpty(serverAddr)) {
-            Toast.makeText(getActivity(), "ÇëÌîĞ´·şÎñµØµã", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "è¯·å¡«å†™æœåŠ¡åœ°ç‚¹", Toast.LENGTH_LONG).show();
             edServerAddr.requestFocus();
             return false;
         }
 
         String serverTime = "";
         if (year == -1 || month == -1 || day == -1 || hour == -1 || minute == -1) {
-            Toast.makeText(getActivity(), "ÇëÑ¡Ôñ·şÎñÊ±¼ä", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "è¯·é€‰æ‹©æœåŠ¡æ—¶é—´", Toast.LENGTH_LONG).show();
             return false;
         }
         serverTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + "00";
@@ -394,21 +394,21 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
 
             invoiceTitle = edInvoiceTitle.getText().toString();
             if (TextUtils.isEmpty(invoiceTitle)) {
-                Toast.makeText(getActivity(), "ÇëÌîĞ´·¢Æ±Ì§Í·", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "è¯·å¡«å†™å‘ç¥¨æŠ¬å¤´", Toast.LENGTH_LONG).show();
                 edInvoiceTitle.requestFocus();
                 return false;
             }
 
             receiver = edReceiver.getText().toString();
             if (TextUtils.isEmpty(receiver)) {
-                Toast.makeText(getActivity(), "ÇëÌîĞ´ÊÕ¼şÈË", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "è¯·å¡«å†™æ”¶ä»¶äºº", Toast.LENGTH_LONG).show();
                 edReceiver.requestFocus();
                 return false;
             }
 
             receiverMail = edReceiverMail.getText().toString();
             if (TextUtils.isEmpty(receiverMail)) {
-                Toast.makeText(getActivity(), "ÇëÌîĞ´ÊÕ¼şµØÖ·", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "è¯·å¡«å†™æ”¶ä»¶åœ°å€", Toast.LENGTH_LONG).show();
                 edReceiverMail.requestFocus();
                 return false;
             }
@@ -573,11 +573,11 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
                                                 OrderConformFragment.this.hour = hourOfDay;
                                                 OrderConformFragment.this.minute = minute;
 
-                                                String date = OrderConformFragment.this.year + "Äê" +
-                                                        OrderConformFragment.this.month + "ÔÂ" +
-                                                        OrderConformFragment.this.day + "ÈÕ" +
-                                                        OrderConformFragment.this.hour + "Ê±" +
-                                                        OrderConformFragment.this.minute + "·Ö";
+                                                String date = OrderConformFragment.this.year + "å¹´" +
+                                                        OrderConformFragment.this.month + "æœˆ" +
+                                                        OrderConformFragment.this.day + "æ—¥" +
+                                                        OrderConformFragment.this.hour + "æ—¶" +
+                                                        OrderConformFragment.this.minute + "åˆ†";
                                                 txtServerTime.setText(date);
                                             }
                                         },
