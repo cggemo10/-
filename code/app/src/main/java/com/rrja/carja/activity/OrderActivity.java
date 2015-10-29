@@ -11,7 +11,9 @@ import android.os.IBinder;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.baidu.location.BDLocation;
 import com.rrja.carja.R;
+import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.fragment.order.OrderConformFragment;
 import com.rrja.carja.fragment.order.OrderPayFragment;
@@ -191,5 +193,23 @@ public class OrderActivity extends BaseActivity {
             }
         }
         return super.dispatchKeyEvent(event);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (currentFragment == conformFragment) {
+            finish();
+        } else if (currentFragment == payFragment) {
+            switchFragment(conformFragment, true);
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    private class LocationChangeListener implements RRjaApplication.OnLocationChangeListener {
+
+        @Override
+        public void onLocationChanged(BDLocation location) {
+            // TODO
+        }
     }
 }

@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alipay.sdk.app.PayTask;
@@ -24,7 +26,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 
-public class OrderPayFragment extends Fragment {
+public class OrderPayFragment extends Fragment implements View.OnClickListener{
 
     private static final String RSA_PRIVATE =
             "MIICeAIBADANBgkqhkiG9w0BAQEFAASCAmIwggJeAgEAAoGBANPLWVqPLOB3vNUn" +
@@ -41,9 +43,13 @@ public class OrderPayFragment extends Fragment {
                     "Dr7IOId2W7iAVRko9+6l0NVraQ7zNqthR5W+nbZO4rUCyQIh/g3FzOsCQQDKfs+3" +
                     "ZWd2AD9AjGRcaoflBXx8hcW64xerxzDkjJgRRdV9WKNezcoPMOYiiZUH9FEPYm7a" +
                     "4AOuOPCO7fesa76F";
+
     private static final int SDK_PAY_FLAG = 1;
 
     private OnOrderPayInteractionListener mListener;
+
+    private AppCompatButton btnCommit;
+    private TextView txtAmount;
 
 
     public static OrderPayFragment newInstance() {
@@ -69,7 +75,20 @@ public class OrderPayFragment extends Fragment {
     }
 
     private void initView(View view) {
+        btnCommit = (AppCompatButton) view.findViewById(R.id.btn_pay_order);
+        btnCommit.setOnClickListener(this);
 
+        txtAmount = (TextView) view.findViewById(R.id.txt_amount);
+
+        PayInfo payInfo = ((OrderActivity) getActivity()).getpayInfo();
+        if (payInfo != null) {
+            txtAmount.setText(payInfo.getFee() + " 元");
+        } else {
+            MaintenanceOrder order = ((OrderActivity) getActivity()).getMaintenanceOrder();
+            if (order != null) {
+                txtAmount.setText(order.calculateTotalFee() + "元");
+            }
+        }
     }
 
     @Override
@@ -86,7 +105,8 @@ public class OrderPayFragment extends Fragment {
     }
 
     // ----------------------------------------------------------------------------------------
-    private void pay(final PayInfo info) {
+    private void pay() {
+        final PayInfo info = ((OrderActivity)getActivity()).getpayInfo();
         // 订单
         String orderInfo = getOrderInfo(info);
 
@@ -270,8 +290,17 @@ public class OrderPayFragment extends Fragment {
         }
     };
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == R.id.txt_amount) {
+            btnCommit.setEnabled(false);
+            pay();
+        }
+    }
+
     public interface OnOrderPayInteractionListener {
 
-        public void syncPayment(String payStatus, String orderNum);
+        void syncPayment(String payStatus, String orderNum);
     }
 }

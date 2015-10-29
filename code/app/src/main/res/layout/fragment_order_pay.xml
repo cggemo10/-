@@ -2,10 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/c_bg_base"
     tools:context="com.rrja.carja.fragment.order.OrderPayFragment">
 
-    <LinearLayout
+    <RelativeLayout
+        android:background="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -17,11 +18,13 @@
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="30dp"
             android:layout_marginTop="10dp"
-            android:text="总额："
+            android:text="支付总额："
             android:textColor="@android:color/secondary_text_light"
             android:textSize="16sp" />
 
         <TextView
+            android:id="@+id/txt_amount"
+            android:layout_centerVertical="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -29,12 +32,13 @@
             android:layout_marginLeft="50dp"
             android:layout_marginRight="30dp"
             android:text="15元"
-            android:textColor="@android:color/secondary_text_light"
+            android:textColor="@color/c_style_red"
             android:textSize="16sp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <android.support.v7.widget.AppCompatButton
+        android:text="支付宝支付"
         android:id="@+id/btn_pay_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

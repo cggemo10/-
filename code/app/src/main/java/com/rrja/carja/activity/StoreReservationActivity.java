@@ -16,8 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rrja.carja.R;
+import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.adapter.StoreReservationAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -182,5 +184,13 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
         }
     };
 
+    // ---------------------------------------------------------------------------------------------
+    private class LocationChangeListener implements RRjaApplication.OnLocationChangeListener {
+
+        @Override
+        public void onLocationChanged(BDLocation location) {
+            // TODO
+        }
+    }
 
 }

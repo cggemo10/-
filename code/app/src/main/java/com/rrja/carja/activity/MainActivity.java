@@ -28,7 +28,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.rrja.carja.R;
+import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.fragment.home.CouponsFragment;
@@ -74,6 +76,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     UserBinder userService;
 
+    LocationChangeListener locationChangeListener;
+
     ServiceConnection conn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -116,6 +120,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         initView();
 
+        locationChangeListener = new LocationChangeListener();
+        ((RRjaApplication)getApplication()).registLocationChangeListener(MainActivity.class.getName(), locationChangeListener);
     }
 
     @Override
@@ -131,6 +137,11 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     protected void onDestroy() {
         if (userService != null) {
             unbindService(conn);
+        }
+
+        if (locationChangeListener != null) {
+            ((RRjaApplication)getApplication()).unRegistLocationChangeListener(MainActivity.class.getName());
+            locationChangeListener = null;
         }
         super.onDestroy();
     }
@@ -423,6 +434,15 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         @Override
         public void modifyNickname() {
 
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    private class LocationChangeListener implements RRjaApplication.OnLocationChangeListener {
+
+        @Override
+        public void onLocationChanged(BDLocation location) {
+            // TODO
         }
     }
 

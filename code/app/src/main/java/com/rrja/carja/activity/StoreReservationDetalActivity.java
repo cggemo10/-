@@ -12,7 +12,9 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 
+import com.baidu.location.BDLocation;
 import com.rrja.carja.R;
+import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.fragment.BaseElementFragment;
 import com.rrja.carja.fragment.store.StoreBookingFragment;
@@ -181,6 +183,15 @@ public class StoreReservationDetalActivity extends BaseActivity{
         @Override
         public void onBackClicked() {
             finish();
+        }
+    }
+
+    // ---------------------------------------------------------------------------------------------
+    private class LocationChangeListener implements RRjaApplication.OnLocationChangeListener {
+
+        @Override
+        public void onLocationChanged(BDLocation location) {
+            // TODO
         }
     }
 }

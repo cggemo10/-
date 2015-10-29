@@ -698,7 +698,7 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
 
     public interface OnOrderConformInteractionListener {
 
-        public void onOrderConform(MaintenanceOrder order, Bundle data);
-        public void onPay(PayInfo payInfo);
+        void onOrderConform(MaintenanceOrder order, Bundle data);
+        void onPay(PayInfo payInfo);
     }
 }
