@@ -293,7 +293,7 @@ public class OrderPayFragment extends Fragment implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        if (id == R.id.txt_amount) {
+        if (id == R.id.btn_pay_order) {
             btnCommit.setEnabled(false);
             pay();
         }

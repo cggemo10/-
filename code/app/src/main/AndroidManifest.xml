@@ -120,10 +120,14 @@
             </intent-filter>
         </service>
 
-        <!-- meta-data需要写在application中 -->
+        <!-- meta-data需要写在application中 release
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="请输入AK" />
+            android:value="ACX3b4GSVcjDOIPT7j1GMWmk" />
+        -->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="oFGVNdKAkc9G4YKSPXL0PAT4" />
 
     </application>
 

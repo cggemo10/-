@@ -122,6 +122,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         locationChangeListener = new LocationChangeListener();
         ((RRjaApplication)getApplication()).registLocationChangeListener(MainActivity.class.getName(), locationChangeListener);
+        ((RRjaApplication)getApplication()).requestLocation();
     }
 
     @Override
@@ -283,7 +284,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     public static final int MAKE_PICTURE = 21;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (!RrjaUtils.getNetworkStatus(this)) {
             Toast.makeText(this, R.string.str_err_net, Toast.LENGTH_LONG).show();
             return;
@@ -325,6 +326,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     avatarPath = myCaptureFile.getAbsolutePath();
                 } catch (Exception e) {
                     e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "解析文件失败，请重新选择图片", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             } else if (requestCode == MAKE_PICTURE) {
                 Bitmap bm = (Bitmap) data.getExtras().get("data");
@@ -346,10 +353,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     // imgHead.setImageBitmap(BitmapFactory
                     // .decodeStream(new FileInputStream(myCaptureFile)));
                     avatarPath = myCaptureFile.getAbsolutePath();
-                } catch (FileNotFoundException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, "解析文件失败，请重新选择图片", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
 
@@ -360,6 +371,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
             }
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
 
     }
 
@@ -442,7 +455,16 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
         @Override
         public void onLocationChanged(BDLocation location) {
-            // TODO
+
+            String name = location.getCity();
+            Region regionByName = CoreManager.getManager().getRegionByName(name);
+            if (regionByName != null) {
+                CoreManager.getManager().setGpsRegion(regionByName);
+                if (!CoreManager.getManager().isCustomeChange()) {
+                    txtLoc.setText(regionByName.getName());
+                }
+            }
+
         }
     }
 

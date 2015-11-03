@@ -46,7 +46,10 @@ public class CoreManager {
     private static List<CarStore> stores = new ArrayList<>();
     private static List<CouponGoods> couponsList = new ArrayList<>();
     private static List<Forum> forums = new ArrayList<>();
+
     private static List<Region> regions = new ArrayList<>();
+    private static HashMap<String, Region> regionsMap = new HashMap<>();
+
     private static List<CarBrand> brandList = new ArrayList<>();
     private static HashMap<String, List<CarSeries>> carSeriesMap = new HashMap<>();
     private static HashMap<String, List<CarModel>> carModelMap = new HashMap<>();
@@ -55,7 +58,10 @@ public class CoreManager {
 
     private static List<CarInfo> userCars = new ArrayList<>();
 
+    private Region gpsRegion;
     private Region customRegion;
+    private boolean isCustomeChange;
+
     private UserInfo currUser;
 
 
@@ -109,6 +115,22 @@ public class CoreManager {
         return customRegion;
     }
 
+    public Region getGpsRegion() {
+        return gpsRegion;
+    }
+
+    public void setGpsRegion(Region region) {
+        gpsRegion = region;
+    }
+
+    public boolean isCustomeChange() {
+        return isCustomeChange;
+    }
+
+    public void setCustomeChange (boolean isCustomeChange) {
+        this.isCustomeChange = isCustomeChange;
+    }
+
     //----------------------------------------------------------------------------------------------
     //-------------------------------------getter---------------------------------------------------
     //----------------------------------------------------------------------------------------------
@@ -145,6 +167,14 @@ public class CoreManager {
     }
 
     public List<Region> getRegions() { return regions; }
+
+    public HashMap<String, Region> getRegionsMap() {
+        return regionsMap;
+    }
+
+    public Region getRegionByName(String name) {
+        return regionsMap.get(name);
+    }
 
     public List<CarSeries> getCarSeriesByBrandId(String brandId) {
         if (carSeriesMap.containsKey(brandId)) {
@@ -295,7 +325,12 @@ public class CoreManager {
             List<Region> queryForAll = regionsDao.queryForAll();
             if (queryForAll != null && queryForAll.size() != 0) {
                 regions.clear();
+                regionsMap.clear();
+
                 regions.addAll(queryForAll);
+                for (Region region : regions) {
+                    regionsMap.put(region.getName(), region);
+                }
 
                 Intent intent = new Intent(Constant.ACTION_BROADCAST_REFRESH_REGION);
                 intent.putExtra("regions", "regions");

@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ public class BaseActivity extends AppCompatActivity {
     TextView toolbarTitle;
     LinearLayout llloc;
     TextView txtLoc;
+    ImageView imgLoc;
 
     @Override
     public void setContentView(int layoutResID) {
@@ -31,6 +33,7 @@ public class BaseActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             llloc = (LinearLayout) toolbar.findViewById(R.id.ll_cur_loc);
             txtLoc = (TextView) llloc.findViewById(R.id.txt_location);
+            imgLoc = (ImageView) llloc.findViewById(R.id.img_loc);
             toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
             if (toolbarTitle != null) {
                 getSupportActionBar().setDisplayShowTitleEnabled(false);

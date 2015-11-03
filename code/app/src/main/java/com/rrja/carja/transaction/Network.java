@@ -131,9 +131,9 @@ public class Network {
 
         CloseableHttpClient httpClient = HttpClients.custom().useSystemProperties()
                 .build();
-        HttpGetHC4 get = new HttpGetHC4(url);
 
         try {
+            HttpGetHC4 get = new HttpGetHC4(url);
             CloseableHttpResponse response = httpClient.execute(get);
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode == HttpURLConnection.HTTP_OK) {
@@ -144,7 +144,7 @@ public class Network {
                 return true;
             }
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

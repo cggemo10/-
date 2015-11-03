@@ -101,6 +101,7 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
 
         txtAddress.setText(store.getAddress());
         txtStoreArea.setText(store.getArea());
+
         txtStoreTel.setText(store.getTel());
         txtStoreOpenTime.setText(store.getOpenTime());
         txtStorePayType.setText(store.getPayType());

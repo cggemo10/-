@@ -13,6 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.rrja.carja.R;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
@@ -30,6 +31,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
 
     private RecyclerView recyclerMaintenance;
     private AppCompatButton btnCommit;
+    private LinearLayout llAdd;
 
     private MaintenanceAdapter maintanceAdapter;
 
@@ -67,6 +69,9 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         recyclerMaintenance = (RecyclerView) view.findViewById(R.id.recycler_main_maintenance);
         recyclerMaintenance.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerMaintenance.setAdapter(maintanceAdapter);
+
+        llAdd = (LinearLayout) view.findViewById(R.id.ll_add_goods);
+        llAdd.setOnClickListener(this);
 
         btnCommit = (AppCompatButton) view.findViewById(R.id.btn_commit_order);
         btnCommit.setOnClickListener(this);
@@ -131,6 +136,12 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
             }
         }
 
+        if (id == R.id.ll_add_goods) {
+            if (mListener != null) {
+                mListener.onAddGoods();
+            }
+        }
+
     }
 
     @Override
@@ -148,6 +159,7 @@ public class MaintenanceMainFragment extends BaseElementFragment implements View
         void removeSubService(MaintenanceMainFragment fragment, TagableService service, TagableSubService subService);
         void onCarClicked();
         void onOrderCommit();
+        void onAddGoods();
     }
 
     public MaintenanceOrder getOrderContent() {

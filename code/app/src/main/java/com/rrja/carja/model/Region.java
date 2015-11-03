@@ -85,7 +85,19 @@ public class Region {
             return null;
 
         }
+    }
 
-
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof Region) {
+            Region region = (Region) o;
+            if (region.getId() == getId()) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

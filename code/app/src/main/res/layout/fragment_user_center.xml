@@ -141,6 +141,29 @@
             android:visibility="gone">
 
             <LinearLayout
+                android:id="@+id/ll_setting_order_unpay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="2dp">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/icon_pay_unfinished"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="未完成"
+                    android:textColor="@android:color/darker_gray"/>
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/ll_setting_order_payed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -163,28 +186,7 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_setting_order_unpay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="2dp">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/icon_pay_unfinished"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:text="未完成"
-                    android:textColor="@android:color/darker_gray"/>
-
-            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_setting_order_finished"
@@ -227,7 +229,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
-                    android:text="未完成"
+                    android:text="已取消"
                     android:textColor="@android:color/darker_gray"/>
 
             </LinearLayout>

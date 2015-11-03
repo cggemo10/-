@@ -223,8 +223,13 @@ public class MaintenanceAdapter extends RecyclerView.Adapter {
 
         public void bindData(CarInfo carInfo) {
             if (carInfo == null) {
+                imgLogo.setVisibility(View.GONE);
+                txtDetal.setText("点击选择车辆");
+                txtCarPlat.setVisibility(View.GONE);
                 return;
             } else {
+                imgLogo.setVisibility(View.VISIBLE);
+                txtCarPlat.setVisibility(View.VISIBLE);
                 String picUrl = carInfo.getCarImg();
                 try {
                     if (!TextUtils.isEmpty(picUrl)) {

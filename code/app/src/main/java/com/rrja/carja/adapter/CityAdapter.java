@@ -1,6 +1,7 @@
 package com.rrja.carja.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,8 @@ public class CityAdapter extends RecyclerView.Adapter {
 
     private static final int TAG_CITY_HEADER = 10;
     private static final int TAG_CITY_CONTENT = 11;
+
+    private int gpsIndex = -1;
 
     private List<CityItem> items = new ArrayList<>();
 
@@ -55,7 +58,13 @@ public class CityAdapter extends RecyclerView.Adapter {
                     }
                 }
             });
+
+            if (gpsIndex == position) {
+                Log.e("gpsfind", position + "");
+                cityHolder.txtContent.setTextColor(cityHolder.itemView.getContext().getResources().getColor(R.color.c_style_red));
+            }
         }
+
     }
 
     @Override
@@ -136,5 +145,20 @@ public class CityAdapter extends RecyclerView.Adapter {
 
     public interface OnCityItemClickListener {
         public void onCityClicked(Region region);
+    }
+
+    public int getCityIndex(Region region) {
+        for (int i = 0; i < items.size(); i++) {
+            CityItem item = items.get(i);
+            if (!item.isHeader && item.region.equals(region)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public void setGpsIndex(int index) {
+        gpsIndex = index;
     }
 }

@@ -10,12 +10,11 @@ import com.baidu.location.Address;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by Administrator on 2015/10/28.
@@ -38,15 +37,16 @@ public class RRjaApplication extends Application {
         sp = getSharedPreferences("rrja_loc", MODE_PRIVATE);
 
         mLocationClient = new LocationClient(this.getApplicationContext());
+        requestLowLocationMode();
         mMyLocationListener = new LocationListener();
         mLocationClient.registerLocationListener(mMyLocationListener);
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
-
+        mLocationClient.start();
     }
 
 
     /**
-     * 实现实时位置回调监听
+     * 瀹炵幇瀹炴椂浣嶇疆鍥炶皟鐩戝惉
      */
     public class LocationListener implements BDLocationListener {
 
@@ -189,4 +189,51 @@ public class RRjaApplication extends Application {
         }
     }
 
+    public void requestHighLocationMode() {
+        if (mMyLocationListener != null) {
+            mLocationClient.stop();
+        }
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("bd09ll");
+        int span=1000;
+        option.setScanSpan(span);
+        option.setIsNeedAddress(true);
+        option.setOpenGps(true);
+        option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);
+        option.setIsNeedLocationPoiList(true);
+        option.setIgnoreKillProcess(false);
+        mLocationClient.setLocOption(option);
+        if (mMyLocationListener != null) {
+            mLocationClient.start();
+            mLocationClient.requestLocation();
+        }
+    }
+
+    public void requestLowLocationMode() {
+        if (mMyLocationListener != null) {
+            mLocationClient.stop();
+        }
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Battery_Saving);
+        option.setCoorType("bd09ll");
+        int span=1000;
+        option.setScanSpan(span);
+        option.setIsNeedAddress(true);
+        option.setOpenGps(true);
+        option.setLocationNotify(true);
+        option.setIsNeedLocationDescribe(true);
+        option.setIsNeedLocationPoiList(true);
+        option.setIgnoreKillProcess(false);
+        mLocationClient.setLocOption(option);
+        if (mMyLocationListener != null) {
+            mLocationClient.start();
+            mLocationClient.requestLocation();
+        }
+    }
+
+    public void requestLocation() {
+        mLocationClient.requestLocation();
+    }
 }

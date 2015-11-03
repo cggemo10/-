@@ -64,17 +64,7 @@ public class HomeMaintenanceActivity extends BaseActivity {
         setContentView(R.layout.activity_home_maintenance);
 
         if (llloc != null) {
-            imgAdd = (ImageView) llloc.findViewById(R.id.img_loc);
-            imgAdd.setImageResource(R.drawable.icon_add);
-            imgAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    switchFragment(tagListMaintenanceFragment, true);
-                }
-            });
-
-            TextView txt = (TextView) llloc.findViewById(R.id.txt_location);
-            txt.setVisibility(View.GONE);
+            llloc.setVisibility(View.GONE);
         }
 
 
@@ -106,14 +96,14 @@ public class HomeMaintenanceActivity extends BaseActivity {
 
         switchFragment(mainFragment, false);
 
-        List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
-        if (carInfos != null && carInfos.size() == 1) {
-            mOrder.setmCarInfo(carInfos.get(0));
-        } else {
-            Intent intentCarInfo = new Intent(this, CarManagerActivity.class);
-            intentCarInfo.putExtra("select", true);
-            startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
-        }
+//        List<CarInfo> carInfos = CoreManager.getManager().getUserCars();
+//        if (carInfos != null && carInfos.size() == 1) {
+//            mOrder.setmCarInfo(carInfos.get(0));
+//        } else {
+//            Intent intentCarInfo = new Intent(this, CarManagerActivity.class);
+//            intentCarInfo.putExtra("select", true);
+//            startActivityForResult(intentCarInfo, ACTION_REQUEST_CAR);
+//        }
 
     }
 
@@ -337,6 +327,11 @@ public class HomeMaintenanceActivity extends BaseActivity {
             intent.putExtra("order", mOrder);
             intent.putExtra("subject", "汽车保养");
             startActivity(intent);
+        }
+
+        @Override
+        public void onAddGoods() {
+            switchFragment(tagListMaintenanceFragment, true);
         }
     }
 

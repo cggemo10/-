@@ -33,15 +33,11 @@ import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.service.FileService;
+import com.rrja.carja.utils.DialogHelper;
 import com.rrja.carja.utils.ImageUtil;
 
 
 public class UserCenterFragment extends Fragment implements View.OnClickListener, Handler.Callback {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
 
     ImageView imgAvatar;
     TextView txtAccount;
@@ -68,12 +64,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     private Handler mHandler;
 
 
-    public static UserCenterFragment newInstance(String param1, String param2) {
+    public static UserCenterFragment newInstance() {
         UserCenterFragment fragment = new UserCenterFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -84,10 +76,6 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
 
         mHandler = new Handler(this);
     }
@@ -231,12 +219,12 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                             Intent intent = new Intent();
                             intent.setType("image/*");
                             intent.setAction(Intent.ACTION_GET_CONTENT);
-                            startActivityForResult(intent, MainActivity.TAKE_PICTURE);
+                            getActivity().startActivityForResult(intent, MainActivity.TAKE_PICTURE);
                         }
                         if (which == 1) {
                             Intent intent = new Intent();
                             intent.setAction("android.media.action.IMAGE_CAPTURE");
-                            startActivityForResult(intent, MainActivity.MAKE_PICTURE);
+                            getActivity().startActivityForResult(intent, MainActivity.MAKE_PICTURE);
                         }
                     }
                 });
@@ -263,6 +251,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                     mListener.loginInteraction();
                 } else {
                     Intent intent = new Intent(getActivity(), OrderListActivity.class);
+                    intent.putExtra("order_type", "22");
                     startActivity(intent);
                 }
 
@@ -281,7 +270,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                     mListener.loginInteraction();
                 } else {
                     Intent intent = new Intent(getActivity(), OrderListActivity.class);
-                    intent.putExtra("order_type", "22");
+                    intent.putExtra("order_type", "33");
                     startActivity(intent);
                 }
                 break;
@@ -290,7 +279,7 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                     mListener.loginInteraction();
                 } else {
                     Intent intent = new Intent(getActivity(), OrderListActivity.class);
-                    intent.putExtra("order_type", "33");
+                    intent.putExtra("order_type", "44");
                     startActivity(intent);
                 }
                 break;
@@ -361,6 +350,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
+            DialogHelper.getHelper().dismissWatting();
+
             String action = intent.getAction();
             if (Constant.ACTION_LOGIN_BY_AUTH.equals(action)) {
 

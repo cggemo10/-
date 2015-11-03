@@ -27,17 +27,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:text="11111"
+            android:layout_marginBottom="10dp"
             android:id="@+id/txt_car_platnm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/primary_text_light"/>
 
         <TextView
+            android:textSize="18sp"
+            android:text="11111"
             android:id="@+id/txt_car_detial"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
             android:textColor="@android:color/primary_text_light"/>
     </LinearLayout>
 
