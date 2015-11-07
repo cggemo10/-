@@ -456,14 +456,14 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         @Override
         public void onLocationChanged(BDLocation location) {
 
-            String name = location.getCity();
-            Region regionByName = CoreManager.getManager().getRegionByName(name);
-            if (regionByName != null) {
-                CoreManager.getManager().setGpsRegion(regionByName);
+
                 if (!CoreManager.getManager().isCustomeChange()) {
-                    txtLoc.setText(regionByName.getName());
+                    Region gpsRegion = CoreManager.getManager().getGpsRegion();
+                    if (gpsRegion != null) {
+                        txtLoc.setText(gpsRegion.getName());
+                    }
                 }
-            }
+
 
         }
     }

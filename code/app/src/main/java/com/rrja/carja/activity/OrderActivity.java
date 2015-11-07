@@ -209,7 +209,9 @@ public class OrderActivity extends BaseActivity {
 
         @Override
         public void onLocationChanged(BDLocation location) {
-            // TODO
+            if (currentFragment instanceof OrderConformFragment) {
+                currentFragment.
+            }
         }
     }
 }

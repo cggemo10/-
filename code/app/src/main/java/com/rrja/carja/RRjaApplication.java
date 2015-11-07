@@ -11,6 +11,8 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.rrja.carja.core.CoreManager;
+import com.rrja.carja.model.Region;
 
 import org.json.JSONObject;
 
@@ -58,6 +60,12 @@ public class RRjaApplication extends Application {
                 currLoc = location;
                 // save
                 saveLocation(location);
+
+                String name = location.getCity();
+                Region regionByName = CoreManager.getManager().getRegionByName(name);
+                if (regionByName != null) {
+                    CoreManager.getManager().setGpsRegion(regionByName);
+                }
 
                 // listener
                 if (locationListeners.size() != 0) {
