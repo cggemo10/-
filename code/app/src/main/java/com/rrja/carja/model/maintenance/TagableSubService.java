@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
+import com.rrja.carja.model.coupons.UserCoupons;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +16,7 @@ public class TagableSubService implements TagableElement, Parcelable {
 
     private MaintenanceGoods goods;
     private MaintenanceService subService;
+    private UserCoupons coupons;
 
     @Override
     public int getTag() {
@@ -35,6 +37,14 @@ public class TagableSubService implements TagableElement, Parcelable {
 
     public void setSubService(MaintenanceService subService) {
         this.subService = subService;
+    }
+
+    public UserCoupons getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(UserCoupons coupons) {
+        this.coupons = coupons;
     }
 
     public String getGoodsId() {
@@ -133,9 +143,13 @@ public class TagableSubService implements TagableElement, Parcelable {
         json.put("goodsAmount", goods.getPrice());
         json.put("goodsId", goods.getId());
         json.put("subServiceId", subService.getAmount());
-        json.put("couponsAmount", 0);
-        json.put("couponId", 0);
-
+        if (coupons != null) {
+            json.put("couponsAmount", coupons.getCouponsPrice());
+            json.put("couponId", coupons.getCouponsNum());
+        } else {
+            json.put("couponsAmount", 0);
+            json.put("couponId", 0);
+        }
         return json;
     }
 }

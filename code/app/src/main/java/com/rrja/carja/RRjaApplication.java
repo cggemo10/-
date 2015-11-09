@@ -18,9 +18,6 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-/**
- * Created by Administrator on 2015/10/28.
- */
 public class RRjaApplication extends Application {
 
     public LocationClient mLocationClient;

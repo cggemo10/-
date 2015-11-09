@@ -5,8 +5,10 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
+import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.model.coupons.UserCoupons;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,6 +61,13 @@ public class MaintenanceOrder implements Parcelable{
             return;
         }
 
+        if (subService.getGoods() != null) {
+            String goodsId = subService.getGoods().getId();
+            UserCoupons coupons = CoreManager.getManager().usedCouponsByGoodsId(goodsId);
+            if (coupons != null) {
+                subService.setCoupons(coupons);
+            }
+        }
         if (orderContent.containsKey(serviceId) && orderContent.get(serviceId) != null) {
 
             TagableService tagableService = orderContent.get(serviceId);
@@ -70,7 +79,6 @@ public class MaintenanceOrder implements Parcelable{
             tagableService.setService(service);
             tagableService.addTagableGood(subService);
             orderContent.put(serviceId, tagableService);
-
         }
     }
 
@@ -115,7 +123,10 @@ public class MaintenanceOrder implements Parcelable{
         if (!orderContent.containsKey(serviceId)) {
             return;
         }
-
+        UserCoupons coupons = subService.getCoupons();
+        if (coupons != null) {
+            CoreManager.getManager().addUnusedCouponsWithGoodsId(subService.getGoodsId(), coupons);
+        }
         TagableService tagableService = orderContent.get(serviceId);
         tagableService.removeSubService(subService);
         if (tagableService.getSubServiceList().size() == 0) {

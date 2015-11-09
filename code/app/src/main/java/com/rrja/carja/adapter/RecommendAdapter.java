@@ -16,7 +16,8 @@ import android.widget.TextView;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.RecommendGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
+import com.rrja.carja.model.coupons.RecommendGoods;
 
 import java.io.File;
 import java.text.SimpleDateFormat;

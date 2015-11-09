@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.activity.HomeMaintenanceActivity;
 import com.rrja.carja.activity.LoginActivity;
 import com.rrja.carja.activity.MainActivity;
@@ -26,9 +25,8 @@ import com.rrja.carja.activity.ViolationActivity;
 import com.rrja.carja.adapter.RecommendAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.CarInfo;
-import com.rrja.carja.model.RecommendGoods;
-import com.rrja.carja.model.maintenance.MaintenanceOrder;
+import com.rrja.carja.model.coupons.CouponGoods;
+import com.rrja.carja.model.coupons.RecommendGoods;
 import com.rrja.carja.service.FileService;
 
 

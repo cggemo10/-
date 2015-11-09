@@ -21,7 +21,7 @@ import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.adapter.CouponsAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.service.FileService;
 
 

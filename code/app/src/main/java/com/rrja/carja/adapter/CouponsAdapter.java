@@ -1,7 +1,5 @@
 package com.rrja.carja.adapter;
 
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -13,13 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.rrja.carja.R;
-import com.rrja.carja.activity.CouponsDetalActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.service.FileService;
-
-import org.apache.http.conn.ssl.PrivateKeyDetails;
+import com.rrja.carja.model.coupons.CouponGoods;
 
 import java.io.File;
 import java.io.IOException;

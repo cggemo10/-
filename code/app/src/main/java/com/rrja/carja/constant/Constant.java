@@ -8,6 +8,17 @@ public class Constant {
 
     public static final String SP_CONSTANT_TIME = "constant_data";
 
+    //
+    public static final String ACTION_INIT_SERVICE = "rrja.request.init";
+    public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
+    public static final String ACTION_STORE_RESERVATION_SERVICE = "rrja.request.store.reservation";
+    public static final String ACTION_CAR_SERVICE = "rrja.request.car.service";
+    public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
+    public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
+    public static final String ACTION_ORDER_SERVICE = "rrja.ORDER_SERVICE";
+    public static final String ACTION_FEEDBACK_SERVICE = "rrja.FEEDBACK";
+
+    //
     public static final String ACTION_LOGIN_BY_AUTH = "rrja.LOGIN_AUTH";
     public static final String ACTION_LOGIN_BY_AUTH_ERROR = "rrja.LOGIN_AUTH_ERROR";
 
@@ -22,15 +33,6 @@ public class Constant {
 
     public static final String ACTION_MODIFY_AVATAR = "rrja.MODIFY_AVATAR";
     public static final String ACTION_MODIFY_AVATAR_ERR = "rrja.MODIFY_AVATAR_ERR";
-
-    public static final String ACTION_INIT_SERVICE = "rrja.request.init";
-    public static final String ACTION_USER_SERVICE = "rrja.request.user.service";
-    public static final String ACTION_STORE_RESERVATION_SERVICE = "rrja.request.store.reservation";
-    public static final String ACTION_CAR_SERVICE = "rrja.request.car.service";
-    public static final String ACTION_FORUM_SERVICE = "rrja.request.forum.service";
-    public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
-    public static final String ACTION_ORDER_SERVICE = "rrja.ORDER_SERVICE";
-    public static final String ACTION_FEEDBACK_SERVICE = "rrja.FEEDBACK";
 
     public static final String ACTION_BROADCAST_FEEDBACK = "rrja.broadcast.FEEDBACK";
     public static final String ACTION_BROADCAST_FEEDBACK_ERR = "rrja.broadcast.FEEDBACK_ERR";
@@ -83,6 +85,9 @@ public class Constant {
 
     public static final String ACTION_DATA_GET_RECOMMEND = "rrja.data.goods.RECOMMEND";
     public static final String ACTION_DATA_GET_COUPONS_GOODS = "rrja.data.goods.COUPONS";
+
+    public static final String ACTION_BROADCAST_GAIN_COUPONS = "rrja.broadcast.GAIN_COUPONS";
+    public static final String ACTION_BROADCAST_GAIN_COUPONS_ERR = "rrja.broadcast.GAIN_COUPONS_ERR";
 
     public static final String ACTION_BROADCAST_GET_USER_CARS = "rrja.data.USER_CAR";
     public static final String ACTION_BROADCAST_GET_USER_CARS_ERR = "rrja.data.USER_CAR_ERR";

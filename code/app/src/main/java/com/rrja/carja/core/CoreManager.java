@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -17,13 +18,13 @@ import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.CarModel;
 import com.rrja.carja.model.CarSeries;
 import com.rrja.carja.model.CarStore;
-import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.RecommendGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.model.Forum;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.model.UserInfo;
+import com.rrja.carja.model.coupons.RecommendGoods;
+import com.rrja.carja.model.coupons.UserCoupons;
 import com.rrja.carja.model.maintenance.MaintenanceGoods;
-import com.rrja.carja.model.maintenance.MaintenanceOrder;
 import com.rrja.carja.model.maintenance.MaintenanceService;
 import com.rrja.carja.model.myorder.OrderRecord;
 
@@ -57,6 +58,9 @@ public class CoreManager {
     private static HashMap<String, List<OrderRecord>> myOrderMap = new HashMap<>();
 
     private static List<CarInfo> userCars = new ArrayList<>();
+
+    private static HashMap<String, List<UserCoupons>> userCouponsMap = new HashMap<>();
+    private static HashMap<String, UserCoupons> unUsedCoupons = new HashMap<>();
 
     private Region gpsRegion;
     private Region customRegion;
@@ -373,5 +377,38 @@ public class CoreManager {
             myOrderMap.put(key, records);
         }
         return myOrderMap.get(key);
+    }
+
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------my coupons--------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+    // my coupons
+    public List<UserCoupons> getUserCouponsByStatus(String status) {
+        if (userCouponsMap.containsKey(status)) {
+            return userCouponsMap.get(status);
+        } else {
+            ArrayList<UserCoupons> userCouponses = new ArrayList<>();
+            userCouponsMap.put(status, userCouponses);
+            return userCouponses;
+        }
+    }
+
+    public UserCoupons usedCouponsByGoodsId(String goodsId) {
+        if (unUsedCoupons.containsKey(goodsId)) {
+            return unUsedCoupons.remove(goodsId);
+        } else {
+            return null;
+        }
+    }
+
+    public void addUnusedCouponsWithGoodsId(String goodsId, UserCoupons coupons) {
+        if (TextUtils.isEmpty(goodsId) || coupons == null) {
+            return;
+        }
+        if (unUsedCoupons.containsKey(goodsId)) {
+            unUsedCoupons.remove(goodsId);
+        }
+
+        unUsedCoupons.put(goodsId, coupons);
     }
 }

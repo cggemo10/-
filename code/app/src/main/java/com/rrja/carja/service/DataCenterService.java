@@ -10,11 +10,11 @@ import android.text.TextUtils;
 
 import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.table.TableUtils;
-import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.core.DBHelper;
 import com.rrja.carja.model.CarBrand;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.model.Region;
 import com.rrja.carja.service.impl.CarBinder;
 import com.rrja.carja.service.impl.FeedbackBinder;
@@ -96,6 +96,11 @@ public class DataCenterService extends Service implements Handler.Callback {
                 } else {
                     // TODO
                 }
+            }
+
+            if (Constant.ACTION_GAIN_COUPONS.equals(action)) {
+                CouponGoods coupons = intent.getParcelableExtra("coupons");
+                userBinder.requestCoupons(coupons);
             }
 
         }
@@ -180,6 +185,15 @@ public class DataCenterService extends Service implements Handler.Callback {
         CoreManager.getManager().clearUserCars();
 
         userBinder.getUserCars();
+    }
+
+    public void requestUserCoupons() {
+        if (CoreManager.getManager().getCurrUser() == null) {
+            return;
+        }
+
+//        CoreManager.getManager().clearUserCoupons();
+        userBinder.getprivateCoupons();
     }
 
     private void loadCityData() {

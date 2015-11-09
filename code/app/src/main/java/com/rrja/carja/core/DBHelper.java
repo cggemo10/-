@@ -8,9 +8,9 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.rrja.carja.model.CarBrand;
-import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.RecommendGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.model.Region;
+import com.rrja.carja.model.coupons.RecommendGoods;
 
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {

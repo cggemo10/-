@@ -6,22 +6,18 @@ import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.Text;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.model.CouponGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 
 public class CouponsDetalActivity extends BaseActivity implements View.OnClickListener{
@@ -121,7 +117,7 @@ public class CouponsDetalActivity extends BaseActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
 
-        if (CoreManager.getManager().getCurrUser() != null) {
+        if (CoreManager.getManager().getCurrUser() == null) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
         } else {

@@ -1,13 +1,9 @@
 package com.rrja.carja.model.maintenance;
 
-import android.graphics.Paint;
-import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 
-import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.table.DatabaseTable;
 import com.rrja.carja.model.TagableElement;
 
 import org.json.JSONArray;
@@ -77,7 +73,9 @@ public class TagableService implements TagableElement, Parcelable {
                 if ("服务费".equals(service.getServiceName())) {
                     serviceAmount += service.getServiceAmount();
                 } else {
-                    if (service.getGoods() != null) {
+                    if (service.getCoupons() != null) {
+                        serviceAmount += service.getCoupons().getCouponsPrice();
+                    } else if (service.getGoods() != null) {
                         serviceAmount += service.getGoods().getPrice();
                     }
                 }
@@ -120,7 +118,7 @@ public class TagableService implements TagableElement, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeParcelable(service,flags);
+        dest.writeParcelable(service, flags);
 //        Bundle bundle = new Bundle();
 //        bundle.putParcelableArrayList("sub_service", subServiceList);
 //        dest.writeBundle(bundle);
@@ -149,7 +147,7 @@ public class TagableService implements TagableElement, Parcelable {
         }
     };
 
-    public JSONObject getCommitContent() throws JSONException{
+    public JSONObject getCommitContent() throws JSONException {
 
         JSONObject json = new JSONObject();
         json.put("serviceId", service.getId());

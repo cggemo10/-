@@ -9,10 +9,10 @@ import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
-import com.rrja.carja.model.CouponGoods;
-import com.rrja.carja.model.RecommendGoods;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.model.UserInfo;
 import com.rrja.carja.model.ViolationRecord;
+import com.rrja.carja.model.coupons.RecommendGoods;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.transaction.HttpUtils;
 import com.rrja.carja.utils.ResponseUtils;
@@ -106,6 +106,7 @@ public class UserBinder extends Binder {
                                 @Override
                                 public void run() {
                                     mContext.requestUserCars();
+                                    mContext.requestUserCoupons();
                                 }
                             });
 
@@ -467,6 +468,85 @@ public class UserBinder extends Binder {
                 }
             }
         };
+        mContext.execute(task);
+    }
+
+    public void requestCoupons(final CouponGoods couponGoods) {
+
+        if (CoreManager.getManager().getCurrUser() == null) {
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_GAIN_COUPONS_ERR);
+            intent.putExtra("description", "请先登录");
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        if (couponGoods == null || TextUtils.isEmpty(couponGoods.getServiceId())) {
+            Intent intent = new Intent(Constant.ACTION_BROADCAST_GAIN_COUPONS_ERR);
+            intent.putExtra("description", mContext.getString(R.string.str_err_net));
+            mContext.sendBroadcast(intent);
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                try {
+
+                    JSONObject gainJs = HttpUtils.gainCoupons(couponGoods);
+
+                    int code = gainJs.getInt("code");
+                    if (code == 0) {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GAIN_COUPONS);
+                        intent.putExtra("number", "gainCoupons");
+                        mContext.sendBroadcast(intent);
+                    } else {
+                        Intent intent = new Intent(Constant.ACTION_BROADCAST_GAIN_COUPONS_ERR);
+                        String errMg = null;
+                        if (gainJs.has("description")) {
+                            errMg = gainJs.getString("description");
+                        } else {
+                            errMg = mContext.getString(R.string.str_err_net);
+                        }
+                        intent.putExtra("description", errMg);
+                        mContext.sendBroadcast(intent);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Intent intent = new Intent(Constant.ACTION_BROADCAST_GAIN_COUPONS_ERR);
+                    String errMg = mContext.getString(R.string.str_err_net);
+                    intent.putExtra("description", errMg);
+                    mContext.sendBroadcast(intent);
+                }
+            }
+        };
+
+        mContext.execute(task);
+    }
+
+    public void getprivateCoupons() {
+
+        if (CoreManager.getManager().getCurrUser() == null) {
+
+            return;
+        }
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                JSONObject userCouponsJs = HttpUtils.getPrivateCoupons(CoreManager.getManager().getCurrUser());
+                try {
+                    int code = userCouponsJs.getInt("code");
+                    if (code == 0) {
+
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
         mContext.execute(task);
     }
 

@@ -1,4 +1,4 @@
-package com.rrja.carja.model;
+package com.rrja.carja.model.coupons;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -13,7 +13,7 @@ import org.json.JSONObject;
  * Created by Administrator on 2015/6/6.
  */
 @DatabaseTable(tableName = "discount")
-public class RecommendGoods implements Parcelable{
+public class RecommendGoods implements Parcelable {
 
     @DatabaseField(id = true)
     private String productId;
@@ -160,7 +160,7 @@ public class RecommendGoods implements Parcelable{
         dest.writeString(serviceId);
     }
 
-    public static Parcelable.Creator<RecommendGoods> CREATOR = new Parcelable.Creator<RecommendGoods>() {
+    public static Creator<RecommendGoods> CREATOR = new Creator<RecommendGoods>() {
         @Override
         public RecommendGoods createFromParcel(Parcel source) {
             RecommendGoods discountInfo = new RecommendGoods();
@@ -185,7 +185,7 @@ public class RecommendGoods implements Parcelable{
         }
     };
 
-    public static RecommendGoods parse(JSONObject discountJson) throws JSONException{
+    public static RecommendGoods parse(JSONObject discountJson) throws JSONException {
 
         if (discountJson == null || discountJson.length() == 0) {
             return null;

@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.baidu.location.BDLocation;
 import com.rrja.carja.R;
 import com.rrja.carja.activity.OrderActivity;
 import com.rrja.carja.constant.Constant;
@@ -70,6 +71,8 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
     private int day = -1;
     private int hour = -1;
     private int minute = -1;
+
+    BDLocation location;
 
     private static final int SDK_ORDRE_FLAG = 10;
 
@@ -216,6 +219,9 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
             }
         });
         edServerAddr.setOnFocusChangeListener(this);
+        if (this.location != null) {
+            edServerAddr.setText(this.location.getAddrStr());
+        }
 
         txtServerTime = (TextView) view.findViewById(R.id.txt_order_server_time);
         txtServerTime.setOnClickListener(this);
@@ -700,5 +706,14 @@ public class OrderConformFragment extends Fragment implements View.OnClickListen
 
         void onOrderConform(MaintenanceOrder order, Bundle data);
         void onPay(PayInfo payInfo);
+    }
+
+    public void setLocation(BDLocation location) {
+        this.location = location;
+        if (edServerAddr != null) {
+            if (TextUtils.isEmpty(edServerAddr.getText().toString())) {
+                edServerAddr.setText(location.getAddrStr());
+            }
+        }
     }
 }

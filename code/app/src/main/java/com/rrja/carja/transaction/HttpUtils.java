@@ -2,6 +2,7 @@ package com.rrja.carja.transaction;
 
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
+import com.rrja.carja.model.coupons.CouponGoods;
 import com.rrja.carja.model.UserInfo;
 
 import org.apache.http.util.TextUtils;
@@ -19,6 +20,7 @@ public class HttpUtils {
     private static final String BASE_URL = "http://120.25.201.50/api";
 
     private static final String SERVICE_USER = "/user";
+    private static final String SERVICE_COUPONS = "/coupon";
     private static final String SERVICE_AREA = "/area";
     private static final String SERVICE_CAR = "/car";
     private static final String SERVICE_GOODS = "/goods";
@@ -35,6 +37,7 @@ public class HttpUtils {
     private static final String INTERFACE_SERIES = "/getSeries";
     private static final String INTERFACE_MODEL = "/getModels";
     private static final String INTERFACE_ADD_CAR = "/addUserCar";
+    private static final String INTERFACE_REQUEST_COUPONS = "/requestCoupon";
 
     private static final String INTERFACE_CHECK_AUTH = "/login";
     private static final String INTERFACE_PREREGIST = "/preRegister";
@@ -183,6 +186,13 @@ public class HttpUtils {
     public static JSONObject getAppointmentByStoreId(UserInfo info, String storeId) {
 
         return null;//Network.doGet(url);
+    }
+
+    public static JSONObject gainCoupons(CouponGoods coupons) {
+
+        String url = BASE_URL + SERVICE_COUPONS + INTERFACE_REQUEST_COUPONS + "?nattel=" + CoreManager.getManager().getCurrUser().getTel() +
+                "&authToken=" + CoreManager.getManager().getCurrUser().getAuthToken() + "&goodsId=" + coupons.getCouponId();
+        return Network.doGet(url);
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -365,4 +375,5 @@ public class HttpUtils {
 
         return Network.doPost(url, pairs, null);
     }
+
 }

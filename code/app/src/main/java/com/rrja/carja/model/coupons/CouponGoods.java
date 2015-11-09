@@ -1,4 +1,4 @@
-package com.rrja.carja.model;
+package com.rrja.carja.model.coupons;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,8 +8,6 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Date;
 
 /**
  * Created by Administrator on 2015/6/25.
@@ -209,4 +207,5 @@ public class CouponGoods implements Parcelable {
         return goods;
 
     }
+
 }

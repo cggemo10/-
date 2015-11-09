@@ -38,6 +38,7 @@ public class OrderActivity extends BaseActivity {
     private FragmentManager fragmentManager;
     private OrderConformFragment conformFragment;
     private OrderPayFragment payFragment;
+    private LocationChangeListener locationListener;
 
 
     @Override
@@ -89,6 +90,8 @@ public class OrderActivity extends BaseActivity {
 
         switchFragment(conformFragment, false);
 
+        locationListener = new LocationChangeListener();
+        ((RRjaApplication)getApplication()).registLocationChangeListener(OrderActivity.class.getName(), locationListener);
 
     }
 
@@ -97,6 +100,7 @@ public class OrderActivity extends BaseActivity {
         if (orderService != null) {
             unbindService(conn);
         }
+        ((RRjaApplication)getApplication()).unRegistLocationChangeListener(OrderActivity.class.getName());
         super.onDestroy();
     }
 
@@ -210,7 +214,7 @@ public class OrderActivity extends BaseActivity {
         @Override
         public void onLocationChanged(BDLocation location) {
             if (currentFragment instanceof OrderConformFragment) {
-                currentFragment.
+                ((OrderConformFragment)currentFragment).setLocation(location);
             }
         }
     }
