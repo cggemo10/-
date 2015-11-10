@@ -6,8 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +37,7 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
     private MaintenanceService subService;
     private MaintenanceService feeService;
 
+    private SwipeRefreshLayout refreshLayout;
     private RecyclerView recyclerGoods;
     private GoodsAdapter mAdapter;
 
@@ -70,6 +73,37 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
     private void initView(View v) {
         recyclerGoods = (RecyclerView) v.findViewById(R.id.recycler_maintenance_good);
         recyclerGoods.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        refreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_maintenance_good);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
+        refreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
+        recyclerGoods.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+
+            }
+
+        });
+
+        recyclerGoods.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        recyclerGoods.setLayoutManager(mLayoutManager);
+        recyclerGoods.setItemAnimator(new DefaultItemAnimator());
+
         recyclerGoods.setAdapter(mAdapter);
     }
 
