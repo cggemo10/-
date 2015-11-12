@@ -33,6 +33,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 
 public class CoreManager {
@@ -281,6 +282,16 @@ public class CoreManager {
             goodses.addAll(goodsList);
         } else {
             maintenanceGoodsMap.put(goodsKey, goodsList);
+        }
+    }
+
+    public void clearMaintenanceGoods() {
+        Set<String> keySet = maintenanceGoodsMap.keySet();
+        for (String key : keySet) {
+            List<MaintenanceGoods> remove = maintenanceGoodsMap.remove(key);
+            if (remove != null && remove.size() != 0) {
+                remove.clear();
+            }
         }
     }
 

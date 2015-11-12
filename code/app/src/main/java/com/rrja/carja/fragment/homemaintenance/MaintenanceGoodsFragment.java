@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -79,7 +80,10 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
+                CoreManager.getManager().clearMaintenanceGoods();
+                if (mListener != null) {
+                    mListener.requestGoods(subService.getId(), 1);
+                }
             }
         });
         refreshLayout.setProgressViewOffset(false, 0, (int) TypedValue
@@ -100,8 +104,6 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
         });
 
         recyclerGoods.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(this);
-        recyclerGoods.setLayoutManager(mLayoutManager);
         recyclerGoods.setItemAnimator(new DefaultItemAnimator());
 
         recyclerGoods.setAdapter(mAdapter);
@@ -190,41 +192,91 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
         this.feeService = feeService;
     }
 
-    private class GoodsAdapter extends RecyclerView.Adapter{
+    // ----------------------------------------------------------adapter
+    private static int TYPE_FOOTER = 1;
+    private static int TYPE_ITEM = 2;
+
+    private class GoodsAdapter extends RecyclerView.Adapter {
+
+        boolean loadable;
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_maintenance_multi_checkable, parent, false);
-            return new GoodsVH(v);
+            View v = null;
+            if (viewType == TYPE_FOOTER) {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_refresh_footer, parent, false);
+                return new FooterVH(v);
+            } else {
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_maintenance_multi_checkable, parent, false);
+                return new GoodsVH(v);
+            }
         }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            GoodsVH vh = (GoodsVH) holder;
-            final MaintenanceGoods goods = goodList.get(position);
-            vh.bindData(goods);
-            vh.itemView.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-                    if (mListener != null) {
-
-                        TagableSubService commitSubService = new TagableSubService();
-                        commitSubService.setSubService(subService);
-                        commitSubService.setGoods(goods);
-
-                        TagableSubService commitFeeService = new TagableSubService();
-                        commitFeeService.setSubService(feeService);
-                        mListener.onGoodsCommit(service, commitSubService, commitFeeService);
+            int viewType = getItemViewType(position);
+            if (viewType == TYPE_FOOTER) {
+                final FooterVH vh = (FooterVH) holder;
+                vh.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        vh.footer.setText("加载中...");
+                        if (CoreManager.getManager().getMaintenanceGoods(getServiceKey(currentPage)).size() == 0) {
+                            if (mListener != null) {
+                                mListener.requestGoods(subService.getId(), currentPage);
+                            }
+                            vh.footer.setClickable(false);
+                        } else {
+                            if (CoreManager.getManager().getMaintenanceGoods(getServiceKey(currentPage)).size() != 15) {
+                                setLoadable(false);
+                            }
+                            goodList.addAll(CoreManager.getManager().getMaintenanceGoods(getServiceKey(currentPage)));
+                            notifyDataSetChanged();
+                            currentPage += 1;
+                        }
                     }
-                }
-            });
+                });
+            }
+            if (viewType == TYPE_ITEM) {
+                GoodsVH vh = (GoodsVH) holder;
+                final MaintenanceGoods goods = goodList.get(position);
+                vh.bindData(goods);
+                vh.itemView.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        if (mListener != null) {
+
+                            TagableSubService commitSubService = new TagableSubService();
+                            commitSubService.setSubService(subService);
+                            commitSubService.setGoods(goods);
+
+                            TagableSubService commitFeeService = new TagableSubService();
+                            commitFeeService.setSubService(feeService);
+                            mListener.onGoodsCommit(service, commitSubService, commitFeeService);
+                        }
+                    }
+                });
+            }
         }
 
         @Override
         public int getItemCount() {
-            return goodList.size();
+            return goodList.size() + 1;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (position + 1 == getItemCount()) {
+                return TYPE_FOOTER;
+            } else {
+                return TYPE_ITEM;
+            }
+        }
+
+        public void setLoadable(boolean loadable) {
+            this.loadable = loadable;
         }
     }
 
@@ -243,6 +295,16 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
         }
     }
 
+    private class FooterVH extends RecyclerView.ViewHolder {
+        TextView footer;
+
+        public FooterVH(View itemView) {
+            super(itemView);
+
+            footer = (TextView) itemView.findViewById(R.id.txt_refresh_load_more);
+        }
+    }
+
     private class GoodsReceiver extends BroadcastReceiver {
 
         @Override
@@ -253,6 +315,8 @@ public class MaintenanceGoodsFragment extends BaseElementFragment {
                 if (requestGoods.size() != 0) {
                     goodList.addAll(requestGoods);
                     currentPage += 1;
+                } else {
+
                 }
                 mAdapter.notifyDataSetChanged();
             }
