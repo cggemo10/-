@@ -3,9 +3,6 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_splsh">SplshActivity</string>
-    <string name="title_activity_user_center">UserCenterActivity</string>
-    <string name="title_activity_car_info">CarInfoActivity</string>
     <string name="str_menu_home">首页</string>
     <string name="str_menu_forum">论坛</string>
     <string name="str_menu_coupons">优惠券</string>
@@ -57,6 +54,8 @@
     <string name="str_coupons_used">已使用</string>
     <string name="str_coupons_out_of_date">已过期</string>
     <string name="str_notice_deadline">您还有%1$d张优惠券即将到期</string>
+    <string name="str_coupons_label_time">领取时间：</string>
+    <string name="str_coupons_label_price">优惠价格：</string>
 
     <!-- 优惠券详情 -->
     <string name="title_available_coupons">优惠券</string>
@@ -125,6 +124,7 @@
     <string name="title_store_reservation">门店预约</string>
     <string name="title_store_detial">门店详情</string>
     <string name="title_store_conform_add">确认添加</string>
+    <string name="title_store_start_nav">导航</string>
     <string name="btn_comform_store_reservation">确认门店预约</string>
     <string name="hint_book_user">请输入您的姓名</string>
     <string name="hint_book_tel">请输入您的电话</string>
@@ -242,9 +242,21 @@
         <item>台(台湾)</item>
 
     </string-array>
-    <string name="title_activity_car_manager">CarManagerActivity</string>
-    <string name="title_activity_order_list">OrderListActivity</string>
 
+    <string name="str_finish_nav">是否结束导航？</string>
+    <string name="str_end_nav">导航已结束</string>
+    <string name="str_conform">确定</string>
 
+    <string name="qg_updating">正在更新中，请稍后再试 :)</string>
+    <string name="qg_str_title_update">版本更新</string>
+    <string name="qg_str_version_new">最新版本：</string>
+    <string name="qg_str_version_curr">当前版本：</string>
+    <string name="qg_str_alert_update">有新版本发布啦，是否立即更新？</string>
+    <string name="qg_str_update_later">以后再说</string>
+    <string name="qg_str_update_now">现在更新</string>
+    <string name="qg_str_load_update">正在准备更新数据...</string>
+    <string name="qg_update_start_download">正在下载更新...</string>
+    <string name="qg_update_cancel">下载已取消</string>
+    <string name="qg_update_cancel_dia_title">是否取消下载更新？</string>
 
 </resources>

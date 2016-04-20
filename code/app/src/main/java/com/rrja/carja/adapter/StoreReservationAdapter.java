@@ -10,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.location.BDLocation;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
@@ -22,6 +25,7 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
 
     private String TAG = "rrja.StoreReservationAdapter";
     private StoreActionListener mActionListener;
+    private BDLocation location;
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -45,6 +49,10 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
                 }
             }
         });
+    }
+
+    public void setCurrentLocation(BDLocation location) {
+        this.location = location;
     }
 
     @Override
@@ -92,6 +100,31 @@ public class StoreReservationAdapter extends RecyclerView.Adapter {
                         mActionListener.onRequestStorePic(store);
                     }
                 }
+            }
+
+            if (location != null) {
+                double lat = store.getLat();
+                double lng = store.getLng();
+
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+
+                LatLng to = new LatLng(lat, lng);
+                LatLng from = new LatLng(latitude, longitude);
+
+                double distance = DistanceUtil.getDistance(to, from);
+                if (distance == -1) {
+                    return;
+                }
+
+                String distanceBuff = "";
+
+                if (distance > 500) {
+                    distanceBuff = String.format("%.2f KM", distance / 1000);
+                } else {
+                    distanceBuff = String.format("%d M", (int)distance);
+                }
+                storeDistance.setText(distanceBuff);
             }
         }
     }

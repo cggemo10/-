@@ -1,10 +1,8 @@
 package com.rrja.carja.service;
 
 import android.app.Service;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -36,6 +34,8 @@ public class FileService extends Service implements Handler.Callback {
     public static final String ACTION_APP_CLOSE = "rrja.app.close";
     public static final String ACTION_IMG_USER_AVATAR = "rrja.user.avatar";
 
+    public static final String ACTION_APP_UPDATE = "rrja.app.UPDATE";
+
     private static final int WHAT_COUPONS = 10;
     private static final int WHAT_DISCOUNT = 11;
     private static final int WHAT_FORUM = 12;
@@ -54,8 +54,6 @@ public class FileService extends Service implements Handler.Callback {
     HashMap<String, CarStore> loadingStoreMap;
     HashMap<String, CarInfo> loadingCarMap;
 
-    private RecycleBoradcastReceiver recycleReceiver;
-
     public FileService() {
     }
 
@@ -73,7 +71,6 @@ public class FileService extends Service implements Handler.Callback {
         loadingStoreMap = new HashMap<>();
         loadingCarMap = new HashMap<>();
 
-        registRecycleReceiver();
     }
 
 
@@ -155,6 +152,15 @@ public class FileService extends Service implements Handler.Callback {
             loadingStoreMap.clear();
         }
 
+        if (ACTION_APP_UPDATE.equals(action)) {
+            String apkPath = intent.getStringExtra("app_url");
+            DownloadTask task = DownloadTask.getInstance();
+            if (task == null) {
+                task = DownloadTask.newInstance(this, apkPath, mHandler);
+                executor.execute(task);
+            }
+        }
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -166,7 +172,6 @@ public class FileService extends Service implements Handler.Callback {
 
     @Override
     public void onDestroy() {
-        unRegistRecycleReceiver();
         super.onDestroy();
     }
 
@@ -216,6 +221,63 @@ public class FileService extends Service implements Handler.Callback {
                 } else {
                     sendBroadCast(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR);
                 }
+                break;
+//            case DownloadTask.MSG_DOWNLOAD_START: {
+
+//                Intent intent = new Intent(Constant.ACTION_BORADCAST_DOWNLOAD_START);
+//                intent.putExtra()
+//                sendBroadcast(intent);
+
+//                downFragment.setTitle(R.string.qg_update_start_download);
+//                downFragment.setFileTotalLength((Integer) msg.obj);
+//                break;
+//            }
+            case DownloadTask.MSG_DOWNLOAD_PROGRESS: {
+                Intent intent = new Intent(Constant.ACTION_BORADCAST_APK_DOWNLOAD_PROGRESS);
+                Bundle bundle = (Bundle) msg.obj;
+                intent.putExtras(bundle);
+                sendBroadcast(intent);
+//                downFragment.setFileDownloadLength(msg.arg1);
+                // downFragment.setDownLoadSpeed((Long) msg.obj, msg.arg2);
+                break;
+            }
+            case DownloadTask.MSG_DOWNLOAD_SUCCESS:
+                String filePath = (String) msg.obj;
+                File file = new File(filePath);
+                Uri fileUri = Uri.fromFile(file);
+                installApk(fileUri);
+                break;
+            case DownloadTask.MSG_DOWNLOAD_CANCEL: {
+
+//                Intent intent = new Intent(Constant.ACTION_BORADCAST_DOWNLOAD_CANCEL);
+                Bundle bundle = (Bundle) msg.obj;
+                String path = bundle.getString("fileName");
+                if (!TextUtils.isEmpty(path)) {
+                    File file2 = new File(path);
+                    file2.delete();
+                }
+//                String cancelMessage = getString(R.string.qg_update_cancel);
+//                downFragment.showErrorMessage(cancelMessage);
+//                finish();
+                break;
+            }
+            case DownloadTask.MSG_DOWNLOAD_FAILED: {
+
+                String path2 = (String) msg.obj;
+                if (!TextUtils.isEmpty(path2)) {
+                    File file2 = new File(path2);
+                    file2.delete();
+                }
+                String errorMessage = (String) msg.obj;
+
+                Intent intent = new Intent(Constant.ACTION_BORADCAST_APK_DOWNLOAD_FAILED);
+                intent.putExtra("errMsg", (String)msg.obj);
+                sendBroadcast(intent);
+//                downFragment.showErrorMessage(errorMessage);
+//                finish();
+                break;
+            }
+            default:
                 break;
         }
         return false;
@@ -303,38 +365,38 @@ public class FileService extends Service implements Handler.Callback {
 
     private class RecommendImgTask implements Runnable {
 
-                       RecommendGoods mDiscountInfo;
+        RecommendGoods mDiscountInfo;
 
-                       RecommendImgTask(RecommendGoods info) {
-                           this.mDiscountInfo = info;
-                       }
+        RecommendImgTask(RecommendGoods info) {
+            this.mDiscountInfo = info;
+        }
 
-                       @Override
-                       public void run() {
+        @Override
+        public void run() {
 
-                           Message msg = mHandler.obtainMessage(WHAT_DISCOUNT);
-                           msg.obj = mDiscountInfo.getProductId();
-                           if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                               msg.arg1 = MSG_DOWNLOAD_FAILED;
-                           } else {
-                               String path = Environment.getExternalStorageDirectory().getPath() +
-                                       File.separatorChar + Constant.DIR_BASE + File.separator +
-                                       Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_RECOMMEND + File.separator;
+            Message msg = mHandler.obtainMessage(WHAT_DISCOUNT);
+            msg.obj = mDiscountInfo.getProductId();
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+                msg.arg1 = MSG_DOWNLOAD_FAILED;
+            } else {
+                String path = Environment.getExternalStorageDirectory().getPath() +
+                        File.separatorChar + Constant.DIR_BASE + File.separator +
+                        Constant.DIR_IMG_CACHE + File.separator + Constant.DIR_RECOMMEND + File.separator;
 
-                               String url = mDiscountInfo.getImgUrl();
+                String url = mDiscountInfo.getImgUrl();
 
-                               boolean result = HttpUtils.getPicture(url, path);
+                boolean result = HttpUtils.getPicture(url, path);
 
-                               if (result) {
-                                   msg.arg1 = MSG_DOWNLOAD_SUCC;
-                               } else {
-                                   msg.arg1 = MSG_DOWNLOAD_FAILED;
-                               }
-                           }
-                           msg.sendToTarget();
+                if (result) {
+                    msg.arg1 = MSG_DOWNLOAD_SUCC;
+                } else {
+                    msg.arg1 = MSG_DOWNLOAD_FAILED;
+                }
+            }
+            msg.sendToTarget();
 
-                       }
-                   }
+        }
+    }
 
     private class CarImgTask implements Runnable {
 
@@ -376,7 +438,10 @@ public class FileService extends Service implements Handler.Callback {
         String uid;
         String avatarPath;
 
-        public AvatarTask(String uid, String avatarPath) {this.uid = uid; this.avatarPath = avatarPath; }
+        public AvatarTask(String uid, String avatarPath) {
+            this.uid = uid;
+            this.avatarPath = avatarPath;
+        }
 
         @Override
         public void run() {
@@ -403,40 +468,23 @@ public class FileService extends Service implements Handler.Callback {
         }
     }
 
+    private void installApk(Uri fileUri) {
+
+        File apkfile = new File(fileUri.getPath());
+        if (!apkfile.exists()) {
+            return;
+        }
+        Intent i = new Intent(Intent.ACTION_VIEW);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        i.setDataAndType(fileUri, "application/vnd.android.package-archive");
+        startActivity(i);
+    }
 
     private void sendBroadCast(String action) {
         Intent intent = new Intent(action);
-        intent.putExtra("img_load","img");
+        intent.putExtra("img_load", "img");
         sendBroadcast(intent);
     }
 
-    private void registRecycleReceiver() {
-
-        if (recycleReceiver == null) {
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_STORE);
-            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_FORUM);
-            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_DISCOUNT);
-            filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_COUPONS);
-
-            recycleReceiver = new RecycleBoradcastReceiver();
-            registerReceiver(recycleReceiver, filter);
-        }
-    }
-
-    private void unRegistRecycleReceiver() {
-        if (recycleReceiver != null) {
-            unregisterReceiver(recycleReceiver);
-            recycleReceiver = null;
-        }
-    }
-
-    private class RecycleBoradcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // do nothing
-        }
-    }
 
 }

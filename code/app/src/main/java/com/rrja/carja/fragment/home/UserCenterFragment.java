@@ -29,6 +29,7 @@ import com.rrja.carja.activity.CarManagerActivity;
 import com.rrja.carja.activity.FeedbackActivity;
 import com.rrja.carja.activity.MainActivity;
 import com.rrja.carja.activity.OrderListActivity;
+import com.rrja.carja.activity.UserCouponsActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.UserInfo;
@@ -296,7 +297,8 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
                 if (currUser == null) {
                     mListener.loginInteraction();
                 } else {
-
+                    Intent intent = new Intent(getActivity(), UserCouponsActivity.class);
+                    getActivity().startActivity(intent);
                 }
                 break;
             case R.id.rl_setting_feedback:
@@ -334,6 +336,9 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
         filter.addAction(Constant.ACTION_MODIFY_AVATAR_ERR);
         filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR);
         filter.addAction(Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR);
+
+        filter.addAction(Constant.ACTION_BORADCAST_APK_DOWNLOAD_PROGRESS);
+        filter.addAction(Constant.ACTION_BORADCAST_APK_DOWNLOAD_FAILED);
 
         getActivity().registerReceiver(userReceiver, filter);
     }
@@ -404,8 +409,15 @@ public class UserCenterFragment extends Fragment implements View.OnClickListener
             if (Constant.ACTION_BROADCAST_DOWNLOAD_IMG_AVATAR_ERR.equals(action)) {
                 Toast.makeText(context, "获取头像失败，请稍后再试！", Toast.LENGTH_LONG).show();
             }
+
+            if (Constant.ACTION_BORADCAST_APK_DOWNLOAD_FAILED.equals(action)) {
+                // TODO
+            }
+
+            if (Constant.ACTION_BORADCAST_APK_DOWNLOAD_PROGRESS.equals(action)) {
+                // TODO
+            }
         }
     }
-
 
 }

@@ -6,6 +6,8 @@ import java.io.File;
 
 public class Constant {
 
+    public static final int VERSION = 1;
+
     public static final String SP_CONSTANT_TIME = "constant_data";
 
     //
@@ -17,6 +19,11 @@ public class Constant {
     public static final String ACTION_MAINTENANCE_SERVICE = "rrja.request.maintenance.service";
     public static final String ACTION_ORDER_SERVICE = "rrja.ORDER_SERVICE";
     public static final String ACTION_FEEDBACK_SERVICE = "rrja.FEEDBACK";
+    public static final String ACTION_CHECK_UPDATE = "rrja.CHECK_UPDATE";
+
+    public static final String ACTION_BROADCAST_UPDATE = "rrja.broadcast.UPDATE";
+    public static final String ACTION_BORADCAST_APK_DOWNLOAD_PROGRESS = "rrja.broadcast.DOWLOAD_PROGRESS";
+    public static final String ACTION_BORADCAST_APK_DOWNLOAD_FAILED = "rrja.broadcast.DOWNLOAD_FAILED";
 
     //
     public static final String ACTION_LOGIN_BY_AUTH = "rrja.LOGIN_AUTH";
@@ -118,6 +125,10 @@ public class Constant {
     public static final String ACTION_LOGIN_AFTER_HOMEMAINTENANCE = "rrja.login_HOMEMAINTENANCE";
     public static final String ACTION_LOGIN_AFTER_ONDOREWASH = "rrja.login_ONDOREWASH";
     public static final String ACTION_LOGIN_AFTER_VIOLATION = "rrja.login_VIOLATION";
+
+    public static final int TITLE_TAG_UNUSE = 11;
+    public static final int TITLE_TAG_USED = 12;
+    public static final int TITLE_TAG_TIMEOUT = 13;
 
     public static String getRecommendCacheDir() {
         String path = "";

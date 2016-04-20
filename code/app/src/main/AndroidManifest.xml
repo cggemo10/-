@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rrja.carja" >
 
+    <uses-sdk
+        android:minSdkVersion="10"
+        android:targetSdkVersion="22" />
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -15,7 +19,20 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" />
+    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_GPS" />
+    <!-- SDK1.5需要android.permission.GET_TASKS权限判断本程序是否为当前运行的应用? -->
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.BROADCAST_STICKY" />
+    <!-- 来电消音 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- 摄影机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <uses-permission android:name="android.permission.ACCES_MOCK_LOCATION" />
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
@@ -30,6 +47,8 @@
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 摄影机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+
+    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".RRjaApplication"
@@ -51,9 +70,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.UserCenterActivity"
-            android:label="@string/title_activity_user_center" />
         <activity
             android:name=".activity.FeedbackActivity"
             android:label="@string/title_feed_back" >
@@ -135,7 +151,8 @@
             </intent-filter>
         </service>
 
-        <!-- meta-data需要写在application中 release
+        <!--
+        meta-data需要写在application中 release
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="ACX3b4GSVcjDOIPT7j1GMWmk" />
@@ -144,6 +161,21 @@
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="oFGVNdKAkc9G4YKSPXL0PAT4" />
 
+        <activity
+            android:name=".activity.NavActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".activity.UserCouponsActivity"
+            android:label="@string/title_my_coupons"
+            android:theme="@style/AppTheme" >
+        </activity>
+
+        <service
+            android:name=".service.RecyclerService"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

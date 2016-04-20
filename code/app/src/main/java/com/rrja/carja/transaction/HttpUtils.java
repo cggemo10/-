@@ -1,5 +1,6 @@
 package com.rrja.carja.transaction;
 
+import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
 import com.rrja.carja.model.CarInfo;
 import com.rrja.carja.model.coupons.CouponGoods;
@@ -28,6 +29,7 @@ public class HttpUtils {
     private static final String SERVICE_ORDER = "/order";
     private static final String SERVICE_STORE = "/store";
     private static final String SERVICE_TRAFFIC = "/traffic";
+    private static final String SERVICE_API = "/api";
 
     private static final String INTERFACE_PROVINCE = "/getProvinceList";
     private static final String INTERFACE_CITY = "/getCityListByProvinceId";
@@ -63,6 +65,8 @@ public class HttpUtils {
     private static final String INTERFACE_STORE = "/getStoreList";
 
     private static final String INTERFACE_FEEDBACK = "/feedback";
+
+    private static final String INTERFACE_UPDATE = "/app/checkUpdate";
 
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -376,4 +380,9 @@ public class HttpUtils {
         return Network.doPost(url, pairs, null);
     }
 
+    public static void checkUpdate() {
+
+        // http://120.25.201.50/api/app/checkUpdate?platform=10&version=2
+        String url = BASE_URL + SERVICE_API + INTERFACE_UPDATE + "platform=10&version=" + Constant.VERSION;
+    }
 }

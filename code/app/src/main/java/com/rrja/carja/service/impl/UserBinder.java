@@ -446,7 +446,7 @@ public class UserBinder extends Binder {
                         }
 
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION);
-                        intent.putParcelableArrayListExtra("violation_record", (ArrayList)carInfoList);
+                        intent.putParcelableArrayListExtra("violation_record", (ArrayList) carInfoList);
                         mContext.sendBroadcast(intent);
                     } else {
                         Intent intent = new Intent(Constant.ACTION_BROADCAST_VIOLATION_ERR);
@@ -550,4 +550,16 @@ public class UserBinder extends Binder {
         mContext.execute(task);
     }
 
+    public void checkUpdate() {
+
+        Runnable task = new Runnable() {
+            @Override
+            public void run() {
+
+                HttpUtils.checkUpdate();
+            }
+        };
+
+        mContext.execute(task);
+    }
 }

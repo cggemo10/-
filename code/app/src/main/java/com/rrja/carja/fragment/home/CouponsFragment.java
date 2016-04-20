@@ -79,7 +79,6 @@ public class CouponsFragment extends Fragment implements CouponsAdapter.OnItemCl
         registBroadcast();
 
         if (CoreManager.getManager().getCoupons() == null || CoreManager.getManager().getCoupons().size() == 0) {
-//            DialogHelper.getHelper().showWaitting();
             mListener.requestCouponsData(1);
         }
     }

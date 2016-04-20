@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias '天象互动'
+            keyPassword 'tianxiang2014'
+            storeFile file('D:/env/sign_tool/skymoonsKeystore.abc')
+            storePassword 'tianxiang2014'
+        }
+    }
     compileSdkVersion 22
     buildToolsVersion "21.1.2"
-
     defaultConfig {
         applicationId "com.rrja.carja"
         minSdkVersion 14
@@ -16,6 +23,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.config
+        }
     }
 }
 
@@ -27,13 +37,15 @@ dependencies {
     compile files('libs/httpmime-4.3.6.jar')
     compile files('libs/ormlite-core-4.49-SNAPSHOT.jar')
     compile files('libs/ormlite-android-4.49-SNAPSHOT.jar')
-    compile files('libs/BaiduNaviSDK_2.0.jar')
-
+    compile files('libs/alipaySDK-20150724.jar')
+    compile files('libs/BaiduNaviSDK_3.0.0.jar')
+    compile files('libs/calligraphy-1.2.0.jar')
     compile files('libs/BaiduLBS_Android.jar')
     compile files('libs/locSDK_6.13.jar')
-    compile 'com.android.support:support-v4:22.2.0'
-    compile 'com.android.support:appcompat-v7:22.2.0'
-    compile 'com.android.support:recyclerview-v7:22.2.0'
-    compile 'com.android.support:cardview-v7:22.2.0'
-    compile 'com.android.support:gridlayout-v7:22.2.0'
+    compile 'com.android.support:support-v4:22.2.1'
+    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:recyclerview-v7:22.2.1'
+    compile 'com.android.support:cardview-v7:22.2.1'
+    compile 'com.android.support:gridlayout-v7:22.2.1'
+    compile 'com.android.support:design:22.2.1'
 }

@@ -5,24 +5,20 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.text.TextUtils;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,13 +40,9 @@ import com.rrja.carja.service.impl.UserBinder;
 import com.rrja.carja.utils.DialogHelper;
 import com.rrja.carja.utils.RrjaUtils;
 
-import org.apache.http.Consts;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.UUID;
 
 
@@ -71,7 +63,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
     ImageView imgMenuCoupons;
 
     LinearLayout llHOme;
-//    LinearLayout llForum;
+    //    LinearLayout llForum;
     LinearLayout llDiscount;
 
     UserBinder userService;
@@ -121,8 +113,8 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         initView();
 
         locationChangeListener = new LocationChangeListener();
-        ((RRjaApplication)getApplication()).registLocationChangeListener(MainActivity.class.getName(), locationChangeListener);
-        ((RRjaApplication)getApplication()).requestLocation();
+        ((RRjaApplication) getApplication()).registLocationChangeListener(MainActivity.class.getName(), locationChangeListener);
+        ((RRjaApplication) getApplication()).requestLocation();
     }
 
     @Override
@@ -132,6 +124,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         if (costumerRegion != null && !TextUtils.isEmpty(costumerRegion.getName())) {
             txtLoc.setText(costumerRegion.getName());
         }
+
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -141,7 +139,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         }
 
         if (locationChangeListener != null) {
-            ((RRjaApplication)getApplication()).unRegistLocationChangeListener(MainActivity.class.getName());
+            ((RRjaApplication) getApplication()).unRegistLocationChangeListener(MainActivity.class.getName());
             locationChangeListener = null;
         }
         super.onDestroy();
@@ -169,7 +167,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 //                    mDrawerlayout.closeDrawer(Gravity.START);
 //                }
                 super.onDrawerOpened(drawerView);
-                
+
             }
 
             @Override
@@ -282,6 +280,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
 
     public static final int TAKE_PICTURE = 20;
     public static final int MAKE_PICTURE = 21;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -343,7 +342,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
                     BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
                     bm.compress(Bitmap.CompressFormat.JPEG, 80, bos);
                     bos.flush();
-					/*
+                    /*
 					 * 采用压缩转档方法 bm.compress(Bitmap.CompressFormat.JPEG, 80,
 					 * bos); /* 调用flush()方法，更新BufferStream bos.flush();
 					 * 结束OutputStream
@@ -390,7 +389,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             if (userService == null) {
                 Intent intent = new Intent(MainActivity.this, DataCenterService.class);
                 intent.setAction(Constant.ACTION_DATA_GET_COUPONS_GOODS);
-                intent.putExtra("page",page);
+                intent.putExtra("page", page);
                 startService(intent);
             } else {
                 userService.getCouponsGoods(page);
@@ -422,7 +421,7 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
             if (userService == null) {
                 Intent intent = new Intent(MainActivity.this, DataCenterService.class);
                 intent.setAction(Constant.ACTION_DATA_GET_RECOMMEND);
-                intent.putExtra("page",page);
+                intent.putExtra("page", page);
                 startService(intent);
             } else {
                 userService.getRecommendGoods(page);
@@ -456,15 +455,12 @@ public class MainActivity extends BaseActivity implements ViewPager.OnPageChange
         @Override
         public void onLocationChanged(BDLocation location) {
 
-
-                if (!CoreManager.getManager().isCustomeChange()) {
-                    Region gpsRegion = CoreManager.getManager().getGpsRegion();
-                    if (gpsRegion != null) {
-                        txtLoc.setText(gpsRegion.getName());
-                    }
+            if (!CoreManager.getManager().isCustomeChange()) {
+                Region gpsRegion = CoreManager.getManager().getGpsRegion();
+                if (gpsRegion != null) {
+                    txtLoc.setText(gpsRegion.getName());
                 }
-
-
+            }
         }
     }
 

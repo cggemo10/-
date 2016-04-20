@@ -271,8 +271,6 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:src="@drawable/icon_go"/>
-
-
     </RelativeLayout>
 
     <RelativeLayout

@@ -1,20 +1,19 @@
 package com.rrja.carja.fragment.store;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,15 +38,21 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
     private TextView txtStoreOpenTime;
     private TextView txtStorePayType;
     private TextView txtStoreService;
-    private Button btnCommit;
+    private AppCompatButton btnNav;
+    private AppCompatButton btnCommit;
 
     private OnStoreMainActionListener mListener;
     private CarStore store;
 
     private StoreImgReceiver mReceiver;
 
-    public static StoreMainFragment newInstance() {
-        StoreMainFragment fragment = new StoreMainFragment();
+    private static StoreMainFragment fragment;
+
+    public static StoreMainFragment newInstance(CarStore store) {
+        if (fragment == null) {
+            fragment = new StoreMainFragment();
+        }
+        fragment.store = store;
         return fragment;
     }
 
@@ -77,7 +82,10 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
         txtStoreOpenTime = (TextView) view.findViewById(R.id.txt_store_opentime_detal_content);
         txtStorePayType = (TextView) view.findViewById(R.id.txt_store_paytype_content);
         txtStoreService = (TextView) view.findViewById(R.id.txt_store_service_content);
-        btnCommit = (Button) view.findViewById(R.id.btn_gain_coupons);
+
+        btnNav = (AppCompatButton) view.findViewById(R.id.btn_nav);
+
+        btnCommit = (AppCompatButton) view.findViewById(R.id.btn_booking_store);
 
         txtStoreName.setText(store.getStoreName());
 
@@ -107,7 +115,7 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
         txtStorePayType.setText(store.getPayType());
         txtStoreService.setText(store.getDesc());
 
-
+        btnNav.setOnClickListener(this);
         btnCommit.setOnClickListener(this);
 
 
@@ -123,7 +131,13 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
     @Override
     public void onClick(View v) {
         if (mListener != null) {
-            mListener.onAddBook();
+            int id = v.getId();
+            if (id == R.id.btn_nav) {
+                mListener.onNavClicked();
+            }
+            if (id == R.id.btn_booking_store) {
+                mListener.onAddBook();
+            }
         }
     }
 
@@ -163,6 +177,7 @@ public class StoreMainFragment extends BaseElementFragment implements View.OnCli
     public interface OnStoreMainActionListener {
 
         public void onAddBook();
+        public void onNavClicked();
         public void onBackClicked();
     }
 

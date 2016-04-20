@@ -31,6 +31,7 @@ import com.rrja.carja.R;
 import com.rrja.carja.activity.StoreReservationDetalActivity;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.fragment.BaseElementFragment;
+import com.rrja.carja.model.CarStore;
 
 import java.util.Calendar;
 
@@ -51,10 +52,16 @@ public class StoreBookingFragment extends BaseElementFragment implements View.On
 
     private OnBookActionListener mListener;
     private StoreBookReceiver mReceiver;
+    private CarStore store;
 
-    public static StoreBookingFragment newInstance() {
-        StoreBookingFragment fragment = new StoreBookingFragment();
-        return fragment;
+    private static StoreBookingFragment instance;
+
+    public static StoreBookingFragment newInstance(CarStore store) {
+        if (instance == null) {
+            instance = new StoreBookingFragment();
+        }
+        instance.store = store;
+        return instance;
     }
 
     public StoreBookingFragment() {

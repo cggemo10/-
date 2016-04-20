@@ -7,12 +7,17 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
+import com.baidu.navisdk.adapter.BNRoutePlanNode;
+import com.baidu.navisdk.adapter.BaiduNaviManager;
 import com.rrja.carja.R;
 import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.constant.Constant;
@@ -23,10 +28,17 @@ import com.rrja.carja.model.CarStore;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.impl.StoreReservationBinder;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by chongge on 15/6/28.
  */
-public class StoreReservationDetalActivity extends BaseActivity{
+public class StoreReservationDetalActivity extends BaseActivity {
+
+    public static final String ROUTE_START_NODE = "route_Start_Node";
+    public static final String ROUTE_END_NODE = "route_End_Node";
 
     CarStore store;
     Fragment currFragment;
@@ -36,6 +48,7 @@ public class StoreReservationDetalActivity extends BaseActivity{
     BaseElementFragment storeBookFragment;
 
     StoreReservationBinder mService;
+    LocationChangeListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +70,9 @@ public class StoreReservationDetalActivity extends BaseActivity{
         Bundle extras = getIntent().getExtras();
         if (extras.containsKey("curr_store")) {
             store = extras.getParcelable("curr_store");
+            // just for test TODO　delete
+            store.setLat(30.3227);
+            store.setLng(104.3605);
         }
 
         if (store == null) {
@@ -74,17 +90,109 @@ public class StoreReservationDetalActivity extends BaseActivity{
         }
 
         fm = getFragmentManager();
-        storeMainFragment = StoreMainFragment.newInstance();
-        storeBookFragment = StoreBookingFragment.newInstance();
+        storeMainFragment = StoreMainFragment.newInstance(store);
+        storeBookFragment = StoreBookingFragment.newInstance(store);
 
         switchFragment(storeMainFragment, false);
+
+        locationListener = new LocationChangeListener();
+        ((RRjaApplication) getApplication()).registLocationChangeListener(StoreReservationDetalActivity.class.getName(), locationListener);
     }
+
+    // 百度导航
+    private void startNav() {
+        String sdcardDir = getSdcardDir();
+        if (TextUtils.isEmpty(sdcardDir)) {
+            Toast.makeText(this, "未找到SDK卡", Toast.LENGTH_LONG).show();
+        }
+        String packageName = this.getPackageName();
+        File dir = new File(sdcardDir, packageName);
+        if (!dir.exists() || !dir.isDirectory()) {
+            dir.mkdirs();
+        }
+        BaiduNaviManager.getInstance().init(this, getSdcardDir(), this.getPackageName(),
+                new BaiduNaviManager.NaviInitListener() {
+
+                    @Override
+                    public void onAuthResult(int status, String msg) {
+                        if (0 != status) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(StoreReservationDetalActivity.this, "认证失败，请在官网下载App", Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+                        }
+                    }
+
+                    @Override
+                    public void initStart() {
+
+                    }
+
+                    @Override
+                    public void initSuccess() {
+                        routeplanToNavi();
+                    }
+
+                    @Override
+                    public void initFailed() {
+                        Log.e(StoreReservationDetalActivity.this.getClass().getName(), "nav init failed");
+                    }
+                }, null);
+    }
+
+    private String getSdcardDir() {
+        if (Environment.getExternalStorageState().equalsIgnoreCase(
+                Environment.MEDIA_MOUNTED)) {
+            return Environment.getExternalStorageDirectory().toString();
+        }
+        return null;
+    }
+
+    private void routeplanToNavi() {
+        if (locationListener == null || locationListener.getLocation() == null) {
+            if (locationListener == null) {
+
+                return;
+            }
+            if (locationListener.getLocation() == null) {
+                return;
+            }
+        }
+        final BNRoutePlanNode sNode = new BNRoutePlanNode(locationListener.getLocation().getLongitude(), locationListener.getLocation().getLatitude(),  "当前位置", null, BNRoutePlanNode.CoordinateType.BD09LL);
+        final BNRoutePlanNode eNode = new BNRoutePlanNode( Double.valueOf(store.getLng()),Double.valueOf(store.getLat()), store.getStoreName(), null, BNRoutePlanNode.CoordinateType.BD09LL);
+
+        List<BNRoutePlanNode> list = new ArrayList<>();
+        list.add(sNode);
+        list.add(eNode);
+        BaiduNaviManager.getInstance().launchNavigator(this, list, BaiduNaviManager.RoutePlanPreference.ROUTE_PLAN_MOD_AVOID_TAFFICJAM, false, new BaiduNaviManager.RoutePlanListener() {
+            @Override
+            public void onJumpToNavigator() {
+// TODO
+                Intent intent = new Intent(StoreReservationDetalActivity.this, NavActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(ROUTE_START_NODE, sNode);
+                bundle.putSerializable(ROUTE_END_NODE, eNode);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onRoutePlanFailed() {
+                Toast.makeText(StoreReservationDetalActivity.this, "算路失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     @Override
     protected void onDestroy() {
         if (mService != null) {
             unbindService(conn);
         }
+        ((RRjaApplication) getApplication()).unRegistLocationChangeListener(StoreReservationDetalActivity.class.getName());
         super.onDestroy();
     }
 
@@ -169,7 +277,7 @@ public class StoreReservationDetalActivity extends BaseActivity{
     }
 
     // ------------------------------------------------------------------------------------------
-    public StoreMainFragment.OnStoreMainActionListener getStoreMainActionListener () {
+    public StoreMainFragment.OnStoreMainActionListener getStoreMainActionListener() {
         return new StoreMainActionListener();
     }
 
@@ -181,17 +289,29 @@ public class StoreReservationDetalActivity extends BaseActivity{
         }
 
         @Override
+        public void onNavClicked() {
+            startNav();
+        }
+
+        @Override
         public void onBackClicked() {
             finish();
         }
     }
 
+
     // ---------------------------------------------------------------------------------------------
     private class LocationChangeListener implements RRjaApplication.OnLocationChangeListener {
 
+        BDLocation mLocation;
+
         @Override
         public void onLocationChanged(BDLocation location) {
-            // TODO
+            mLocation = location;
+        }
+
+        public BDLocation getLocation() {
+            return mLocation;
         }
     }
 }

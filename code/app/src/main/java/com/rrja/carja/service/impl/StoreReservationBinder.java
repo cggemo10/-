@@ -2,6 +2,7 @@ package com.rrja.carja.service.impl;
 
 import android.content.Intent;
 import android.os.Binder;
+import android.text.TextUtils;
 
 import com.rrja.carja.R;
 import com.rrja.carja.constant.Constant;
@@ -36,6 +37,10 @@ public class StoreReservationBinder extends Binder {
             public void run() {
 
                 String area = "";
+                if (CoreManager.getManager().getCurrUser() == null || TextUtils.isEmpty(CoreManager.getManager().getCurrUser().getTel())) {
+                    return;
+                }
+
                 if (CoreManager.getManager().getCostumerRegion() != null) {
                     area = CoreManager.getManager().getCostumerRegion().getName();
                 }

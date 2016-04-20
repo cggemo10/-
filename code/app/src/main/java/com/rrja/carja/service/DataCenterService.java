@@ -103,6 +103,10 @@ public class DataCenterService extends Service implements Handler.Callback {
                 userBinder.requestCoupons(coupons);
             }
 
+            if (Constant.ACTION_CHECK_UPDATE.equals(action)) {
+                userBinder.checkUpdate();
+            }
+
         }
 
         return super.onStartCommand(intent, flags, startId);

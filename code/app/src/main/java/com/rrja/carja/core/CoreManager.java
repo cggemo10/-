@@ -47,7 +47,7 @@ public class CoreManager {
     private static int storeCurPage = 0;
     private static List<CarStore> stores = new ArrayList<>();
     private static List<CouponGoods> couponsList = new ArrayList<>();
-    private static List<Forum> forums = new ArrayList<>();
+//    private static List<Forum> forums = new ArrayList<>();
 
     private static List<Region> regions = new ArrayList<>();
     private static HashMap<String, Region> regionsMap = new HashMap<>();
@@ -159,9 +159,9 @@ public class CoreManager {
         return couponsList;
     }
 
-    public List<Forum> getForums() {
-        return forums;
-    }
+//    public List<Forum> getForums() {
+//        return forums;
+//    }
 
     public List<RecommendGoods> getDiscounts() {
         return discountList;

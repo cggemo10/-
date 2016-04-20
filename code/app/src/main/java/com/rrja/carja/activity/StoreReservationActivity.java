@@ -7,23 +7,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
-import com.handmark.pulltorefresh.library.PullToRefreshListView;
 import com.rrja.carja.R;
 import com.rrja.carja.RRjaApplication;
 import com.rrja.carja.adapter.StoreReservationAdapter;
 import com.rrja.carja.constant.Constant;
 import com.rrja.carja.core.CoreManager;
-import com.rrja.carja.fragment.store.StoreMainFragment;
 import com.rrja.carja.model.CarStore;
 import com.rrja.carja.service.DataCenterService;
 import com.rrja.carja.service.FileService;
@@ -32,12 +29,13 @@ import com.rrja.carja.utils.DialogHelper;
 
 public class StoreReservationActivity extends BaseActivity implements StoreReservationAdapter.StoreActionListener{
 
-//    ListView listViewStore;
     private RecyclerView recyclerView;
     private StoreReservationAdapter mAdapter;
 
     private StoreReservationBinder storeService;
     private StoreReceiver mReceiver;
+
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +63,7 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
 
         registReceiver();
 
+        mHandler = new Handler();
     }
 
     @Override
@@ -189,7 +188,14 @@ public class StoreReservationActivity extends BaseActivity implements StoreReser
 
         @Override
         public void onLocationChanged(BDLocation location) {
-            // TODO
+
+            mAdapter.setCurrentLocation(location);
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            });
         }
     }
 

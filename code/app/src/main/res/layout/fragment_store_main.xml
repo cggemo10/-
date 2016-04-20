@@ -176,7 +176,20 @@
 
     <android.support.v7.widget.AppCompatButton
         android:backgroundTint="@color/c_style_red"
-        android:id="@+id/btn_gain_coupons"
+        android:id="@+id/btn_nav"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp"
+        android:textColor="@android:color/white"
+        android:text="@string/title_store_start_nav"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:backgroundTint="@color/c_style_red"
+        android:id="@+id/btn_booking_store"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:textSize="16sp"
